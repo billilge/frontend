@@ -1,6 +1,6 @@
-name: "버그 수정"
+name: '버그 수정'
 description: 버그 수정 사항을 작성해주세요.
-title: "[ Bug ] "
+title: '[ Bug ] '
 body:
   - type: markdown
     attributes:
@@ -11,7 +11,7 @@ body:
     attributes:
       label: 🐛 Issue
       description: 버그가 발생한 이슈 이름과 번호를 작성해주세요.
-      placeholder: "[ Feat ] 로그인 기능 구현 <#1>"
+      placeholder: '[ Feat ] 로그인 기능 구현 <#1>'
     validations:
       required: true
   - type: textarea
@@ -22,7 +22,7 @@ body:
       placeholder: |
         1. <버그 설명 1>
         2. <버그 설명 2>
-      render: ""
+      render: ''
     validations:
       required: true
   - type: textarea
