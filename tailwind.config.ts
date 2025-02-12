@@ -12,8 +12,27 @@ export default {
         pretendard: ['Pretendard', 'sans-serif'],
       },
       colors: {
-        background: 'var(--background)',
         foreground: 'var(--foreground)',
+        background: 'var(--background)',
+
+        // 기본 색상 정의
+        warning: '#CC2E2E',
+        'black-primary': '#202125',
+        'white-primary': '#FAFAFA',
+        // background: '#F3F4F8',
+
+        'return-red': '#CC2E2E',
+        'return-blue': '#5294FF',
+
+        'main-primary': '#2E5ACC',
+        'main-secondary': '#899FD8',
+        'main-tertiary': '#C0C9E0',
+
+        'gray-primary': '#37393C',
+        'gray-secondary': '#898C8E',
+        'gray-tertiary': '#F2F1F1',
+        'gray-border': '#DCDDDE',
+      },
       fontSize: {
         'heading-1_M': ['24px', { lineHeight: '32px' }],
         'heading-2_M': ['22px', { lineHeight: '30px' }],
@@ -33,28 +52,7 @@ export default {
         'heading-2_D': ['32px', { lineHeight: '40px' }],
         'heading-3_D': ['24px', { lineHeight: '32px' }],
         'heading-4_D': ['20px', { lineHeight: '28px' }],
-        'text': ['18px', { lineHeight: '20px' }],
-      },
-
-      colors: {
-        foreground: "var(--foreground)",
-
-        'warning': "#CC2E2E",
-        'black-primary': "#202125",
-        'white-primary':'#FAFAFA',
-        'background': "#F3F4F8",
-
-        'return-red': '#CC2E2E',
-        'return-blue:': '#5294FF',
-
-        'main-primary':'#2E5ACC',
-        'main-secondary':'#899FD8',
-        'main-tertiary':'#C0C9E0',
-
-        'gray-primary':'#37393C',
-        'gray-secondary':'#898C8E',
-        'gray-tertiary':'#F2F1F1',
-        'gray-border':'#DCDDDE',
+        text: ['18px', { lineHeight: '20px' }],
       },
     },
   },
