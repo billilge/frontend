@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import IconArrow from 'public/assets/icon-arrow.svg';
-import IconHambuger from 'public/assets/icon-hamburger.svg';
+import IconHamburger from 'public/assets/icon-hamburger.svg';
 
 interface HeaderProps {
   title: string;
@@ -28,7 +28,7 @@ export default function Header({ title, menu = false }: HeaderProps) {
           type="button"
           onClick={() => console.log('사이드바 오픈!')}
         >
-          <IconHambuger />
+          <IconHamburger />
         </button>
       ) : (
         <div className="h-6 w-6" />
