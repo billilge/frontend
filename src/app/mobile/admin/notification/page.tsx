@@ -8,7 +8,7 @@ const test = [
     link: '/desktop/login',
     isRead: false,
     status: '대여',
-    date: 'ㄴㄴ',
+    date: '10',
   },
   {
     notificationId: 1,
@@ -16,7 +16,16 @@ const test = [
     link: '/mobile',
     isRead: true,
     status: '반납',
-    date: 'ㄴㄴ',
+    date: '20',
+  },
+  {
+    notificationId: 2,
+    message:
+      '메시지 두 줄 테스트입니다 두 줄 테스트 두 줄 테스트 두 줄 테스트 두 줄 테스트',
+    link: '/mobile',
+    isRead: true,
+    status: '반납',
+    date: '20',
   },
 ];
 
