@@ -1,13 +1,17 @@
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
+import {
+  AdminNotificationText,
+  AdminNotificationTypes,
+} from '@/constants/notificationStatus';
 // import IconBell from 'public/assets/icon-bell.svg';
 
 interface NotificationItemProps {
   message: string;
   link: string;
   isRead: boolean;
-  status: string;
-  date: string;
+  status: AdminNotificationTypes;
+  createdAt: string;
 }
 
 export default function NotificationItem({
@@ -15,7 +19,7 @@ export default function NotificationItem({
   link,
   isRead,
   status,
-  date,
+  createdAt,
 }: NotificationItemProps) {
   return (
     <Link className="w-full" href={link}>
@@ -29,9 +33,11 @@ export default function NotificationItem({
 
         <section className="flex w-full flex-col items-start gap-2.5 text-sm font-medium">
           <section className="flex w-full justify-between">
-            <div className="text-[12px] font-medium">대여 신청</div>
+            <div className="text-[12px] font-medium">
+              {AdminNotificationText[status]}
+            </div>
             <div className="text-[12px] font-medium text-gray-secondary">
-              {date}분 전
+              {createdAt}
             </div>
           </section>
           {message}
@@ -41,4 +47,4 @@ export default function NotificationItem({
   );
 }
 
-// TODO : 아이콘 세팅, 글자별 색상 세팅 배경색 임시로 설정했는데 tailwind에 수정헤야 함
+// TODO : 아이콘 세팅해야 함

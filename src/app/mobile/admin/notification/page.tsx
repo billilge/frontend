@@ -1,5 +1,6 @@
 import MobileLayout from '@/components/mobile/layout';
 import NotificationItem from '@/components/mobile/common/NotificationItem';
+import { elapsedTime } from '@/utils/elapsedTime';
 
 const NotificationDetail = [
   {
@@ -7,16 +8,16 @@ const NotificationDetail = [
     message: '메시지 1입니다',
     link: '/desktop/login',
     isRead: false,
-    status: '대여',
-    createdAt: '2025-02-16T05:44:45.476Z',
+    status: 'ADMIN_RETNAL_APPLY',
+    createdAt: '2025-02-16T08:44:45.476Z',
   },
   {
     notificationId: 1,
     message: '메시지 2입니다',
     link: '/mobile',
     isRead: true,
-    status: '반납',
-    createdAt: '2025-02-16T05:44:45.476Z',
+    status: 'ADMIN_RENTAL_CANCEL',
+    createdAt: '2025-02-16T06:44:45.476Z',
   },
   {
     notificationId: 2,
@@ -24,8 +25,8 @@ const NotificationDetail = [
       '메시지 두 줄 테스트입니다 두 줄 테스트 두 줄 테스트 두 줄 테스트 두 줄 테스트',
     link: '/mobile',
     isRead: true,
-    status: '반납',
-    createdAt: '2025-02-16T05:44:45.476Z',
+    status: 'ADMIN_RETURN_APPLY',
+    createdAt: '2025-02-12T05:44:45.476Z',
   },
 ];
 
@@ -40,7 +41,7 @@ export default function Notification() {
           link={item.link}
           isRead={item.isRead}
           status={item.status}
-          date={item.createdAt}
+          createdAt={elapsedTime(item.createdAt)}
         />
       ))}
     </MobileLayout>
