@@ -1,5 +1,5 @@
 import MobileLayout from '@/components/mobile/layout';
-import NotificationItem from '@/components/mobile/common/NotificationItem';
+import NotificationItem from '@/components/mobile/NotificationItem';
 import { elapsedTime } from '@/utils/elapsedTime';
 import { NotificationProps } from '@/types/notificationType';
 
