@@ -26,7 +26,7 @@ export default function NotificationItem({
       <section
         className={cn(
           'flex w-full gap-2.5 p-5',
-          isRead ? '' : 'bg-main-background',
+          isRead ? '' : 'bg-main-tertiary',
         )}
       >
         <div className="flex h-4 w-4">{/* <IconBell /> */}</div>

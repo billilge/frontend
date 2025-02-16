@@ -33,7 +33,6 @@ const NotificationDetail = [
 export default function Notification() {
   return (
     <MobileLayout>
-      <div className="w-full bg-main-primary">알람 페이지임미다</div>
       {NotificationDetail.map((item) => (
         <NotificationItem
           key={item.notificationId}
