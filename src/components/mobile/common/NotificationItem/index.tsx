@@ -33,7 +33,14 @@ export default function NotificationItem({
 
         <section className="flex w-full flex-col items-start gap-2.5 text-sm font-medium">
           <section className="flex w-full justify-between">
-            <div className="text-[12px] font-medium">
+            <div
+              className={cn(
+                'text-[12px] font-medium',
+                /REJECTED|CANCEL/.test(status)
+                  ? 'text-return-red'
+                  : 'text-return-blue',
+              )}
+            >
               {AdminNotificationText[status]}
             </div>
             <div className="text-[12px] font-medium text-gray-secondary">
@@ -47,4 +54,4 @@ export default function NotificationItem({
   );
 }
 
-// TODO : 아이콘 세팅해야 함
+// TODO : 아이콘 세팅해야 함 -> 머지 후 재시도
