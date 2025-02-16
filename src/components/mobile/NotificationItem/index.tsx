@@ -56,5 +56,3 @@ export default function NotificationItem({
     </Link>
   );
 }
-
-// TODO : 아이콘 세팅해야 함 -> 머지 후 재시도
