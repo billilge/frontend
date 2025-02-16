@@ -3,16 +3,10 @@ import { cn } from '@/lib/utils';
 import {
   AdminNotificationText,
   AdminNotificationTypes,
+  UserNotificationText,
 } from '@/constants/notificationStatus';
+import { NotificationProps } from '@/types/notificationType';
 // import IconBell from 'public/assets/icon-bell.svg';
-
-interface NotificationItemProps {
-  message: string;
-  link: string;
-  isRead: boolean;
-  status: AdminNotificationTypes;
-  createdAt: string;
-}
 
 export default function NotificationItem({
   message,
@@ -20,7 +14,12 @@ export default function NotificationItem({
   isRead,
   status,
   createdAt,
-}: NotificationItemProps) {
+}: NotificationProps) {
+  const isAdminStatus = (
+    notificationStatus: string,
+  ): notificationStatus is AdminNotificationTypes =>
+    notificationStatus.startsWith('ADMIN');
+
   return (
     <Link className="w-full" href={link}>
       <section
@@ -41,7 +40,9 @@ export default function NotificationItem({
                   : 'text-return-blue',
               )}
             >
-              {AdminNotificationText[status]}
+              {isAdminStatus(status)
+                ? AdminNotificationText[status]
+                : UserNotificationText[status]}
             </div>
             <div className="text-[12px] font-medium text-gray-secondary">
               {createdAt}
