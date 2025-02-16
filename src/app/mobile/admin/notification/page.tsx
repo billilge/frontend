@@ -1,5 +1,6 @@
 import MobileLayout from '@/components/mobile/layout';
 import NotificationItem from '@/components/mobile/NotificationItem';
+import Header from '@/components/mobile/Header';
 import { elapsedTime } from '@/utils/elapsedTime';
 import { NotificationProps } from '@/types/notificationType';
 
@@ -36,6 +37,7 @@ type AdminNotificationType = NotificationProps;
 export default function Notification() {
   return (
     <MobileLayout>
+      <Header title="관리자 알림" />
       {NotificationDetail.map((item) => (
         <NotificationItem
           key={item.notificationId}
