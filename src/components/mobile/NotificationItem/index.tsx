@@ -1,3 +1,5 @@
+'use client';
+
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import {
@@ -6,7 +8,7 @@ import {
   UserNotificationText,
 } from '@/constants/notificationStatus';
 import { NotificationProps } from '@/types/notificationType';
-// import IconBell from 'public/assets/icon-bell.svg';
+import IconBell from 'public/assets/icon-bell.svg';
 
 export default function NotificationItem({
   message,
@@ -28,13 +30,15 @@ export default function NotificationItem({
           isRead ? '' : 'bg-main-tertiary',
         )}
       >
-        <div className="flex h-4 w-4">{/* <IconBell /> */}</div>
+        <div className="flex h-4 w-4">
+          <IconBell />
+        </div>
 
         <section className="flex w-full flex-col items-start gap-2.5 text-sm font-medium">
-          <section className="flex w-full justify-between">
+          <section className="flex w-full justify-between text-xs">
             <div
               className={cn(
-                'text-[12px] font-medium',
+                'font-medium',
                 /REJECTED|CANCEL/.test(status)
                   ? 'text-return-red'
                   : 'text-return-blue',
@@ -44,9 +48,7 @@ export default function NotificationItem({
                 ? AdminNotificationText[status]
                 : UserNotificationText[status]}
             </div>
-            <div className="text-[12px] font-medium text-gray-secondary">
-              {createdAt}
-            </div>
+            <div className="font-medium text-gray-secondary">{createdAt}</div>
           </section>
           {message}
         </section>
