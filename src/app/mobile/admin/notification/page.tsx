@@ -1,14 +1,14 @@
 import MobileLayout from '@/components/mobile/layout';
 import NotificationItem from '@/components/mobile/common/NotificationItem';
 
-const test = [
+const NotificationDetail = [
   {
     notificationId: 0,
     message: '메시지 1입니다',
     link: '/desktop/login',
     isRead: false,
     status: '대여',
-    date: '10',
+    createdAt: '2025-02-16T05:44:45.476Z',
   },
   {
     notificationId: 1,
@@ -16,7 +16,7 @@ const test = [
     link: '/mobile',
     isRead: true,
     status: '반납',
-    date: '20',
+    createdAt: '2025-02-16T05:44:45.476Z',
   },
   {
     notificationId: 2,
@@ -25,7 +25,7 @@ const test = [
     link: '/mobile',
     isRead: true,
     status: '반납',
-    date: '20',
+    createdAt: '2025-02-16T05:44:45.476Z',
   },
 ];
 
@@ -33,14 +33,14 @@ export default function Notification() {
   return (
     <MobileLayout>
       <div className="w-full bg-main-primary">알람 페이지임미다</div>
-      {test.map((item) => (
+      {NotificationDetail.map((item) => (
         <NotificationItem
           key={item.notificationId}
           message={item.message}
           link={item.link}
           isRead={item.isRead}
           status={item.status}
-          date={item.date}
+          date={item.createdAt}
         />
       ))}
     </MobileLayout>

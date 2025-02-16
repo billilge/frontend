@@ -1,0 +1,39 @@
+export const ADMIN_NOTIFICATION_STATUS = {
+  ADMIN_RETNAL_APPLY: 'ADMIN_RETNAL_APPLY',
+  ADMIN_RENTAL_CANCEL: 'ADMIN_RENTAL_CANCEL',
+  ADMIN_RETURN_APPLY: 'ADMIN_RETURN_APPLY',
+  ADMIN_RETURN_CANCEL: 'ADMIN_RETURN_CANCEL',
+} as const;
+
+export const USER_NOTIFICATION_STATUS = {
+  USER_RENTAL_APPLY: 'USER_RENTAL_APPLY',
+  USER_RENTAL_APPROVED: 'USER_RENTAL_APPROVED ',
+  USER_RENTAL_REJECTED: 'USER_RENTAL_REJECTED',
+  USER_RETURN_APPLY: 'USER_RETURN_APPLY',
+  USER_RETURN_COMPLETED: 'USER_RETURN_COMPLETED',
+} as const;
+
+export type AdminNotificationStatus =
+  (typeof ADMIN_NOTIFICATION_STATUS)[keyof typeof ADMIN_NOTIFICATION_STATUS];
+
+export type UserNotificationStatus =
+  (typeof USER_NOTIFICATION_STATUS)[keyof typeof USER_NOTIFICATION_STATUS];
+
+export const adminNotificationText: Record<AdminNotificationStatus, string> = {
+  [ADMIN_NOTIFICATION_STATUS.ADMIN_RETNAL_APPLY]: '대여 신청',
+  [ADMIN_NOTIFICATION_STATUS.ADMIN_RENTAL_CANCEL]: '대여 취소',
+  [ADMIN_NOTIFICATION_STATUS.ADMIN_RETURN_APPLY]: '반납 신청',
+  [ADMIN_NOTIFICATION_STATUS.ADMIN_RETURN_CANCEL]: '반납 취소',
+};
+
+export const userNotificationText: Record<UserNotificationStatus, string> = {
+  [USER_NOTIFICATION_STATUS.USER_RENTAL_APPLY]: '대여 신청',
+  [USER_NOTIFICATION_STATUS.USER_RENTAL_APPROVED]: '대여 승인',
+  [USER_NOTIFICATION_STATUS.USER_RENTAL_REJECTED]: '대여 반려',
+  [USER_NOTIFICATION_STATUS.USER_RETURN_APPLY]: '반납 신청',
+  [USER_NOTIFICATION_STATUS.USER_RETURN_COMPLETED]: '반납 완료',
+};
+
+export type AdminNotificationTypes = keyof typeof adminNotificationText;
+
+export type UserNotificationTypes = keyof typeof userNotificationText;
