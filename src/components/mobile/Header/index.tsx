@@ -13,7 +13,7 @@ export default function Header({ title, menu = false }: HeaderProps) {
   const router = useRouter();
 
   return (
-    <section className="flex h-8 w-full items-center justify-between px-4 py-1.5">
+    <section className="h-8.5 flex w-full items-center justify-between px-4 py-1.5">
       <button
         className="h-6 w-6 items-center justify-center"
         type="button"
@@ -21,7 +21,7 @@ export default function Header({ title, menu = false }: HeaderProps) {
       >
         <IconArrow />
       </button>
-      <div className="font-medium text-black-primary">{title}</div>
+      <div className="font-medium leading-6 text-black-primary">{title}</div>
       {menu ? (
         <button
           className="h-6 w-6 items-center justify-center"
