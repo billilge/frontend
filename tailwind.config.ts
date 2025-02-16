@@ -26,6 +26,8 @@ export default {
         'main-primary': '#2E5ACC',
         'main-secondary': '#899FD8',
         'main-tertiary': '#C0C9E0',
+        'main-caption': '#5294FF',
+        'main-background': '#ECF4FF',
         'gray-primary': '#37393C',
         'gray-secondary': '#898C8E',
         'gray-tertiary': '#F2F1F1',
