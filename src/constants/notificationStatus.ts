@@ -19,14 +19,14 @@ export type AdminNotificationStatus =
 export type UserNotificationStatus =
   (typeof USER_NOTIFICATION_STATUS)[keyof typeof USER_NOTIFICATION_STATUS];
 
-export const adminNotificationText: Record<AdminNotificationStatus, string> = {
+export const AdminNotificationText: Record<AdminNotificationStatus, string> = {
   [ADMIN_NOTIFICATION_STATUS.ADMIN_RETNAL_APPLY]: '대여 신청',
   [ADMIN_NOTIFICATION_STATUS.ADMIN_RENTAL_CANCEL]: '대여 취소',
   [ADMIN_NOTIFICATION_STATUS.ADMIN_RETURN_APPLY]: '반납 신청',
   [ADMIN_NOTIFICATION_STATUS.ADMIN_RETURN_CANCEL]: '반납 취소',
 };
 
-export const userNotificationText: Record<UserNotificationStatus, string> = {
+export const UserNotificationText: Record<UserNotificationStatus, string> = {
   [USER_NOTIFICATION_STATUS.USER_RENTAL_APPLY]: '대여 신청',
   [USER_NOTIFICATION_STATUS.USER_RENTAL_APPROVED]: '대여 승인',
   [USER_NOTIFICATION_STATUS.USER_RENTAL_REJECTED]: '대여 반려',
@@ -34,6 +34,5 @@ export const userNotificationText: Record<UserNotificationStatus, string> = {
   [USER_NOTIFICATION_STATUS.USER_RETURN_COMPLETED]: '반납 완료',
 };
 
-export type AdminNotificationTypes = keyof typeof adminNotificationText;
-
-export type UserNotificationTypes = keyof typeof userNotificationText;
+export type AdminNotificationTypes = keyof typeof AdminNotificationText;
+export type UserNotificationTypes = keyof typeof UserNotificationText;
