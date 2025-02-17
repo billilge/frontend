@@ -7,8 +7,9 @@ import DashboardItem from './_components/DashboardItem';
 const RentalApplicationDetail = [
   {
     id: 0,
-    itemName: '고데기',
-    imageUrl: 'https://www.example.com/test.png',
+    itemName: '우산',
+    imageUrl:
+      'https://github.com/user-attachments/assets/1b8c9ae9-a840-4756-a87d-c092958a2854',
     renterName: '윤신지',
     studentId: 20213102,
     status: 'PENDING',
@@ -17,7 +18,8 @@ const RentalApplicationDetail = [
   {
     id: 1,
     itemName: '타이레놀',
-    imageUrl: 'https://www.example.com/test.png',
+    imageUrl:
+      'https://github.com/user-attachments/assets/159ee697-5a2e-43c8-a5a0-8ab73ae869fd',
     renterName: '황현진',
     studentId: 20213102,
     status: 'RENTAL',

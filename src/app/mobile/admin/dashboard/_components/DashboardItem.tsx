@@ -1,3 +1,5 @@
+import convertTime from '@/utils/convertTime';
+
 interface DashboardItemProps {
   itemName: string;
   imageUrl: string;
@@ -16,6 +18,8 @@ export default function DashboardItem({
   status,
   applicatedAt,
 }: DashboardItemProps) {
+  const applicatedTime = convertTime(applicatedAt);
+
   return (
     <section className="flex w-full items-center justify-between px-5 py-4">
       <section className="flex items-center gap-4">
@@ -37,7 +41,9 @@ export default function DashboardItem({
 
             <section className="flex gap-1">
               <div className="flex w-10">신청 시간</div>
-              <div className="">{applicatedAt}</div>
+              <div className="">
+                {applicatedTime.formattedDate} {applicatedTime.formattedTime}
+              </div>
             </section>
           </section>
         </section>
