@@ -1,4 +1,21 @@
-export default function DashboardItem() {
+interface DashboardItemProps {
+  itemName: string;
+  imageUrl: string;
+  renterName: string;
+  studentId: number;
+  // status도 enum으로 type 정리해서 뽑는 게 좋을 듯
+  status: string;
+  applicatedAt: string;
+}
+
+export default function DashboardItem({
+  itemName,
+  imageUrl,
+  renterName,
+  studentId,
+  status,
+  applicatedAt,
+}: DashboardItemProps) {
   return (
     <section className="flex w-full items-center justify-between px-5 py-4">
       <section className="flex items-center gap-4">
@@ -8,17 +25,19 @@ export default function DashboardItem() {
         </section>
 
         <section className="flex flex-col gap-2">
-          <div className="text-sm font-semibold">물품명</div>
+          <div className="text-sm font-semibold">{itemName}</div>
 
           <section className="flex flex-col text-[10px] font-normal">
             <section className="flex gap-1">
-              <div className="">신청자</div>
-              <div className="">이름</div>
+              <div className="flex w-10">신청자</div>
+              <div className="">
+                {studentId} {renterName}
+              </div>
             </section>
 
             <section className="flex gap-1">
-              <div className="">신청 시간</div>
-              <div className="">시간</div>
+              <div className="flex w-10">신청 시간</div>
+              <div className="">{applicatedAt}</div>
             </section>
           </section>
         </section>
