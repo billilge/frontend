@@ -19,6 +19,7 @@ export default function Mobile() {
         actions={dropdownActions}
         isVisible={isDropdownVisible}
         hideDropdown={hideDropdown}
+        position={{ top: '22px', right: '20px' }}
       />
       <button type="button" onClick={showDropdown}>
         열기
