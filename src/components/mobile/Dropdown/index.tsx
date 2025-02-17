@@ -38,7 +38,7 @@ export default function Dropdown({
       ref={dropdownRef}
       className={cn(
         'absolute z-10 flex min-w-28 flex-col gap-3 rounded-[20px] border-none bg-white-primary px-3.5 py-4 shadow-md',
-        positionClasses, // 위치 클래스 추가
+        positionClasses,
         !isVisible && 'hidden',
       )}
     >
