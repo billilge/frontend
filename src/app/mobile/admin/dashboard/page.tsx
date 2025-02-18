@@ -1,7 +1,12 @@
 'use client';
 
+import { useState } from 'react';
 import MobileLayout from '@/components/mobile/layout';
 import Header from '@/components/mobile/Header';
+import Dropdown from '@/components/mobile/Dropdown';
+import useDropdown from '@/hooks/useDropdown';
+import IconArrow from 'public/assets/icon-arrow.svg';
+import { cn } from '@/lib/utils';
 import DashboardItem from './_components/DashboardItem';
 
 const RentalApplicationDetail = [
@@ -28,6 +33,21 @@ const RentalApplicationDetail = [
 ];
 
 export default function Dashboard() {
+  const dropdownActions = [
+    { title: '전체', func: () => console.log('전체') },
+    { title: '대여 신청', func: () => console.log('대여 신청') },
+    { title: '반납 신청', func: () => console.log('반납 신청') },
+  ];
+
+  const [filter, setFilter] = useState('ALL');
+
+  const { showDropdown, hideDropdown, isDropdownVisible } = useDropdown();
+
+  const handleDropdown = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    isDropdownVisible ? hideDropdown() : showDropdown();
+  };
+
   return (
     <MobileLayout>
       <Header title="관리자 대시보드" />
@@ -36,8 +56,18 @@ export default function Dashboard() {
         <div className="flex justify-between text-lg font-semibold">
           신청 내역
         </div>
-        {/* TODO : 드롭다운 공통 컴포넌트로 생성 */}
-        <div>드롭다운</div>
+        <button
+          type="button"
+          onClick={handleDropdown}
+          className="flex items-center gap-2.5"
+        >
+          <div className="flex text-sm font-semibold">{filter}</div>
+          <IconArrow
+            className={
+              (cn('flex'), isDropdownVisible ? 'rotate-90' : '-rotate-90')
+            }
+          />
+        </button>
       </section>
       {RentalApplicationDetail.map((item) => (
         <DashboardItem
@@ -50,6 +80,13 @@ export default function Dashboard() {
           applicatedAt={item.applicatedAt}
         />
       ))}
+
+      <Dropdown
+        actions={dropdownActions}
+        isVisible={isDropdownVisible}
+        hideDropdown={hideDropdown}
+        positionClasses="top-15 right-5"
+      />
     </MobileLayout>
   );
 }
