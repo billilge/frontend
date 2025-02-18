@@ -1,12 +1,32 @@
+'use client';
+
 import MobileLayout from '@/components/mobile/layout';
+import Dropdown from '@/components/mobile/Dropdown';
+import useDropdown from '@/hooks/useDropdown';
 
 export default function Mobile() {
+  const dropdownActions = [
+    { title: '전체', func: () => console.log('전체') },
+    { title: '대여 신청', func: () => console.log('대여 신청') },
+    { title: '반납 신청', func: () => console.log('반납 신청') },
+  ];
+
+  const { showDropdown, hideDropdown, isDropdownVisible } = useDropdown();
+
   return (
     <MobileLayout>
-      <div className="w-full bg-main-primary">
-        <h1>국민대학교 소프트웨어융합대학</h1>
-        <p className="text-3xl font-bold">복지물품 대여 시스템</p>
-      </div>
+      <Dropdown
+        actions={dropdownActions}
+        isVisible={isDropdownVisible}
+        hideDropdown={hideDropdown}
+        positionClasses="top-5 right-5"
+      />
+      <button type="button" onClick={showDropdown}>
+        열기
+      </button>
+      <button type="button" onClick={hideDropdown}>
+        닫기
+      </button>
     </MobileLayout>
   );
 }
