@@ -59,14 +59,14 @@ export default function DashboardItem({
           onClick={() => console.log('수락!')}
           className="text-return-blue"
         >
-          수락하기
+          대여 승인
         </button>
         <button
           type="button"
           onClick={() => console.log('취소!')}
           className="text-return-red"
         >
-          취소하기
+          대여 취소
         </button>
       </section>
     </section>
