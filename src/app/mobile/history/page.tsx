@@ -17,57 +17,57 @@ export default function Mobile() {
   // const { showDropdown, hideDropdown, isDropdownVisible } = useDropdown();
 
   const returnItemDummy = [
-    { name: '현진이의 감자', url: '/assets/test.svg', dayCount: 3 },
-    { name: '감자', url: '/assets/test.svg', dayCount: 65 },
-    { name: '고구마', url: '/assets/test.svg', dayCount: 666 },
-    { name: '옥수수', url: '/assets/test.svg', dayCount: 656565 },
-    { name: '콩', url: '/assets/test.svg', dayCount: 6566656 },
-    { name: '팥', url: '/assets/test.svg', dayCount: 6 },
+    // { name: '현진이의 감자', url: '/assets/test.svg', dayCount: 3 },
+    // { name: '감자', url: '/assets/test.svg', dayCount: 65 },
+    // { name: '고구마', url: '/assets/test.svg', dayCount: 666 },
+    // { name: '옥수수', url: '/assets/test.svg', dayCount: 656565 },
+    // { name: '콩', url: '/assets/test.svg', dayCount: 6566656 },
+    // { name: '팥', url: '/assets/test.svg', dayCount: 6 },
   ];
 
   const rentalItemDummy = [
-    {
-      rentalHistoryId: 1,
-      member: {
-        name: '황수민',
-        studentId: '20213102',
-      },
-      item: {
-        itemName: '고데기',
-        imageUrl: '/assets/test.svg',
-      },
-      rentAt: '2025.01.22 13:08',
-      returnedAt: '2025.01.22 13:08',
-      rentalStatus: 'PENDING',
-    },
-    {
-      rentalHistoryId: 2,
-      member: {
-        name: '황수민',
-        studentId: '20213102',
-      },
-      item: {
-        itemName: '고데기',
-        imageUrl: '/assets/test.svg',
-      },
-      rentAt: '2025.01.22 13:08',
-      returnedAt: '2025.01.22 13:08',
-      rentalStatus: 'PENDING',
-    },
-    {
-      rentalHistoryId: 3,
-      member: {
-        name: '황수민',
-        studentId: '20213102',
-      },
-      item: {
-        itemName: '짱뜨거운고데기인데요사실은그게',
-        imageUrl: '/assets/test.svg',
-      },
-      rentAt: '2025.01.22 13:08',
-      returnedAt: '',
-      rentalStatus: 'RENTAL',
-    },
+    // {
+    //   rentalHistoryId: 1,
+    //   member: {
+    //     name: '황수민',
+    //     studentId: '20213102',
+    //   },
+    //   item: {
+    //     itemName: '고데기',
+    //     imageUrl: '/assets/test.svg',
+    //   },
+    //   rentAt: '2025.01.22 13:08',
+    //   returnedAt: '2025.01.22 13:08',
+    //   rentalStatus: 'PENDING',
+    // },
+    // {
+    //   rentalHistoryId: 2,
+    //   member: {
+    //     name: '황수민',
+    //     studentId: '20213102',
+    //   },
+    //   item: {
+    //     itemName: '고데기',
+    //     imageUrl: '/assets/test.svg',
+    //   },
+    //   rentAt: '2025.01.22 13:08',
+    //   returnedAt: '2025.01.22 13:08',
+    //   rentalStatus: 'PENDING',
+    // },
+    // {
+    //   rentalHistoryId: 3,
+    //   member: {
+    //     name: '황수민',
+    //     studentId: '20213102',
+    //   },
+    //   item: {
+    //     itemName: '짱뜨거운고데기인데요사실은그게',
+    //     imageUrl: '/assets/test.svg',
+    //   },
+    //   rentAt: '2025.01.22 13:08',
+    //   returnedAt: '',
+    //   rentalStatus: 'RENTAL',
+    // },
   ];
 
   return (
@@ -77,29 +77,41 @@ export default function Mobile() {
         반납이 필요한 물품
       </div>
       <div className="box-border flex gap-1.5 overflow-auto px-4 py-1">
-        {returnItemDummy.map((item) => (
-          <ReturnItem
-            key={item.name}
-            name={item.name}
-            url={item.url}
-            dayCount={item.dayCount}
-          />
-        ))}
+        {returnItemDummy.length > 0 ? (
+          returnItemDummy.map((item) => (
+            <ReturnItem
+              key={item.name}
+              name={item.name}
+              url={item.url}
+              dayCount={item.dayCount}
+            />
+          ))
+        ) : (
+          <div className="text-body-2-normal_semi font-medium">
+            반납이 필요한 물품이 없습니다.
+          </div>
+        )}
       </div>
 
       <div className="px-4">
         <div className="pb-1.5 pt-[50px] text-heading-4_M font-semibold">
           대여 내역
         </div>
-        {rentalItemDummy.map((item) => (
-          <RentalItem
-            key={item.rentalHistoryId}
-            item={item.item}
-            rentAt={item.rentAt}
-            returnAt={item.returnedAt}
-            rentalStatus={item.rentalStatus}
-          />
-        ))}
+        {rentalItemDummy.length > 0 ? (
+          rentalItemDummy.map((item) => (
+            <RentalItem
+              key={item.rentalHistoryId}
+              item={item.item}
+              rentAt={item.rentAt}
+              returnAt={item.returnedAt}
+              rentalStatus={item.rentalStatus}
+            />
+          ))
+        ) : (
+          <div className="text-body-2-normal_semi font-medium">
+            대여 내역이 없습니다.
+          </div>
+        )}
       </div>
       {/* <Dropdown */}
       {/*  actions={dropdownActions} */}
