@@ -6,7 +6,6 @@ interface DashboardItemProps {
   imageUrl: string;
   renterName: string;
   studentId: number;
-  // status도 enum으로 type 정리해서 뽑는 게 좋을 듯
   status: string;
   applicatedAt: string;
 }
@@ -19,6 +18,11 @@ export default function DashboardItem({
   status,
   applicatedAt,
 }: DashboardItemProps) {
+  const RentalBtnText: Record<string, string> = {
+    PENDING: '대여',
+    RETURN_PENDING: '반납',
+  };
+
   const applicatedTime = convertTime(applicatedAt);
 
   return (
@@ -53,20 +57,19 @@ export default function DashboardItem({
 
       <section className="flex gap-2.5 text-sm font-semibold">
         {/* TODO : API 보고 onClick 연결하기 */}
-        {/* TODO : 대여/반납 상태에 따라 버튼명 달라지게 하기 */}
         <button
           type="button"
           onClick={() => console.log('수락!')}
           className="text-return-blue"
         >
-          대여 승인
+          {RentalBtnText[status]} 승인
         </button>
         <button
           type="button"
           onClick={() => console.log('취소!')}
           className="text-return-red"
         >
-          대여 취소
+          {RentalBtnText[status]} 취소
         </button>
       </section>
     </section>
