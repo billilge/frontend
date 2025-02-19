@@ -44,7 +44,7 @@ export default function Dashboard() {
   const { showDropdown, hideDropdown, isDropdownVisible } = useDropdown();
 
   const handleDropdown = () => {
-    isDropdownVisible ? hideDropdown() : showDropdown();
+    return isDropdownVisible ? hideDropdown() : showDropdown();
   };
 
   const handleFilter = (filterText: string) => {
