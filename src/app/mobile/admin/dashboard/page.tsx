@@ -27,26 +27,36 @@ const RentalApplicationDetail = [
       'https://github.com/user-attachments/assets/159ee697-5a2e-43c8-a5a0-8ab73ae869fd',
     renterName: '황현진',
     studentId: 20213102,
-    status: 'RENTAL',
+    status: 'RETURN_PENDING',
     applicatedAt: '2025-02-13T08:44:45.476Z',
   },
 ];
 
 export default function Dashboard() {
-  const dropdownActions = [
-    { title: '전체', func: () => console.log('전체') },
-    { title: '대여 신청', func: () => console.log('대여 신청') },
-    { title: '반납 신청', func: () => console.log('반납 신청') },
-  ];
+  const RentalFilterText: Record<string, string> = {
+    ALL: '전체',
+    PENDING: '대여 신청',
+    RETURN_PENDING: '반납 신청',
+  };
 
   const [filter, setFilter] = useState('ALL');
 
   const { showDropdown, hideDropdown, isDropdownVisible } = useDropdown();
 
-  const handleDropdown = (e: React.MouseEvent) => {
-    e.stopPropagation();
+  const handleDropdown = () => {
     isDropdownVisible ? hideDropdown() : showDropdown();
   };
+
+  const handleFilter = (filterText: string) => {
+    setFilter(filterText);
+    // 여기에 필터링 GET 쏘는 API 추가
+  };
+
+  const dropdownActions = [
+    { title: '전체', func: () => handleFilter('ALL') },
+    { title: '대여 신청', func: () => handleFilter('PENDING') },
+    { title: '반납 신청', func: () => handleFilter('RETURN_PENDING') },
+  ];
 
   return (
     <MobileLayout>
@@ -58,10 +68,12 @@ export default function Dashboard() {
         </div>
         <button
           type="button"
-          onClick={handleDropdown}
-          className="flex items-center gap-2.5"
+          onClick={isDropdownVisible ? undefined : handleDropdown}
+          className={`flex items-center gap-2.5 ${isDropdownVisible && 'pointer-events-none'}`}
         >
-          <div className="flex text-sm font-semibold">{filter}</div>
+          <div className="flex text-sm font-semibold">
+            {RentalFilterText[filter]}
+          </div>
           <IconArrow
             className={
               (cn('flex'), isDropdownVisible ? 'rotate-90' : '-rotate-90')
