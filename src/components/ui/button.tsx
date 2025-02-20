@@ -15,10 +15,13 @@ const buttonVariants = cva(
           'bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90',
         outline:
           'border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground',
-        secondary:
-          'bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80',
         ghost: 'hover:bg-accent hover:text-accent-foreground',
         link: 'text-primary underline-offset-4 hover:underline',
+        // 우리 버튼 추가
+        primary:
+          'whitespace-nowrap rounded-md bg-gray-primary px-3 py-1 text-sm text-white-primary',
+        secondary:
+          'whitespace-nowrap rounded-md bg-gray-secondary px-3 py-1 text-sm text-white-primary',
       },
       size: {
         default: 'h-9 px-4 py-2',
