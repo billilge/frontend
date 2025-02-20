@@ -7,6 +7,7 @@ import Header from '@/components/mobile/Header';
 import ReturnItem from '@/app/mobile/history/_components/ReturnItem';
 import RentalItem from '@/app/mobile/history/_components/RentalItem';
 import Alert from '@/components/mobile/Alert';
+import { useState } from 'react';
 import IconNoReturn from '../../../../public/assets/icon-no-return.svg';
 
 export default function Mobile() {
@@ -128,6 +129,22 @@ export default function Mobile() {
     },
   ];
 
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [isAlertVisible, setIsAlertVisible] = useState(false);
+
+  // 반납하기 버튼 클릭시 실행
+  const handleReturnClick = (item) => {
+    setSelectedItem(item);
+    setIsAlertVisible(true);
+  };
+
+  // alert창의 cta 버튼 클릭시 실행
+  const handleReturnConfirm = () => {
+    console.log(`${selectedItem?.item.itemName} 반납 처리!`);
+    setIsAlertVisible(false);
+    setSelectedItem(null);
+  };
+
   return (
     <MobileLayout>
       <Header title="대여 기록" menu />
@@ -166,6 +183,7 @@ export default function Mobile() {
                 rentAt={item.rentAt}
                 returnAt={item.returnedAt}
                 rentalStatus={item.rentalStatus}
+                onReturnClick={() => handleReturnClick(item)}
               />
             ))
           ) : (
@@ -176,14 +194,6 @@ export default function Mobile() {
             </div>
           )}
         </section>
-        {/* <Alert */}
-        {/*  content="해당 물품을 반납 하시겠습니까?" */}
-        {/*  ctaButtonText="반납하기" */}
-        {/*  otherButtonText="취소하기" */}
-        {/*  isMainColor // CTA 버튼을 메인 컬러로 */}
-        {/*  onClickCta={() => console.log('반납하기 버튼 클릭')} */}
-        {/*  onClickOther={() => console.log('취소하기 버튼 클릭')} */}
-        {/* /> */}
 
         {/* <Dropdown */}
         {/*  actions={dropdownActions} */}
@@ -197,6 +207,19 @@ export default function Mobile() {
         {/* <button type="button" onClick={hideDropdown}> */}
         {/*  닫기 */}
         {/* </button> */}
+
+        {isAlertVisible && selectedItem && (
+          <Alert
+            // content={`${selectedItem.item.itemName}을 반납할까요?`}
+            content="이 물품 반납할까요?"
+            ctaButtonText="반납할게요"
+            otherButtonText="취소하기"
+            isMainColor={false}
+            onClickCta={handleReturnConfirm} // 반납 처리
+            onClickOther={() => setIsAlertVisible(false)} // Alert 닫기
+          />
+        )}
+
         <div className="fixed bottom-0 left-0 right-0 flex h-12 items-center justify-center bg-[#F3F4F6]">
           <div className="text-body-2-normal_medi">© wink</div>
         </div>
