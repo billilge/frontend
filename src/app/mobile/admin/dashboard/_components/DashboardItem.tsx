@@ -29,9 +29,7 @@ export default function DashboardItem({
     <section className="flex w-full items-center justify-between px-5 py-4">
       <section className="flex items-center gap-4">
         <section className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-tertiary p-2.5">
-          {/* Image를 쓰는 걸 next에서 권장하지만, Image로 svg를 받아오는 건 권장하지 않는다고 함 -> Image / img 선택 필요 */}
           <Image src={imageUrl} width={24} height={24} alt="물품 아이콘" />
-          {/* <img src={imageUrl} alt="물품 아이콘" /> */}
         </section>
 
         <section className="flex flex-col gap-2">
