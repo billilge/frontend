@@ -23,28 +23,36 @@ export default function Alert({
     'text-body-1-normal_semi w-[108px] rounded-[10px] py-[9px] font-medium outline-none';
 
   return (
-    <div className="flex w-[275px] flex-col gap-2.5 rounded-[20px] bg-white-primary p-5 shadow-md">
-      {/*  문구 */}
-      <div className="py-5 text-center text-body-1-normal_medi font-medium">
-        {content}
-      </div>
+    <div className="fixed inset-0 z-20 flex items-center justify-center">
+      {/* 반투명한 검정 배경 */}
+      <div
+        className="absolute inset-0 bg-black bg-opacity-50"
+        onClick={onClickOther} // 배경 클릭 시 닫히도록 설정
+      />
 
-      {/* 버튼 2개(서브 버튼 / 메인 버튼) */}
-      <div className="flex justify-between gap-5">
-        <button
-          type="button"
-          onClick={onClickOther}
-          className={`${defalutButtonClass} bg-gray-tertiary text-gray-secondary`}
-        >
-          {otherButtonText}
-        </button>
-        <button
-          type="button"
-          onClick={onClickCta}
-          className={` ${defalutButtonClass} ${ctaButtonClass}`}
-        >
-          {ctaButtonText}
-        </button>
+      <div className="relative flex w-[275px] flex-col gap-2.5 rounded-[20px] bg-white-primary p-5">
+        {/*  문구 */}
+        <div className="py-5 text-center text-body-1-normal_medi font-medium">
+          {content}
+        </div>
+
+        {/* 버튼 2개(서브 버튼 / 메인 버튼) */}
+        <div className="flex justify-between gap-5">
+          <button
+            type="button"
+            onClick={onClickOther}
+            className={`${defalutButtonClass} bg-gray-tertiary text-gray-secondary`}
+          >
+            {otherButtonText}
+          </button>
+          <button
+            type="button"
+            onClick={onClickCta}
+            className={` ${defalutButtonClass} ${ctaButtonClass}`}
+          >
+            {ctaButtonText}
+          </button>
+        </div>
       </div>
     </div>
   );
