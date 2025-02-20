@@ -44,7 +44,7 @@ export default function RentalItem({
       {rentalStatus === 'RENTAL' && (
         <button
           onClick={onReturnClick}
-          className="py-2.5 text-body-2-normal_semi font-semibold text-warning"
+          className="box-border px-1 py-2.5 text-body-2-normal_semi font-semibold text-warning"
         >
           반납하기
         </button>
