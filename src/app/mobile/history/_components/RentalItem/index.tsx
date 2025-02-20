@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import StatusBadge from '@/app/mobile/history/_components/StatusBadge';
 
 interface RentalItemProps {
   item: { itemName: string; imageUrl: string };
@@ -15,8 +16,8 @@ export default function RentalItem({
 }: RentalItemProps) {
   return (
     <div className="flex w-full items-center justify-between py-5">
-      <div className="flex gap-[17px]">
-        <div className="flex aspect-square items-center justify-center rounded-full bg-gray-tertiary p-1">
+      <div className="flex items-start gap-[17px]">
+        <div className="flex h-[40px] w-[40px] items-center justify-center rounded-full bg-gray-tertiary p-1">
           <Image
             width={26}
             height={26}
@@ -25,25 +26,22 @@ export default function RentalItem({
           />
         </div>
         <div className="flex flex-col gap-[7px]">
-          <div className="flex gap-[7px]">
-            <div className="max-w-40 truncate text-body-2-normal_semi font-semibold">
+          <div className="flex w-full items-center gap-[7px]">
+            <div className="overflow-hidden text-ellipsis whitespace-nowrap text-body-2-normal_semi font-semibold">
               {item.itemName}
             </div>
-            <div className="text-body-2-normal_semi font-semibold">
-              {rentalStatus}
-            </div>
+            <StatusBadge status={rentalStatus} />
           </div>
           <div className="flex flex-col gap-1 text-caption-2_midi text-gray-primary">
             <div>대여 시간 &nbsp;{rentAt !== '' ? rentAt : '-'}</div>
             <div>반납 시간 &nbsp;{returnAt !== '' ? returnAt : '-'}</div>
           </div>
         </div>
-        <div />
       </div>
 
-      <div className="flex flex-col items-center">
+      <div className="flex min-w-14 flex-shrink-0 flex-col items-center">
         {rentalStatus === 'RENTAL' && (
-          <div className="cursor-pointer py-2.5 text-body-2-normal_semi font-semibold text-warning">
+          <div className="py-2.5 text-body-2-normal_semi font-semibold text-warning">
             반납하기
           </div>
         )}
