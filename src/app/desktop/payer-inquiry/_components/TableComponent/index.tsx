@@ -19,11 +19,11 @@ interface Invoice {
 
 interface TableComponentProps {
   data: Invoice[];
-  showCheckboxes?: boolean;
+  showCheckboxes?: boolean; // 고민이에요... ESLint: propType "handleDelete" is not required, but has no corresponding defaultProps declaration 에러가 뜸
   headers?: string[];
   selected: string[];
   setSelected: (selectedIds: (prev: string[]) => string[]) => void;
-  handleDelete?: (selectedIds: string[]) => void;
+  handleDelete?: (selectedIds: string[]) => void; // 22
 }
 
 function TableComponent({
@@ -94,7 +94,7 @@ function TableComponent({
               </TableCell>
               {headers.includes('관리자 여부') && (
                 <TableCell className="w-30 text-center">
-                  {item.admin !== undefined ? (item.admin ? '⭕' : '❌') : ''}
+                  {item.admin !== undefined ? (item.admin ? 'o' : 'x') : ''}
                 </TableCell>
               )}
             </TableRow>
@@ -121,16 +121,16 @@ function TableComponent({
           <ChevronRightIcon className="h-6 w-6 cursor-pointer text-black-primary" />
         </Button>
       </div>
-      {showCheckboxes && selected.length > 0 && (
-        <div className="pt-4 text-right">
-          <Button
-            className="bg-gray-primary text-white"
-            onClick={() => handleDelete && handleDelete(selected)}
-          >
-            완료
-          </Button>
-        </div>
-      )}
+      {/* {showCheckboxes && selected.length > 0 && ( */}
+      {/*   <div className="pt-4 text-right"> */}
+      {/*     <Button */}
+      {/*       className="bg-gray-primary text-white" */}
+      {/*       onClick={() => handleDelete && handleDelete(selected)} */}
+      {/*     > */}
+      {/*       완료 */}
+      {/*     </Button> */}
+      {/*   </div> */}
+      {/* )} */}
     </div>
   );
 }

@@ -3,49 +3,98 @@
 import Sidebar from 'src/components/desktop/Sidebar';
 import Search from '@/components/desktop/Search';
 import { useState } from 'react';
+import AddStudentId from '@/components/desktop/AddStudentId';
+import { Button } from '@/components/ui/button';
 import TableComponent from './_components/TableComponent';
+import AddInput from '../../../components/desktop/AddInput';
 
 const dummyData = [
   { name: '조다운', student_id: '20223139', admin: true },
   { name: '이정욱', student_id: '20223888', admin: true },
   { name: '윤신지', student_id: '20223122', admin: false },
   { name: '황수민', student_id: '20223130', admin: true },
-  { name: '황현진', student_id: '20223134', admin: true },
-  { name: '박건민', student_id: '20220555', admin: false },
-  { name: '이현승', student_id: '20223355', admin: true },
-  { name: '곽희건', student_id: '20223444', admin: true },
-  { name: '박정명', student_id: '20225555', admin: false },
-  { name: '류건', student_id: '20224444', admin: true },
-  { name: '윤성욱', student_id: '20222222', admin: true },
-  { name: '앵나래', student_id: '20221111', admin: false },
 ];
 
 const dummyData2 = [
   { name: '조다운', student_id: '20223139' },
   { name: '황현진', student_id: '20223158' },
-  { name: '황수민', student_id: '20213139' },
 ];
 
 export default function PayerInquiryPage() {
-  const [data, setData] = useState(dummyData); // 데이터 상태
-  const [addedData, setAddedData] = useState(dummyData2); // 추가된 데이터 상태
-  const [isDeleteMode, setIsDeleteMode] = useState(false); // 삭제 모드 상태
-  const [selected, setSelected] = useState<string[]>([]); // 선택된 항목 추적
+  const [data, setData] = useState(dummyData); // 기존 데이터
+  const [addedData, setAddedData] = useState(dummyData2); // 추가된 데이터
+  const [isDeleteModeOriginal, setIsDeleteModeOriginal] = useState(false); // 기존 데이터 삭제 모드
+  const [isDeleteModeAdded, setIsDeleteModeAdded] = useState(false); // 추가된 데이터 삭제 모드
+  const [selectedOriginal, setSelectedOriginal] = useState<string[]>([]); // 기존 데이터에서 선택된 항목
+  const [selectedAdded, setSelectedAdded] = useState<string[]>([]); // 추가된 데이터에서 선택된 항목
 
-  // 삭제 처리 함수
-  const handleDelete = (selectedIds: string[]) => {
-    const updatedData = data.filter(
-      (item) => !selectedIds.includes(item.student_id),
-    );
-    setData(updatedData);
-    setIsDeleteMode(false); // 삭제 후 모드 종료
-    setSelected([]); // 선택 초기화
+  const [newStudentId, setNewStudentId] = useState('');
+  const [newStudentName, setNewStudentName] = useState('');
+
+  // 학번 입력 핸들러
+  const handleStudentIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNewStudentId(e.target.value);
   };
 
-  // 삭제 모드 활성화/비활성화 함수
-  const toggleDeleteMode = () => {
-    setIsDeleteMode((prev) => !prev);
-    setSelected([]); // 삭제 모드 활성화 시 선택 초기화
+  // 이름 입력 핸들러
+  const handleStudentNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNewStudentName(e.target.value);
+  };
+
+  // 추가 버튼 클릭 시 실행될 함수
+  const handleAddStudent = () => {
+    if (!newStudentId || !newStudentName) {
+      alert('이름과 학번을 입력해주세요.');
+      return;
+    }
+
+    // 학번이 8자리 숫자인지 검증
+    const studentIdPattern = /^\d{8}$/;
+    if (!studentIdPattern.test(newStudentId)) {
+      alert('학번은 8자리 숫자로 입력해야 합니다.');
+      return;
+    }
+
+    const newEntry = { name: newStudentName, student_id: newStudentId };
+    setAddedData([...addedData, newEntry]); // 추가된 데이터 업데이트
+    setNewStudentId('');
+    setNewStudentName('');
+  };
+
+  // 기존 데이터 삭제
+  const handleDeleteOriginal = () => {
+    const updatedData = data.filter(
+      (item) => !selectedOriginal.includes(item.student_id),
+    );
+    setData(updatedData);
+    setIsDeleteModeOriginal(false);
+    setSelectedOriginal([]);
+  };
+
+  // 추가된 데이터 삭제
+  const handleDeleteAdded = () => {
+    const updatedData = addedData.filter(
+      (item) => !selectedAdded.includes(item.student_id),
+    );
+    setAddedData(updatedData);
+    setIsDeleteModeAdded(false);
+    setSelectedAdded([]);
+  };
+
+  // 기존 데이터 삭제 모드 토글
+  const toggleDeleteModeOriginal = () => {
+    setIsDeleteModeOriginal((prev) => !prev);
+    setSelectedOriginal([]);
+  };
+
+  // 추가된 데이터 삭제 모드 토글
+  const toggleDeleteModeAdded = () => {
+    setIsDeleteModeAdded((prev) => !prev);
+    setSelectedAdded([]);
+  };
+
+  const api = () => {
+    console.log('api 적용할 곳입니다.');
   };
 
   return (
@@ -61,32 +110,77 @@ export default function PayerInquiryPage() {
           description="설명"
         >
           <div className="flex w-full flex-col items-center justify-center">
-            <Search placeholder="이름을 검색해주세요." />
+            <div className="flex items-end justify-center gap-4">
+              <AddStudentId
+                value={newStudentId}
+                onChange={handleStudentIdChange}
+              />
+              <AddInput
+                value={newStudentName}
+                onChange={handleStudentNameChange}
+                onClick={handleAddStudent}
+              />
+              <div className="flex gap-2">
+                <Button
+                  type="button"
+                  variant="primary"
+                  onClick={toggleDeleteModeAdded}
+                >
+                  {isDeleteModeAdded ? '취소' : '삭제'}
+                </Button>
+                {isDeleteModeAdded && (
+                  <Button
+                    type="button"
+                    variant="primary"
+                    onClick={handleDeleteAdded}
+                  >
+                    완료
+                  </Button>
+                )}
+              </div>
+            </div>
+
             <TableComponent
               data={addedData}
               headers={['추가된 이름', '추가된 학번']}
-              showCheckboxes={isDeleteMode}
-              selected={selected} // Pass selected here
-              setSelected={setSelected} // Pass setSelected here
+              showCheckboxes={isDeleteModeAdded}
+              selected={selectedAdded}
+              setSelected={setSelectedAdded}
             />
           </div>
+          <div className="bottom-0 flex justify-center pt-10">
+            <Button type="button" variant="primary" onClick={api}>
+              적용하기
+            </Button>
+          </div>
         </Sidebar>
-        <button
+        <Button
           type="button"
-          className={`btn whitespace-nowrap rounded-md bg-gray-primary px-3 py-2 text-sm text-white-primary ${isDeleteMode ? 'bg-gray-primary' : 'bg-gray-secondary'}`}
-          onClick={toggleDeleteMode}
+          variant="primary"
+          onClick={toggleDeleteModeOriginal}
         >
-          {isDeleteMode ? '취소' : '삭제하기'}
-        </button>
+          {isDeleteModeOriginal ? '취소' : '삭제'}
+        </Button>
       </div>
       <div className="flex items-center justify-between">
         <TableComponent
           data={data}
-          showCheckboxes={isDeleteMode}
-          selected={selected} // Pass selected here
-          setSelected={setSelected} // Pass setSelected here
-          handleDelete={handleDelete}
+          showCheckboxes={isDeleteModeOriginal}
+          selected={selectedOriginal}
+          setSelected={setSelectedOriginal}
         />
+        <div className="flex gap-2">
+          {isDeleteModeOriginal && (
+            <Button
+              type="button"
+              variant="primary"
+              className={`btn whitespace-nowrap rounded-md px-3 py-2 text-sm text-white-primary ${isDeleteModeOriginal ? 'bg-gray-primary' : 'bg-gray-secondary'}`}
+              onClick={handleDeleteOriginal}
+            >
+              완료
+            </Button>
+          )}
+        </div>
       </div>
     </div>
   );

@@ -18,7 +18,7 @@ interface SidebarProps {
 export default function Sidebar({
   children,
   title = 'Sidebar Title',
-  description = '',
+  // description = '',
   triggerText = 'Open',
 }: SidebarProps) {
   return (
@@ -31,7 +31,7 @@ export default function Sidebar({
           <SheetTitle className="flex justify-center text-2xl font-medium">
             {title}
           </SheetTitle>
-          {description && <SheetDescription>{description}</SheetDescription>}
+          {/* {description && <SheetDescription>{description}</SheetDescription>} */}
         </SheetHeader>
         <div className="mt-4">{children}</div>
       </SheetContent>
