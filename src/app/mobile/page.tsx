@@ -3,6 +3,7 @@
 import MobileLayout from '@/components/mobile/layout';
 import Dropdown from '@/components/mobile/Dropdown';
 import useDropdown from '@/hooks/useDropdown';
+import Spacing from '@/components/mobile/Spacing';
 
 export default function Mobile() {
   const dropdownActions = [
