@@ -25,7 +25,8 @@ const nextConfig = {
   },
   images: {
     domains: ['github.com'],
-    dangerouslyAllowSVG: true,  // svg 이미지 허용을 위해 추가 -> 보안 위험 있음음
+    dangerouslyAllowSVG: true,
+    contentSecurityPolicy: "default-src 'self'; img-src 'self' data: https:;",
   },
 };
 
