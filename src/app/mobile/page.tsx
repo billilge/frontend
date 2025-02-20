@@ -16,6 +16,7 @@ export default function Mobile() {
 
   return (
     <MobileLayout>
+      <Spacing size={8} />
       <Dropdown
         actions={dropdownActions}
         isVisible={isDropdownVisible}

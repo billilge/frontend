@@ -12,12 +12,14 @@ export default function Spacing({ size }: SpacingProps) {
     xl: 'my-8',
   };
 
-  const marginStyle = typeof size === 'number' ? { margin: size } : {};
+  const marginSize = typeof size === 'number' && size / 2;
 
   return (
     <div
-      className={cn(typeof size === 'string' ? marginClasses[size] : '')}
-      style={marginStyle}
+      className={cn(
+        'block h-0 w-full',
+        typeof size === 'string' ? marginClasses[size] : `p-${marginSize}`,
+      )}
     />
   );
 }
