@@ -6,6 +6,7 @@ interface RentalItemProps {
   rentAt: string;
   returnAt: string | null;
   rentalStatus: string;
+  onReturnClick: () => void;
 }
 
 export default function RentalItem({
@@ -13,6 +14,7 @@ export default function RentalItem({
   rentAt,
   returnAt,
   rentalStatus,
+  onReturnClick,
 }: RentalItemProps) {
   return (
     <div className="flex w-full items-center justify-between py-5">
@@ -39,13 +41,14 @@ export default function RentalItem({
         </div>
       </div>
 
-      <div className="flex min-w-14 flex-shrink-0 flex-col items-center">
-        {rentalStatus === 'RENTAL' && (
-          <div className="py-2.5 text-body-2-normal_semi font-semibold text-warning">
-            반납하기
-          </div>
-        )}
-      </div>
+      {rentalStatus === 'RENTAL' && (
+        <button
+          onClick={onReturnClick}
+          className="py-2.5 text-body-2-normal_semi font-semibold text-warning"
+        >
+          반납하기
+        </button>
+      )}
     </div>
   );
 }
