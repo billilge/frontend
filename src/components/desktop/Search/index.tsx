@@ -2,10 +2,16 @@
 
 import { SearchInput } from '../../ui/search-input';
 
-export default function Search() {
+interface SearchProps {
+  placeholder?: string;
+}
+
+export default function Search({
+  placeholder = '검색어를 입력하세요.',
+}: SearchProps) {
   return (
     <SearchInput
-      placeholder="검색어 입력..."
+      placeholder={placeholder}
       onSearch={(query) => console.log(query)}
     />
   );

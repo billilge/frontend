@@ -1,9 +1,21 @@
 import * as React from 'react';
 import { cn } from '@/lib/utils';
-import { Search } from 'lucide-react';
+import { Plus } from 'lucide-react'; // 기본 아이콘은 Plus로 설정
 
-const Input = React.forwardRef<HTMLInputElement, React.ComponentProps<'input'>>(
-  ({ className, type = 'text', ...props }, ref) => {
+interface InputProps extends React.ComponentProps<'input'> {
+  Icon?: React.ReactNode; // 아이콘을 전달할 수 있는 props
+}
+
+const Input = React.forwardRef<HTMLInputElement, InputProps>(
+  (
+    {
+      className,
+      type = 'text',
+      Icon = <Plus className="h-5 w-5 text-muted-foreground" />,
+      ...props
+    },
+    ref,
+  ) => {
     return (
       <div className="relative w-full max-w-80">
         <input
@@ -15,7 +27,9 @@ const Input = React.forwardRef<HTMLInputElement, React.ComponentProps<'input'>>(
           ref={ref}
           {...props}
         />
-        <Search className="absolute right-3 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
+        <div className="absolute right-3 top-1/2 -translate-y-1/2">
+          {Icon} {/* 전달된 아이콘을 렌더링 */}
+        </div>
       </div>
     );
   },
