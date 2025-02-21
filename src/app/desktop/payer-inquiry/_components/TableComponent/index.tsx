@@ -121,16 +121,6 @@ function TableComponent({
           <ChevronRightIcon className="h-6 w-6 cursor-pointer text-black-primary" />
         </Button>
       </div>
-      {/* {showCheckboxes && selected.length > 0 && ( */}
-      {/*   <div className="pt-4 text-right"> */}
-      {/*     <Button */}
-      {/*       className="bg-gray-primary text-white" */}
-      {/*       onClick={() => handleDelete && handleDelete(selected)} */}
-      {/*     > */}
-      {/*       완료 */}
-      {/*     </Button> */}
-      {/*   </div> */}
-      {/* )} */}
     </div>
   );
 }
