@@ -23,6 +23,11 @@ const nextConfig = {
 
     return config;
   },
+  images: {
+    domains: ['github.com'],
+    dangerouslyAllowSVG: true,
+    contentSecurityPolicy: "default-src 'self'; img-src 'self' data: https:;",
+  },
 };
 
 export default nextConfig;
