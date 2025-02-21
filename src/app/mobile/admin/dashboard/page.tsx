@@ -5,8 +5,8 @@ import MobileLayout from '@/components/mobile/layout';
 import Header from '@/components/mobile/Header';
 import Dropdown from '@/components/mobile/Dropdown';
 import useDropdown from '@/hooks/useDropdown';
-import IconArrow from 'public/assets/icon-arrow.svg';
 import { cn } from '@/lib/utils';
+import IconArrow from '../../../../../public/assets/icons/icon-arrow.svg';
 import DashboardItem from './_components/DashboardItem';
 
 const RentalApplicationDetail = [
