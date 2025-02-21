@@ -11,12 +11,12 @@ import IconNoRental from '../../../../public/assets/icons/icon-no-rental.svg';
 
 export default function Mobile() {
   const returnItemDummy = [
-    { name: '현진이의 감자', url: '/assets/icon-test.svg', dayCount: 3 },
-    { name: '감자', url: '/assets/icon-test.svg', dayCount: 65 },
-    { name: '고구마', url: '/assets/icon-test.svg', dayCount: 666 },
-    { name: '옥수수', url: '/assets/icon-test.svg', dayCount: 656565 },
-    { name: '콩', url: '/assets/icon-test.svg', dayCount: 6566656 },
-    { name: '팥', url: '/assets/icon-test.svg', dayCount: 6 },
+    { name: '현진이의 감자', url: '/assets/icons/icon-test.svg', dayCount: 3 },
+    { name: '감자', url: '/assets/icons/icon-test.svg', dayCount: 65 },
+    { name: '고구마', url: '/assets/icons/icon-test.svg', dayCount: 666 },
+    { name: '옥수수', url: '/assets/icons/icon-test.svg', dayCount: 656565 },
+    { name: '콩', url: '/assets/icons/icon-test.svg', dayCount: 6566656 },
+    { name: '팥', url: '/assets/icons/icon-test.svg', dayCount: 6 },
   ];
 
   const rentalItemDummy = [
@@ -28,7 +28,7 @@ export default function Mobile() {
       },
       item: {
         itemName: '고데기',
-        imageUrl: '/assets/icon-test.svg',
+        imageUrl: '/assets/icons/icon-test.svg',
       },
       rentAt: '2025.01.22 13:08',
       returnedAt: '2025.01.22 13:08',
@@ -42,7 +42,7 @@ export default function Mobile() {
       },
       item: {
         itemName: '고데기',
-        imageUrl: '/assets/icon-test.svg',
+        imageUrl: '/assets/icons/icon-test.svg',
       },
       rentAt: '2025.01.22 13:08',
       returnedAt: '2025.01.22 13:08',
@@ -56,7 +56,7 @@ export default function Mobile() {
       },
       item: {
         itemName: '짱뜨거운고데기인데요사실은그게',
-        imageUrl: '/assets/icon-test.svg',
+        imageUrl: '/assets/icons/icon-test.svg',
       },
       rentAt: '2025.01.22 13:08',
       returnedAt: '',
@@ -70,7 +70,7 @@ export default function Mobile() {
       },
       item: {
         itemName: '짱뜨거운고데기인데요사실은그게',
-        imageUrl: '/assets/icon-test.svg',
+        imageUrl: '/assets/icons/icon-test.svg',
       },
       rentAt: '2025.01.22 13:08',
       returnedAt: '',
@@ -84,7 +84,7 @@ export default function Mobile() {
       },
       item: {
         itemName: '짱뜨거운고데기인데요사실은그게',
-        imageUrl: '/assets/icon-test.svg',
+        imageUrl: '/assets/icons/icon-test.svg',
       },
       rentAt: '2025.01.22 13:08',
       returnedAt: '',
@@ -98,7 +98,7 @@ export default function Mobile() {
       },
       item: {
         itemName: '짱뜨거운고데기인데요사실은그게',
-        imageUrl: '/assets/icon-test.svg',
+        imageUrl: '/assets/icons/icon-test.svg',
       },
       rentAt: '2025.01.22 13:08',
       returnedAt: '',
@@ -112,7 +112,7 @@ export default function Mobile() {
       },
       item: {
         itemName: '짱뜨거운고데기인데요사실은그게',
-        imageUrl: '/assets/icon-test.svg',
+        imageUrl: '/assets/icons/icon-test.svg',
       },
       rentAt: '2025.01.22 13:08',
       returnedAt: '',
