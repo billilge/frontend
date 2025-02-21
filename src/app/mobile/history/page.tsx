@@ -19,55 +19,126 @@ export default function Mobile() {
     { name: '팥', url: '/assets/icon-test.svg', dayCount: 6 },
   ];
 
-  const rentalItemDummy = [
+  // const rentalItemDummy = [
+  //   {
+  //     rentalHistoryId: 1,
+  //     member: {
+  //       name: '황수민',
+  //       studentId: '20213102',
+  //     },
+  //     item: {
+  //       itemName: '고데기',
+  //       imageUrl: '/assets/icon-test.svg',
+  //     },
+  //     rentAt: '2025.01.22 13:08',
+  //     returnedAt: '2025.01.22 13:08',
+  //     rentalStatus: 'PENDING',
+  //   },
+  //   {
+  //     rentalHistoryId: 2,
+  //     member: {
+  //       name: '황수민',
+  //       studentId: '20213102',
+  //     },
+  //     item: {
+  //       itemName: '고데기',
+  //       imageUrl: '/assets/icon-test.svg',
+  //     },
+  //     rentAt: '2025.01.22 13:08',
+  //     returnedAt: '2025.01.22 13:08',
+  //     rentalStatus: 'CANCEL',
+  //   },
+  //   {
+  //     rentalHistoryId: 3,
+  //     member: {
+  //       name: '황수민',
+  //       studentId: '20213102',
+  //     },
+  //     item: {
+  //       itemName: '짱뜨거운고데기인데요사실은그게',
+  //       imageUrl: '/assets/icon-test.svg',
+  //     },
+  //     rentAt: '2025.01.22 13:08',
+  //     returnedAt: '',
+  //     rentalStatus: 'CONFIRMED',
+  //   },
+  //   {
+  //     rentalHistoryId: 4,
+  //     member: {
+  //       name: '황수민',
+  //       studentId: '20213102',
+  //     },
+  //     item: {
+  //       itemName: '짱뜨거운고데기인데요사실은그게',
+  //       imageUrl: '/assets/icon-test.svg',
+  //     },
+  //     rentAt: '2025.01.22 13:08',
+  //     returnedAt: '',
+  //     rentalStatus: 'RENTAL',
+  //   },
+  //   {
+  //     rentalHistoryId: 5,
+  //     member: {
+  //       name: '황수민',
+  //       studentId: '20213102',
+  //     },
+  //     item: {
+  //       itemName: '짱뜨거운고데기인데요사실은그게',
+  //       imageUrl: '/assets/icon-test.svg',
+  //     },
+  //     rentAt: '2025.01.22 13:08',
+  //     returnedAt: '',
+  //     rentalStatus: 'RETURN_PENDING',
+  //   },
+  //   {
+  //     rentalHistoryId: 6,
+  //     member: {
+  //       name: '황수민',
+  //       studentId: '20213102',
+  //     },
+  //     item: {
+  //       itemName: '짱뜨거운고데기인데요사실은그게',
+  //       imageUrl: '/assets/icon-test.svg',
+  //     },
+  //     rentAt: '2025.01.22 13:08',
+  //     returnedAt: '',
+  //     rentalStatus: 'RETURN_CONFIRMED',
+  //   },
+  //   {
+  //     rentalHistoryId: 7,
+  //     member: {
+  //       name: '황수민',
+  //       studentId: '20213102',
+  //     },
+  //     item: {
+  //       itemName: '짱뜨거운고데기인데요사실은그게',
+  //       imageUrl: '/assets/icon-test.svg',
+  //     },
+  //     rentAt: '2025.01.22 13:08',
+  //     returnedAt: '',
+  //     rentalStatus: 'RETURNED',
+  //   },
+  // ];
+  const [rentalItems, setRentalItems] = useState([
     {
       rentalHistoryId: 1,
-      member: {
-        name: '황수민',
-        studentId: '20213102',
-      },
-      item: {
-        itemName: '고데기',
-        imageUrl: '/assets/icon-test.svg',
-      },
+      member: { name: '황수민', studentId: '20213102' },
+      item: { itemName: '고데기', imageUrl: '/assets/icon-test.svg' },
       rentAt: '2025.01.22 13:08',
       returnedAt: '2025.01.22 13:08',
       rentalStatus: 'PENDING',
     },
     {
       rentalHistoryId: 2,
-      member: {
-        name: '황수민',
-        studentId: '20213102',
-      },
-      item: {
-        itemName: '고데기',
-        imageUrl: '/assets/icon-test.svg',
-      },
+      member: { name: '황수민', studentId: '20213102' },
+      item: { itemName: '고데기', imageUrl: '/assets/icon-test.svg' },
       rentAt: '2025.01.22 13:08',
       returnedAt: '2025.01.22 13:08',
       rentalStatus: 'CANCEL',
     },
     {
       rentalHistoryId: 3,
-      member: {
-        name: '황수민',
-        studentId: '20213102',
-      },
-      item: {
-        itemName: '짱뜨거운고데기인데요사실은그게',
-        imageUrl: '/assets/icon-test.svg',
-      },
-      rentAt: '2025.01.22 13:08',
-      returnedAt: '',
-      rentalStatus: 'CONFIRMED',
-    },
-    {
-      rentalHistoryId: 4,
-      member: {
-        name: '황수민',
-        studentId: '20213102',
-      },
+      member: { name: '황수민', studentId: '20213102' },
       item: {
         itemName: '짱뜨거운고데기인데요사실은그게',
         imageUrl: '/assets/icon-test.svg',
@@ -76,49 +147,7 @@ export default function Mobile() {
       returnedAt: '',
       rentalStatus: 'RENTAL',
     },
-    {
-      rentalHistoryId: 5,
-      member: {
-        name: '황수민',
-        studentId: '20213102',
-      },
-      item: {
-        itemName: '짱뜨거운고데기인데요사실은그게',
-        imageUrl: '/assets/icon-test.svg',
-      },
-      rentAt: '2025.01.22 13:08',
-      returnedAt: '',
-      rentalStatus: 'RETURN_PENDING',
-    },
-    {
-      rentalHistoryId: 6,
-      member: {
-        name: '황수민',
-        studentId: '20213102',
-      },
-      item: {
-        itemName: '짱뜨거운고데기인데요사실은그게',
-        imageUrl: '/assets/icon-test.svg',
-      },
-      rentAt: '2025.01.22 13:08',
-      returnedAt: '',
-      rentalStatus: 'RETURN_CONFIRMED',
-    },
-    {
-      rentalHistoryId: 7,
-      member: {
-        name: '황수민',
-        studentId: '20213102',
-      },
-      item: {
-        itemName: '짱뜨거운고데기인데요사실은그게',
-        imageUrl: '/assets/icon-test.svg',
-      },
-      rentAt: '2025.01.22 13:08',
-      returnedAt: '',
-      rentalStatus: 'RETURNED',
-    },
-  ];
+  ]);
 
   const [selectedItem, setSelectedItem] = useState(null);
   const [isAlertVisible, setIsAlertVisible] = useState(false);
@@ -129,9 +158,16 @@ export default function Mobile() {
     setIsAlertVisible(true);
   };
 
-  // alert창의 cta 버튼 클릭시 실행
+  // 반납 버튼 클릭 시 해당 아이템의 rentalStatus를 `RETURN_PENDING`으로 변경
   const handleReturnConfirm = () => {
-    console.log(`${selectedItem?.item.itemName} 반납 처리!`);
+    if (!selectedItem) return;
+    setRentalItems((prevItems) =>
+      prevItems.map((item) =>
+        item.rentalHistoryId === selectedItem.rentalHistoryId
+          ? { ...item, rentalStatus: 'RETURN_PENDING' } // 반납 대기 상태로 변경
+          : item,
+      ),
+    );
     setIsAlertVisible(false);
     setSelectedItem(null);
   };
@@ -168,8 +204,8 @@ export default function Mobile() {
         {/* 대여 내역 */}
         <section className="px-4 pb-12 pt-[50px]">
           <div className="pb-1.5 text-heading-4_M font-semibold">대여 내역</div>
-          {rentalItemDummy.length > 0 ? (
-            rentalItemDummy.map((item) => (
+          {rentalItems.length > 0 ? (
+            rentalItems.map((item) => (
               <RentalItem
                 key={item.rentalHistoryId}
                 item={item.item}
