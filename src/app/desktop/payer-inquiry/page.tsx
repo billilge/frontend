@@ -123,7 +123,7 @@ export default function PayerInquiryPage() {
               <div className="flex gap-2">
                 <Button
                   type="button"
-                  variant="primary"
+                  variant="secondary"
                   onClick={toggleDeleteModeAdded}
                 >
                   {isDeleteModeAdded ? '취소' : '삭제'}
@@ -156,19 +156,11 @@ export default function PayerInquiryPage() {
         </Sidebar>
         <Button
           type="button"
-          variant="primary"
+          variant="secondary"
           onClick={toggleDeleteModeOriginal}
         >
           {isDeleteModeOriginal ? '취소' : '삭제'}
         </Button>
-      </div>
-      <div className="flex items-center justify-between">
-        <TableComponent
-          data={data}
-          showCheckboxes={isDeleteModeOriginal}
-          selected={selectedOriginal}
-          setSelected={setSelectedOriginal}
-        />
         <div className="flex gap-2">
           {isDeleteModeOriginal && (
             <Button
@@ -181,6 +173,14 @@ export default function PayerInquiryPage() {
             </Button>
           )}
         </div>
+      </div>
+      <div className="flex items-center justify-between">
+        <TableComponent
+          data={data}
+          showCheckboxes={isDeleteModeOriginal}
+          selected={selectedOriginal}
+          setSelected={setSelectedOriginal}
+        />
       </div>
     </div>
   );
