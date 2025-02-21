@@ -1,8 +1,8 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import IconArrow from 'public/assets/icon-arrow.svg';
-import IconHamburger from 'public/assets/icon-hamburger.svg';
+import IconArrow from 'public/assets/icons/icon-arrow.svg';
+import IconHamburger from 'public/assets/icons/icon-hamburger.svg';
 
 interface HeaderProps {
   title: string;
