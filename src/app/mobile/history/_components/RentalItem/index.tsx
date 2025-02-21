@@ -19,7 +19,7 @@ export default function RentalItem({
   return (
     <div className="flex w-full items-center justify-between py-5">
       <div className="flex items-start gap-[17px]">
-        <div className="flex h-[40px] w-[40px] items-center justify-center rounded-full bg-gray-tertiary p-1">
+        <div className="flex aspect-square h-[40px] w-[40px] items-center justify-center rounded-full bg-gray-tertiary p-1">
           <Image
             width={26}
             height={26}
