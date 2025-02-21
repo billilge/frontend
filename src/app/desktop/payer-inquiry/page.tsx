@@ -120,18 +120,29 @@ export default function PayerInquiryPage() {
                 onChange={handleStudentNameChange}
                 onClick={handleAddStudent}
               />
-              <div className="flex gap-2">
+            </div>
+            <div className="flex w-full flex-col">
+              <TableComponent
+                data={addedData}
+                headers={['추가된 이름', '추가된 학번']}
+                showCheckboxes={isDeleteModeAdded}
+                selected={selectedAdded}
+                setSelected={setSelectedAdded}
+              />
+              <div className="flex justify-end gap-2">
                 <Button
+                  size="sm"
                   type="button"
-                  variant="secondary"
+                  variant="deleteSecondary"
                   onClick={toggleDeleteModeAdded}
                 >
                   {isDeleteModeAdded ? '취소' : '삭제'}
                 </Button>
                 {isDeleteModeAdded && (
                   <Button
+                    size="sm"
+                    variant="deletePrimary"
                     type="button"
-                    variant="primary"
                     onClick={handleDeleteAdded}
                   >
                     완료
@@ -139,33 +150,36 @@ export default function PayerInquiryPage() {
                 )}
               </div>
             </div>
-
-            <TableComponent
-              data={addedData}
-              headers={['추가된 이름', '추가된 학번']}
-              showCheckboxes={isDeleteModeAdded}
-              selected={selectedAdded}
-              setSelected={setSelectedAdded}
-            />
           </div>
-          <div className="bottom-0 flex justify-center pt-10">
+          <div className="bottom-0 flex justify-center gap-2 pt-10">
             <Button type="button" variant="primary" onClick={api}>
               적용하기
             </Button>
           </div>
         </Sidebar>
-        <Button
-          type="button"
-          variant="secondary"
-          onClick={toggleDeleteModeOriginal}
-        >
-          {isDeleteModeOriginal ? '취소' : '삭제'}
-        </Button>
-        <div className="flex gap-2">
+      </div>
+      <div className="flex flex-col justify-between">
+        <TableComponent
+          data={data}
+          showCheckboxes={isDeleteModeOriginal}
+          selected={selectedOriginal}
+          setSelected={setSelectedOriginal}
+        />
+        <div className="flex justify-end gap-2">
+          <Button
+            size="sm"
+            type="button"
+            variant="deleteSecondary"
+            onClick={toggleDeleteModeOriginal}
+          >
+            {isDeleteModeOriginal ? '취소' : '삭제'}
+          </Button>
+
           {isDeleteModeOriginal && (
             <Button
               type="button"
-              variant="primary"
+              size="sm"
+              variant="deleteSecondary"
               className={`btn whitespace-nowrap rounded-md px-3 py-2 text-sm text-white-primary ${isDeleteModeOriginal ? 'bg-gray-primary' : 'bg-gray-secondary'}`}
               onClick={handleDeleteOriginal}
             >
@@ -173,14 +187,6 @@ export default function PayerInquiryPage() {
             </Button>
           )}
         </div>
-      </div>
-      <div className="flex items-center justify-between">
-        <TableComponent
-          data={data}
-          showCheckboxes={isDeleteModeOriginal}
-          selected={selectedOriginal}
-          setSelected={setSelectedOriginal}
-        />
       </div>
     </div>
   );

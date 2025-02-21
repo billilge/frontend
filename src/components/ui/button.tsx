@@ -22,6 +22,10 @@ const buttonVariants = cva(
           'whitespace-nowrap rounded-md bg-gray-primary px-3 py-1 text-sm text-white-primary',
         secondary:
           'whitespace-nowrap rounded-md bg-gray-secondary px-3 py-1 text-sm text-white-primary',
+        deletePrimary:
+          'whitespace-nowrap rounded-md bg-gray-primary px-1 py-1 text-sm text-white-primary',
+        deleteSecondary:
+          'whitespace-nowrap rounded-md bg-gray-secondary px-1 py-1 text-sm text-white-primary',
       },
       size: {
         default: 'h-9 px-4 py-2',

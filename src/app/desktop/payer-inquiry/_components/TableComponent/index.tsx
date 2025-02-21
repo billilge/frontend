@@ -26,7 +26,7 @@ interface TableComponentProps {
   handleDelete?: (selectedIds: string[]) => void; // 22
 }
 
-function TableComponent({
+export default function TableComponent({
   data,
   showCheckboxes = true,
   headers = ['이름', '학번', '관리자 여부'], // 기본값을 설정
@@ -70,8 +70,8 @@ function TableComponent({
                 />
               </TableHead>
             )}
-            {headers.map((header, index) => (
-              <TableHead key={index} className="w-30 text-center">
+            {headers.map((header) => (
+              <TableHead key={header} className="w-30 text-center">
                 {header}
               </TableHead>
             ))}
@@ -94,7 +94,7 @@ function TableComponent({
               </TableCell>
               {headers.includes('관리자 여부') && (
                 <TableCell className="w-30 text-center">
-                  {item.admin !== undefined ? (item.admin ? 'o' : 'x') : ''}
+                  {item.admin !== undefined && (item.admin ? 'o' : 'x')}
                 </TableCell>
               )}
             </TableRow>
@@ -129,5 +129,3 @@ function TableComponent({
 TableComponent.defaultProps = {
   headers: ['이름', '학번', '관리자 여부'],
 };
-
-export default TableComponent;
