@@ -15,6 +15,7 @@ export default function SignIn() {
           <div className="text-3xl font-semibold">복지물품 대여 시스템</div>
         </section>
         <ImageLoginLogo className="absolute top-24" />
+        {/* onClick 구글 로그인 연결하기 */}
         <button
           className="absolute bottom-44 flex w-11/12 justify-between rounded-2xl border bg-white-primary px-6 py-4"
           type="button"
