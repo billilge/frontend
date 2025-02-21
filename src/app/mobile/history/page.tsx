@@ -9,6 +9,7 @@ import RentalItem from '@/app/mobile/history/_components/RentalItem';
 import Alert from '@/components/mobile/Alert';
 import { useState } from 'react';
 import IconNoReturn from '../../../../public/assets/icon-no-return.svg';
+import IconNoRental from '../../../../public/assets/icon-no-rental.svg';
 
 export default function Mobile() {
   // const dropdownActions = [
@@ -29,104 +30,104 @@ export default function Mobile() {
   ];
 
   const rentalItemDummy = [
-    {
-      rentalHistoryId: 1,
-      member: {
-        name: '황수민',
-        studentId: '20213102',
-      },
-      item: {
-        itemName: '고데기',
-        imageUrl: '/assets/icon-test.svg',
-      },
-      rentAt: '2025.01.22 13:08',
-      returnedAt: '2025.01.22 13:08',
-      rentalStatus: 'PENDING',
-    },
-    {
-      rentalHistoryId: 2,
-      member: {
-        name: '황수민',
-        studentId: '20213102',
-      },
-      item: {
-        itemName: '고데기',
-        imageUrl: '/assets/icon-test.svg',
-      },
-      rentAt: '2025.01.22 13:08',
-      returnedAt: '2025.01.22 13:08',
-      rentalStatus: 'CANCEL',
-    },
-    {
-      rentalHistoryId: 3,
-      member: {
-        name: '황수민',
-        studentId: '20213102',
-      },
-      item: {
-        itemName: '짱뜨거운고데기인데요사실은그게',
-        imageUrl: '/assets/icon-test.svg',
-      },
-      rentAt: '2025.01.22 13:08',
-      returnedAt: '',
-      rentalStatus: 'CONFIRMED',
-    },
-    {
-      rentalHistoryId: 4,
-      member: {
-        name: '황수민',
-        studentId: '20213102',
-      },
-      item: {
-        itemName: '짱뜨거운고데기인데요사실은그게',
-        imageUrl: '/assets/icon-test.svg',
-      },
-      rentAt: '2025.01.22 13:08',
-      returnedAt: '',
-      rentalStatus: 'RENTAL',
-    },
-    {
-      rentalHistoryId: 5,
-      member: {
-        name: '황수민',
-        studentId: '20213102',
-      },
-      item: {
-        itemName: '짱뜨거운고데기인데요사실은그게',
-        imageUrl: '/assets/icon-test.svg',
-      },
-      rentAt: '2025.01.22 13:08',
-      returnedAt: '',
-      rentalStatus: 'RETURN_PENDING',
-    },
-    {
-      rentalHistoryId: 6,
-      member: {
-        name: '황수민',
-        studentId: '20213102',
-      },
-      item: {
-        itemName: '짱뜨거운고데기인데요사실은그게',
-        imageUrl: '/assets/icon-test.svg',
-      },
-      rentAt: '2025.01.22 13:08',
-      returnedAt: '',
-      rentalStatus: 'RETURN_CONFIRMED',
-    },
-    {
-      rentalHistoryId: 7,
-      member: {
-        name: '황수민',
-        studentId: '20213102',
-      },
-      item: {
-        itemName: '짱뜨거운고데기인데요사실은그게',
-        imageUrl: '/assets/icon-test.svg',
-      },
-      rentAt: '2025.01.22 13:08',
-      returnedAt: '',
-      rentalStatus: 'RETURNED',
-    },
+    // {
+    //   rentalHistoryId: 1,
+    //   member: {
+    //     name: '황수민',
+    //     studentId: '20213102',
+    //   },
+    //   item: {
+    //     itemName: '고데기',
+    //     imageUrl: '/assets/icon-test.svg',
+    //   },
+    //   rentAt: '2025.01.22 13:08',
+    //   returnedAt: '2025.01.22 13:08',
+    //   rentalStatus: 'PENDING',
+    // },
+    // {
+    //   rentalHistoryId: 2,
+    //   member: {
+    //     name: '황수민',
+    //     studentId: '20213102',
+    //   },
+    //   item: {
+    //     itemName: '고데기',
+    //     imageUrl: '/assets/icon-test.svg',
+    //   },
+    //   rentAt: '2025.01.22 13:08',
+    //   returnedAt: '2025.01.22 13:08',
+    //   rentalStatus: 'CANCEL',
+    // },
+    // {
+    //   rentalHistoryId: 3,
+    //   member: {
+    //     name: '황수민',
+    //     studentId: '20213102',
+    //   },
+    //   item: {
+    //     itemName: '짱뜨거운고데기인데요사실은그게',
+    //     imageUrl: '/assets/icon-test.svg',
+    //   },
+    //   rentAt: '2025.01.22 13:08',
+    //   returnedAt: '',
+    //   rentalStatus: 'CONFIRMED',
+    // },
+    // {
+    //   rentalHistoryId: 4,
+    //   member: {
+    //     name: '황수민',
+    //     studentId: '20213102',
+    //   },
+    //   item: {
+    //     itemName: '짱뜨거운고데기인데요사실은그게',
+    //     imageUrl: '/assets/icon-test.svg',
+    //   },
+    //   rentAt: '2025.01.22 13:08',
+    //   returnedAt: '',
+    //   rentalStatus: 'RENTAL',
+    // },
+    // {
+    //   rentalHistoryId: 5,
+    //   member: {
+    //     name: '황수민',
+    //     studentId: '20213102',
+    //   },
+    //   item: {
+    //     itemName: '짱뜨거운고데기인데요사실은그게',
+    //     imageUrl: '/assets/icon-test.svg',
+    //   },
+    //   rentAt: '2025.01.22 13:08',
+    //   returnedAt: '',
+    //   rentalStatus: 'RETURN_PENDING',
+    // },
+    // {
+    //   rentalHistoryId: 6,
+    //   member: {
+    //     name: '황수민',
+    //     studentId: '20213102',
+    //   },
+    //   item: {
+    //     itemName: '짱뜨거운고데기인데요사실은그게',
+    //     imageUrl: '/assets/icon-test.svg',
+    //   },
+    //   rentAt: '2025.01.22 13:08',
+    //   returnedAt: '',
+    //   rentalStatus: 'RETURN_CONFIRMED',
+    // },
+    // {
+    //   rentalHistoryId: 7,
+    //   member: {
+    //     name: '황수민',
+    //     studentId: '20213102',
+    //   },
+    //   item: {
+    //     itemName: '짱뜨거운고데기인데요사실은그게',
+    //     imageUrl: '/assets/icon-test.svg',
+    //   },
+    //   rentAt: '2025.01.22 13:08',
+    //   returnedAt: '',
+    //   rentalStatus: 'RETURNED',
+    // },
   ];
 
   const [selectedItem, setSelectedItem] = useState(null);
@@ -187,7 +188,8 @@ export default function Mobile() {
               />
             ))
           ) : (
-            <div className="flex h-full flex-col items-center justify-center">
+            <div className="flex h-full flex-col items-center justify-center gap-[30px] pt-20">
+              <IconNoRental />
               <div className="text-body-2-normal_semi font-medium text-gray-secondary">
                 대여 내역이 없습니다.
               </div>
