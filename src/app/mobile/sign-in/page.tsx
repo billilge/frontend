@@ -7,8 +7,8 @@ import IconGoogle from 'public/assets/icons/icon-google.svg';
 export default function SignIn() {
   return (
     <MobileLayout>
-      <section className="relative flex w-full flex-col items-center justify-center overflow-hidden">
-        <section className="mt-[128px] flex flex-col items-center justify-center gap-1.5">
+      <section className="relative flex h-dvh w-full flex-col items-center justify-start overflow-hidden">
+        <section className="mt-[128px] flex flex-col items-center justify-start gap-1.5">
           <div className="text-2xl font-normal">
             국민대학교 소프트웨어융합대학
           </div>
@@ -16,7 +16,7 @@ export default function SignIn() {
         </section>
         <ImageLoginLogo className="absolute top-24" />
         <button
-          className="mt-96 flex w-11/12 justify-between rounded-2xl border px-6 py-4"
+          className="absolute bottom-44 flex w-11/12 justify-between rounded-2xl border px-6 py-4"
           type="button"
         >
           <IconGoogle />
