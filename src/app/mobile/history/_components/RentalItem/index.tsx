@@ -29,7 +29,7 @@ export default function RentalItem({
         </div>
         <div className="flex flex-col gap-[7px]">
           <div className="flex w-full items-center gap-[7px]">
-            <div className="overflow-hidden text-ellipsis whitespace-nowrap text-body-2-normal_semi font-semibold">
+            <div className="max-w-40 overflow-hidden text-ellipsis whitespace-nowrap text-body-2-normal_semi font-semibold">
               {item.itemName}
             </div>
             <StatusBadge status={rentalStatus} />
