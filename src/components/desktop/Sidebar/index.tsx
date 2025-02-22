@@ -18,18 +18,20 @@ interface SidebarProps {
 export default function Sidebar({
   children,
   title = 'Sidebar Title',
-  description = '',
+  // description = '',
   triggerText = 'Open',
 }: SidebarProps) {
   return (
     <Sheet>
-      <SheetTrigger className="rounded-md bg-gray-primary px-3 py-2 text-white-primary">
+      <SheetTrigger className="whitespace-nowrap rounded-md bg-gray-primary px-3 py-1 text-sm text-white-primary">
         {triggerText}
       </SheetTrigger>
       <SheetContent className="max-w-[40rem]! w-full">
         <SheetHeader>
-          <SheetTitle>{title}</SheetTitle>
-          {description && <SheetDescription>{description}</SheetDescription>}
+          <SheetTitle className="flex justify-center text-2xl font-medium">
+            {title}
+          </SheetTitle>
+          {/* {description && <SheetDescription>{description}</SheetDescription>} */}
         </SheetHeader>
         <div className="mt-4">{children}</div>
       </SheetContent>
