@@ -7,6 +7,8 @@ interface RentalItemProps {
   returnAt: string | null;
   rentalStatus: string;
   onReturnClick: () => void;
+  onCancelClick: () => void;
+  onReturnCancelClick: () => void;
 }
 
 export default function RentalItem({
@@ -15,6 +17,8 @@ export default function RentalItem({
   returnAt,
   rentalStatus,
   onReturnClick,
+  onCancelClick,
+  onReturnCancelClick,
 }: RentalItemProps) {
   return (
     <div className="flex w-full items-center justify-between py-5">
@@ -41,12 +45,36 @@ export default function RentalItem({
         </div>
       </div>
 
+      {/* 대여중일 때 반납하기 버튼 생성 */}
       {rentalStatus === 'RENTAL' && (
         <button
+          type="button"
           onClick={onReturnClick}
           className="box-border px-1 py-2.5 text-body-2-normal_semi font-semibold text-warning"
         >
           반납하기
+        </button>
+      )}
+
+      {/* 승인 대기 중일 때 취소하기 버튼 생성 */}
+      {rentalStatus === 'PENDING' && (
+        <button
+          type="button"
+          onClick={onCancelClick}
+          className="box-border px-1 py-2.5 text-body-2-normal_semi font-semibold text-warning"
+        >
+          취소하기
+        </button>
+      )}
+
+      {/* 반납 대기 중일 때 취소하기 버튼 생성 */}
+      {rentalStatus === 'RETURN_PENDING' && (
+        <button
+          type="button"
+          onClick={onReturnCancelClick}
+          className="box-border px-1 py-2.5 text-body-2-normal_semi font-semibold text-warning"
+        >
+          취소하기
         </button>
       )}
     </div>
