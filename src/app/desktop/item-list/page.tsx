@@ -56,9 +56,7 @@ export default function PayerInquiryPage() {
   const [data, setData] = useState(dummyData);
   const [addedData, setAddedData] = useState(dummyData2);
   const [isDeleteModeOriginal, setIsDeleteModeOriginal] = useState(false);
-  const [isDeleteModeAdded, setIsDeleteModeAdded] = useState(false);
   const [selectedOriginal, setSelectedOriginal] = useState<number[]>([]);
-  const [selectedAdded, setSelectedAdded] = useState<number[]>([]);
 
   // 추가할 저장 상태
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
@@ -67,21 +65,27 @@ export default function PayerInquiryPage() {
   const [quantity, setQuantity] = useState<number | ''>('');
 
   const handleDeleteOriginal = () => {
+    // 삭제하려는 항목이 대여된 수량이 있는지 검사
+    const hasRentedItems = data.some(
+      (item) => selectedOriginal.includes(item.id) && item.rentedQuantity > 0,
+    );
+
+    if (hasRentedItems) {
+      alert('대여 중인 물품은 삭제할 수 없습니다.');
+      return;
+    }
+
     setData(data.filter((item) => !selectedOriginal.includes(item.id)));
     setIsDeleteModeOriginal(false);
     setSelectedOriginal([]);
   };
 
-  const handleDeleteAdded = () => {
-    setAddedData(addedData.filter((item) => !selectedAdded.includes(item.id)));
-    setIsDeleteModeAdded(false);
-    setSelectedAdded([]);
-  };
-
   // 새로운 물품 추가
   const handleAddItem = () => {
-    if (!itemName || quantity === '' || quantity <= 0)
-      return alert('모든 정보를 입력하세요.');
+    if (!itemName || quantity === '' || quantity <= 0) {
+      alert('모든 정보를 입력하세요.');
+      return;
+    }
 
     const newItem = {
       id: Date.now(), // 고유 ID 생성
@@ -92,13 +96,15 @@ export default function PayerInquiryPage() {
       logo: selectedImage || 'default.png',
     };
 
-    setAddedData([...addedData, newItem]);
+    setAddedData((prev) => [...prev, newItem]);
 
     // 입력값 초기화
     setItemName('');
     setIsConsumable(false);
     setQuantity('');
     setSelectedImage(null);
+
+    alert('물품 등록을 완료하였습니다.');
   };
 
   return (
@@ -214,7 +220,7 @@ export default function PayerInquiryPage() {
           {isDeleteModeOriginal && (
             <Button
               size="sm"
-              variant="deleteSecondary"
+              variant="deletePrimary"
               onClick={handleDeleteOriginal}
             >
               완료
