@@ -1,6 +1,42 @@
 'use client';
 
+import { useState } from 'react';
+
 export default function SignUp() {
+  const [studentName, setStudentName] = useState('');
+  const [studentId, setStudentId] = useState('');
+
+  const handleStudentNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setStudentName(e.target.value);
+  };
+
+  const handleStudentIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setStudentId(e.target.value);
+  };
+
+  const validateForm = () => {
+    // 이름 유효성 검사: 한글 2~5자
+    const nameRegex = /^[가-힣]{2,5}$/;
+    if (!nameRegex.test(studentName)) {
+      alert('이름은 한글 2~5자로 입력해 주세요.');
+      return false;
+    }
+
+    // 학번 유효성 검사: 숫자 8자리
+    const idRegex = /^\d{8}$/;
+    if (!idRegex.test(studentId)) {
+      alert('학번은 숫자 8자리여야 합니다.');
+      return false;
+    }
+
+    return true;
+  };
+
+  const handleSignUp = () => {
+    if (!validateForm()) return;
+
+    // TODO: 백엔드로 데이터 전송
+  };
   return (
     <section className="relative flex h-dvh w-full flex-col items-center justify-start overflow-hidden">
       <section className="mt-20 flex w-11/12 flex-col items-start">
@@ -18,6 +54,8 @@ export default function SignUp() {
           <input
             placeholder="이름을 정확히 입력해 주세요."
             className="flex w-full rounded-xl border px-3.5 py-4"
+            value={studentName}
+            onChange={handleStudentNameChange}
           />
         </section>
         <section className="flex w-full flex-col gap-1.5">
@@ -26,6 +64,8 @@ export default function SignUp() {
           <input
             placeholder="8자 모두 입력해 주세요."
             className="flex w-full rounded-xl border px-3.5 py-4"
+            value={studentId}
+            onChange={handleStudentIdChange}
           />
         </section>
       </section>
@@ -34,6 +74,7 @@ export default function SignUp() {
       <button
         className="absolute bottom-7 flex w-11/12 justify-between rounded-2xl border bg-on-kookmin px-6 py-4 text-white-primary"
         type="button"
+        onClick={handleSignUp}
       >
         <div className="h-6 w-6" />
         <div className="flex font-medium">작성 완료</div>
