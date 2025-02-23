@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import StatusBadge from '@/app/mobile/history/_components/StatusBadge';
+import convertTime from '@/utils/convertTime';
 
 interface RentalItemProps {
   item: { itemName: string; imageUrl: string };
@@ -20,6 +21,11 @@ export default function RentalItem({
   onCancelClick,
   onReturnCancelClick,
 }: RentalItemProps) {
+  const applicatedRentTime = convertTime(rentAt);
+  const applicatedReturnTime = returnAt
+    ? convertTime(returnAt)
+    : { formattedDate: '-', formattedTime: '' };
+
   return (
     <div className="flex w-full items-center justify-between py-5">
       <div className="flex items-start gap-[17px]">
@@ -39,8 +45,20 @@ export default function RentalItem({
             <StatusBadge status={rentalStatus} />
           </div>
           <div className="flex flex-col gap-1 text-caption-2_midi text-gray-primary">
-            <div>대여 시간 &nbsp;{rentAt !== '' ? rentAt : '-'}</div>
-            <div>반납 시간 &nbsp;{returnAt !== '' ? returnAt : '-'}</div>
+            <div>
+              대여 시간 &nbsp; {applicatedRentTime.formattedDate}{' '}
+              {applicatedRentTime.formattedTime
+                .split(':')
+                .slice(0, 2)
+                .join(':')}
+            </div>
+            <div>
+              반납 시간 &nbsp; {applicatedReturnTime.formattedDate}{' '}
+              {applicatedReturnTime.formattedTime
+                .split(':')
+                .slice(0, 2)
+                .join(':')}
+            </div>
           </div>
         </div>
       </div>
@@ -50,7 +68,7 @@ export default function RentalItem({
         <button
           type="button"
           onClick={onReturnClick}
-          className="box-border px-1 py-2.5 text-body-2-normal_semi font-semibold text-warning"
+          className="box-border py-2.5 text-body-2-normal_semi font-semibold text-warning"
         >
           반납하기
         </button>
@@ -61,7 +79,7 @@ export default function RentalItem({
         <button
           type="button"
           onClick={onCancelClick}
-          className="box-border px-1 py-2.5 text-body-2-normal_semi font-semibold text-warning"
+          className="box-border py-2.5 text-body-2-normal_semi font-semibold text-[#6D6F71]"
         >
           취소하기
         </button>
@@ -72,7 +90,7 @@ export default function RentalItem({
         <button
           type="button"
           onClick={onReturnCancelClick}
-          className="box-border px-1 py-2.5 text-body-2-normal_semi font-semibold text-warning"
+          className="box-border py-2.5 text-body-2-normal_semi font-semibold text-[#6D6F71]"
         >
           취소하기
         </button>
