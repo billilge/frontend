@@ -4,7 +4,7 @@ import { ReturnData } from '@/types/returnItemType';
 const apiUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 const token = process.env.NEXT_PUBLIC_TOKEN;
 
-// 연구 정보 불러오기 (고정된 토큰 추가)
+// 반납해야할 물품 리스트 불러오기
 export const getReturnItems = async (): Promise<ReturnData> => {
   try {
     const response = await axios.get<ReturnData>(

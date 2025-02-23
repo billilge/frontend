@@ -4,7 +4,7 @@ import { WelfareItemData } from '@/types/welfareItemType';
 const apiUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 const token = process.env.NEXT_PUBLIC_TOKEN;
 
-// 연구 정보 불러오기 (고정된 토큰 추가)
+// 대여 가능한 복지물품 리스트 불러오기
 export const getWelfareItems = async (): Promise<WelfareItemData> => {
   try {
     const response = await axios.get<WelfareItemData>(`${apiUrl}/items`, {
