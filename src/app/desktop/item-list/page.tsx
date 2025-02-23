@@ -54,7 +54,7 @@ const dummyData2 = [
 
 export default function PayerInquiryPage() {
   const [data, setData] = useState(dummyData);
-  const [addedData, setAddedData] = useState(dummyData2);
+  const [, setAddedData] = useState(dummyData2);
   const [isDeleteModeOriginal, setIsDeleteModeOriginal] = useState(false);
   const [selectedOriginal, setSelectedOriginal] = useState<number[]>([]);
 
