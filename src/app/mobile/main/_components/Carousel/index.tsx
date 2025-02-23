@@ -1,18 +1,19 @@
 'use client';
 
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Pagination, Autoplay } from 'swiper/modules';
+import { Pagination, Autoplay } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 
 interface CarouselProps {
   images: string[]; // 이미지 URL 배열
+  onClick?: () => void;
 }
 
-export default function Carousel({ images }: CarouselProps) {
+export default function Carousel({ images, onClick }: CarouselProps) {
   return (
-    <div className="w-full rounded-[20px]">
+    <div onClick={onClick} className="w-full rounded-[20px]">
       <Swiper
         modules={[Pagination, Autoplay]}
         slidesPerView={1}

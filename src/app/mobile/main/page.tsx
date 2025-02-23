@@ -59,7 +59,10 @@ export default function MobileMain() {
     <MobileLayout>
       <MainHeader name="황현진" />
       <div className="mt-10 flex flex-col gap-[50px] px-4 pt-4">
-        <Carousel images={imageUrls} />
+        <Carousel
+          images={imageUrls}
+          onClick={() => window.open('https://cs.kookmin.ac.kr/')}
+        />
 
         <section className="flex flex-col gap-4">
           <div className="flex items-center justify-between">
