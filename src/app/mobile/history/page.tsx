@@ -57,12 +57,6 @@ export default function UserRentalList() {
       otherButtonText: '그냥 둘게요',
       isMainColor: false,
     },
-    RETURN_PENDING: {
-      content: '반납 신청을 취소할까요?',
-      ctaButtonText: '취소할래요',
-      otherButtonText: '그냥 둘게요',
-      isMainColor: false,
-    },
   };
 
   const currentAlert =
@@ -133,7 +127,7 @@ export default function UserRentalList() {
     try {
       if (alertState.type === 'CANCEL') {
         await cancelRentalItems(alertState.item.rentalHistoryId);
-      } else if (alertState.type === 'REJECTED') {
+      } else if (alertState.type === 'RENTAL') {
         await returnRentalItems(alertState.item.rentalHistoryId);
       }
 

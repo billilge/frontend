@@ -84,17 +84,6 @@ export default function RentalItem({
           취소하기
         </button>
       )}
-
-      {/* 반납 대기 중일 때 취소하기 버튼 생성 */}
-      {rentalStatus === 'RETURN_PENDING' && (
-        <button
-          type="button"
-          onClick={onReturnCancelClick}
-          className="box-border py-2.5 text-body-2-normal_semi font-semibold text-[#6D6F71]"
-        >
-          취소하기
-        </button>
-      )}
     </div>
   );
 }
