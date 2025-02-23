@@ -8,6 +8,7 @@ import WelfareItem from '@/app/mobile/main/_components/WelfareItem';
 import BottomSheet from '@/components/mobile/BottomSheet';
 import { getWelfareItems } from '@/apis/item';
 import { WelfareItemData, Item } from '@/types/welfareItemType';
+import IconSearch from 'public/assets/icons/icon-search.svg';
 
 export default function MobileMain() {
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
@@ -15,19 +16,33 @@ export default function MobileMain() {
   const [welfareItems, setWelfareItems] = useState<WelfareItemData>({
     items: [],
   });
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const fetchWelfareItems = async () => {
+    try {
+      const data = await getWelfareItems(searchQuery);
+      setWelfareItems(data);
+    } catch (err) {
+      console.log('getWelfareItems API 오류 발생', err);
+    }
+  };
+
+  // 디바운스 적용
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      fetchWelfareItems();
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
 
   useEffect(() => {
-    const fetchWelfareItems = async () => {
-      try {
-        const data = await getWelfareItems();
-        setWelfareItems(data);
-      } catch (err) {
-        console.log('getWelfareItems api 연동 오류 발생', err);
-      }
-    };
-
     fetchWelfareItems();
   }, []);
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(e.target.value);
+  };
 
   const imageUrls = [
     '/assets/images/test.png',
@@ -47,7 +62,19 @@ export default function MobileMain() {
         <Carousel images={imageUrls} />
 
         <section className="flex flex-col gap-4">
-          <div className="text-heading-4_M font-semibold">복지 물품 목록</div>
+          <div className="flex items-center justify-between">
+            <div className="text-heading-4_M font-semibold">복지 물품 목록</div>
+            <div className="flex w-2/5 items-center rounded-xl bg-[#e8e9ec] px-3 py-2">
+              <input
+                type="text"
+                className="w-full bg-transparent text-caption-1_midi outline-none"
+                placeholder="물품 검색"
+                value={searchQuery}
+                onChange={handleSearchChange}
+              />
+              <IconSearch />
+            </div>
+          </div>
           <div className="flex flex-col gap-[9px]">
             {welfareItems.items.map((item) => (
               <WelfareItem
