@@ -18,6 +18,6 @@ export const getReturnItems = async (): Promise<ReturnData> => {
 
     return response.data;
   } catch (error) {
-    throw new Error(`lab 목록 불러오기에 실패했습니다: ${error}`);
+    throw new Error(`returnItem 목록 불러오기에 실패했습니다: ${error}`);
   }
 };
