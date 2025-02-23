@@ -21,6 +21,10 @@ export default function StatusBadge({ status }: StatusBadgeProps) {
       colorClass =
         'text-main-primary border border-main-primary bg-white-primary';
       break;
+    case 'REJECTED':
+      label = '대여 불가';
+      colorClass = 'text-warning border border-warning bg-white-primary';
+      break;
     case 'RENTAL':
       label = '대여 중';
       colorClass = 'text-white-primary bg-main-secondary';
