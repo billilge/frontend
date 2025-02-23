@@ -8,7 +8,7 @@ import {
   UserNotificationText,
 } from '@/constants/notificationStatus';
 import { NotificationProps } from '@/types/notificationType';
-import IconBell from '../../../../public/assets/icons/icon-bell.svg';
+import IconBell from 'public/assets/icons/icon-bell.svg';
 
 export default function NotificationItem({
   message,
