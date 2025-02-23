@@ -13,7 +13,7 @@ export default {
         pretendard: ['Pretendard', 'sans-serif'],
       },
       maxWidth: {
-        sm: '30rem', // sm:max-w-sm 클래스를 30rem으로 설정
+        sm: '35rem', // side sheet 설정을 위한 설정
       },
       colors: {
         foreground: 'hsl(var(--foreground))',
