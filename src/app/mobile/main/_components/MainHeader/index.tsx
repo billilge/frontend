@@ -2,9 +2,11 @@
 
 import { useRouter } from 'next/navigation';
 import Sidebar from '@/components/mobile/SidebarMenu/index';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import IconAlarm from 'public/assets/icons/icon-alarm.svg';
 import IconHamburger from 'public/assets/icons/icon-hamburger.svg';
+import { getNotificationCount } from '@/apis/notification';
+import { NotificationCount } from '@/types/notificationType';
 
 interface HeaderProps {
   name: string;
@@ -13,20 +15,39 @@ interface HeaderProps {
 export default function MainHeader({ name }: HeaderProps) {
   const router = useRouter();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [notificationCount, setNotificationCount] = useState<number | null>(
+    null,
+  );
+
+  useEffect(() => {
+    const fetchNotificationCount = async () => {
+      try {
+        const data = await getNotificationCount();
+        setNotificationCount(data.notificationCount);
+      } catch (err) {
+        console.error('getNotificationCount API 오류:', err);
+      }
+    };
+
+    fetchNotificationCount();
+  }, []);
 
   return (
     <>
-      <section className="fixed top-0 z-10 flex h-10 w-full items-center justify-between bg-[#F3F4F6] px-4 py-1.5">
+      <section className="fixed top-0 z-10 flex h-10 w-full max-w-3xl items-center justify-between bg-[#F3F4F6] px-4 py-1.5">
         <div className="text-heading-3_D font-semibold text-black-primary">
           {name}님
         </div>
         <div className="flex gap-[7px]">
           <button
-            className="h-6 w-6 items-center justify-center"
+            className="relative h-6 w-6 items-center justify-center"
             type="button"
             onClick={() => router.push('/mobile/notification')}
           >
             <IconAlarm />
+            <div className="absolute -right-0.5 -top-0.5 flex h-[13px] w-[13px] items-center justify-center rounded-full bg-warning text-caption-2_midi text-white-primary">
+              {notificationCount}
+            </div>
           </button>
           <button
             className="h-6 w-6 items-center justify-center"
