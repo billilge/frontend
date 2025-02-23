@@ -43,6 +43,31 @@ export default function UserRentalList() {
     item: null,
   });
 
+  // Alert창
+  const alertConfig = {
+    RENTAL: {
+      content: '이 물품 반납할까요?',
+      ctaButtonText: '반납할게요',
+      otherButtonText: '괜찮아요',
+      isMainColor: true,
+    },
+    CANCEL: {
+      content: '대여 신청을 취소할까요?',
+      ctaButtonText: '취소할래요',
+      otherButtonText: '그냥 둘게요',
+      isMainColor: false,
+    },
+    RETURN_PENDING: {
+      content: '반납 신청을 취소할까요?',
+      ctaButtonText: '취소할래요',
+      otherButtonText: '그냥 둘게요',
+      isMainColor: false,
+    },
+  };
+
+  const currentAlert =
+    alertConfig[alertState.type as keyof typeof alertConfig] || {};
+
   useEffect(() => {
     const fetchReturnItems = async () => {
       try {
@@ -131,30 +156,6 @@ export default function UserRentalList() {
 
     handleAlertClose();
   };
-
-  // Alert창
-  const alertConfig = {
-    RENTAL: {
-      content: '이 물품 반납할까요?',
-      ctaButtonText: '반납할게요',
-      otherButtonText: '괜찮아요',
-      isMainColor: true,
-    },
-    CANCEL: {
-      content: '대여 신청을 취소할까요?',
-      ctaButtonText: '취소할래요',
-      otherButtonText: '그냥 둘게요',
-      isMainColor: false,
-    },
-    RETURN_PENDING: {
-      content: '반납 신청을 취소할까요?',
-      ctaButtonText: '취소할래요',
-      otherButtonText: '그냥 둘게요',
-      isMainColor: false,
-    },
-  };
-
-  const currentAlert = alertConfig[alertState.type] || {};
 
   return (
     <MobileLayout>
