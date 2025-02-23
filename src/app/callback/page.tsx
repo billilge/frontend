@@ -9,6 +9,9 @@ function Callback() {
 
   useEffect(() => {
     const status = searchParams.get('status');
+    const email = searchParams.get('email');
+
+    localStorage.setItem('email', email || '');
 
     if (!status) return;
 
