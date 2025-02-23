@@ -3,7 +3,7 @@
 import axios from 'axios';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { postSignUp } from '@/services/sign-up';
+import postSignUp from '@/services/sign-up';
 import { decode } from 'js-base64';
 
 export default function SignUp() {

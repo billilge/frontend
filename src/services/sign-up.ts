@@ -6,7 +6,7 @@ interface SignUpProps {
   name: string;
 }
 
-export const postSignUp = async ({ email, studentId, name }: SignUpProps) => {
+const postSignUp = async ({ email, studentId, name }: SignUpProps) => {
   const response = await PublicAxiosInstance.post('/auth/sign-up', {
     email,
     studentId,
@@ -14,3 +14,5 @@ export const postSignUp = async ({ email, studentId, name }: SignUpProps) => {
   });
   return response.data;
 };
+
+export default postSignUp;
