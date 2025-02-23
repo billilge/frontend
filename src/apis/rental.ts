@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { ReturnData } from '@/types/returnItemType';
+import { RentalRequest } from '@/types/rentalRequestType';
 
 const apiUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 const token = process.env.NEXT_PUBLIC_TOKEN;
@@ -19,5 +20,22 @@ export const getReturnItems = async (): Promise<ReturnData> => {
     return response.data;
   } catch (error) {
     throw new Error(`returnItem 목록 불러오기에 실패했습니다: ${error}`);
+  }
+};
+
+// 물품 대여 신청
+
+export const requestItems = async (
+  requestData: RentalRequest,
+): Promise<void> => {
+  try {
+    await axios.post(`${apiUrl}/rentals`, requestData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+  } catch (error) {
+    throw new Error(`복지 물품 신청에 실패했습니다: ${error}`);
   }
 };

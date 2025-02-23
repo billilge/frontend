@@ -4,11 +4,13 @@ import React, { useState, useEffect } from 'react';
 import IconClose from 'public/assets/icons/bottom-sheet/icon-close.svg';
 import IconHomeIndicator from 'public/assets/icons/bottom-sheet/icon-home-indicator.svg';
 import Image from 'next/image';
+import { Item } from '@/types/welfareItemType';
+import { requestItems } from '@/apis/rental';
 
 interface BottomSheetProps {
   isOpen: boolean;
   onCloseAction: () => void;
-  item: any;
+  item: Item;
 }
 
 export default function BottomSheet({
@@ -96,20 +98,36 @@ export default function BottomSheet({
     setErrors((prevErrors) => ({ ...prevErrors, time: errorMsg }));
   };
 
-  const handleRent = () => {
+  const handleRent = async () => {
     if (
-      !errors.quantity &&
-      !errors.time &&
-      quantity !== '' &&
-      hour !== '' &&
-      minute !== ''
+      errors.quantity ||
+      errors.time ||
+      quantity === '' ||
+      hour === '' ||
+      minute === ''
     ) {
-      // alert(`${item.itemName} 대여가 완료되었습니다!`);
+      return;
+    }
+
+    try {
+      await requestItems({
+        itemId: item.itemId,
+        count: parseInt(quantity, 10),
+        rentalTime: {
+          hour: parseInt(hour, 10),
+          minute: parseInt(minute, 10),
+        },
+        ignoreDuplicate: false,
+      });
+
+      console.log(`${item.itemName} 대여가 완료되었습니다!`);
       onCloseAction();
+    } catch (error) {
+      console.error('대여 신청 실패:', error);
     }
   };
 
-  if (!isOpen && !item) return null;
+  if (!isOpen || !item) return null;
 
   return (
     <div
