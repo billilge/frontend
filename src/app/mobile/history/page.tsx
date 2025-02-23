@@ -198,7 +198,7 @@ export default function UserRentalList() {
             <button
               type="button"
               onClick={isDropdownVisible ? undefined : handleDropdown}
-              className="relative flex items-center gap-2.5"
+              className={`${isDropdownVisible && 'pointer-events-none'} relative flex items-center gap-2.5`}
             >
               <div className="text-body-2-normal_semi font-semibold text-black-primary">
                 대여 상태
