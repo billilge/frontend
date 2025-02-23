@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import MobileLayout from '@/components/mobile/layout';
 import Header from '@/components/mobile/Header';
 import ReturnItem from '@/app/mobile/history/_components/ReturnItem';
@@ -12,17 +12,24 @@ import IconNoReturn from 'public/assets/icons/icon-no-return.svg';
 import IconNoRental from 'public/assets/icons/icon-no-rental.svg';
 import IconArrow from 'public/assets/icons/icon-arrow.svg';
 import { cn } from '@/lib/utils';
+import { getReturnItems } from '@/apis/rental';
+import { ReturnData } from '@/types/returnItemType';
 
 export default function UserRentalList() {
-  // 반납할 물품 더미데이터입니다.
-  const returnItemDummy = [
-    { name: '현진이의 감자', url: '/assets/icons/icon-test.svg', dayCount: 3 },
-    { name: '감자', url: '/assets/icons/icon-test.svg', dayCount: 65 },
-    { name: '고구마', url: '/assets/icons/icon-test.svg', dayCount: 666 },
-    { name: '옥수수', url: '/assets/icons/icon-test.svg', dayCount: 656565 },
-    { name: '콩', url: '/assets/icons/icon-test.svg', dayCount: 6566656 },
-    { name: '팥', url: '/assets/icons/icon-test.svg', dayCount: 6 },
-  ];
+  const [returnItems, setReturnItems] = useState<ReturnData>({ items: [] });
+
+  useEffect(() => {
+    const fetchReturnItems = async () => {
+      try {
+        const data = await getReturnItems();
+        setReturnItems(data);
+      } catch (err) {
+        console.log('getReturnItems api 연동 오류 발생', err);
+      }
+    };
+
+    fetchReturnItems();
+  }, []);
 
   const [rentalItems, setRentalItems] = useState([
     {
@@ -172,13 +179,13 @@ export default function UserRentalList() {
           반납이 필요한 물품
         </div>
         <div className="box-border flex gap-1.5 overflow-auto px-4 py-1">
-          {returnItemDummy.length > 0 ? (
-            returnItemDummy.map((item) => (
+          {returnItems.items.length > 0 ? (
+            returnItems.items.map((item) => (
               <ReturnItem
-                key={item.name}
-                name={item.name}
-                url={item.url}
-                dayCount={item.dayCount}
+                key={item.item.itemName}
+                name={item.item.itemName}
+                url={item.item.imageUrl}
+                dayCount={item.rentalDayCount}
               />
             ))
           ) : (
