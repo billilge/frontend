@@ -2,27 +2,15 @@
 
 import Sidebar from 'src/components/desktop/Sidebar';
 import Search from '@/components/desktop/Search';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import AddStudentId from '@/components/desktop/AddStudentId';
 import { Button } from '@/components/ui/button';
 import TableComponent from './_components/TableComponent';
 import AddInput from '../../../components/desktop/AddInput';
 
-const dummyData = [
-  { name: '조다운', student_id: '20223139', admin: true },
-  { name: '이정욱', student_id: '20223888', admin: true },
-  { name: '윤신지', student_id: '20223122', admin: false },
-  { name: '황수민', student_id: '20223130', admin: true },
-];
-
-const dummyData2 = [
-  { name: '조다운', student_id: '20223139' },
-  { name: '황현진', student_id: '20223158' },
-];
-
 export default function PayerInquiryPage() {
-  const [data, setData] = useState(dummyData); // 기존 데이터
-  const [addedData, setAddedData] = useState(dummyData2); // 추가된 데이터
+  const [data, setData] = useState<any[]>([]); // 기존 데이터
+  const [addedData, setAddedData] = useState<any[]>([]); // 추가된 데이터
   const [isDeleteModeOriginal, setIsDeleteModeOriginal] = useState(false); // 기존 데이터 삭제 모드
   const [isDeleteModeAdded, setIsDeleteModeAdded] = useState(false); // 추가된 데이터 삭제 모드
   const [selectedOriginal, setSelectedOriginal] = useState<string[]>([]); // 기존 데이터에서 선택된 항목
@@ -30,6 +18,28 @@ export default function PayerInquiryPage() {
 
   const [newStudentId, setNewStudentId] = useState('');
   const [newStudentName, setNewStudentName] = useState('');
+
+  // API에서 데이터 가져오기
+  // useEffect(() => {
+  //   const fetchMembers = async () => {
+  //     try {
+  //       const response = await fetch(
+  //         `${process.env.REACT_APP_API_URL}/admin/members`,
+  //       );
+  //       const result = await response.json();
+  //       const members = result.members.map((member: any) => ({
+  //         name: member.name,
+  //         student_id: member.studentId,
+  //         admin: member.role === 'ADMIN',
+  //       }));
+  //       setData(members); // 받아온 데이터로 기존 데이터 업데이트
+  //     } catch (error) {
+  //       console.error('API 호출 실패:', error);
+  //     }
+  //   };
+  //
+  //   fetchMembers();
+  // }, []);
 
   // 학번 입력 핸들러
   const handleStudentIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
