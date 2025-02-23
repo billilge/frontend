@@ -1,8 +1,13 @@
 'use client';
 
+import axios from 'axios';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { postSignUp } from '@/services/sign-up';
 
 export default function SignUp() {
+  const router = useRouter();
+
   const [studentName, setStudentName] = useState('');
   const [studentId, setStudentId] = useState('');
 
@@ -32,11 +37,32 @@ export default function SignUp() {
     return true;
   };
 
-  const handleSignUp = () => {
+  const handleSignUp = async () => {
     if (!validateForm()) return;
 
-    // TODO: 백엔드로 데이터 전송
+    const email = localStorage.getItem('email');
+    if (!email) {
+      alert('이메일 정보가 없습니다. 다시 로그인해 주세요.');
+      return;
+    }
+
+    try {
+      const data = await postSignUp({
+        email,
+        studentId,
+        name: studentName,
+      });
+
+      sessionStorage.setItem('token', data.token);
+      router.push('/mobile/main');
+    } catch (e) {
+      if (axios.isAxiosError(e)) {
+        alert('회원가입에 실패했습니다. 다시 시도해 주세요.');
+      }
+      console.error(e);
+    }
   };
+
   return (
     <section className="relative flex h-dvh w-full flex-col items-center justify-start overflow-hidden">
       <section className="mt-20 flex w-11/12 flex-col items-start">
