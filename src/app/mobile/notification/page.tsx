@@ -1,53 +1,50 @@
+'use client';
+
+import { useState, useEffect } from 'react';
 import MobileLayout from '@/components/mobile/layout';
+import { userNotificationGet } from '@/services/notification';
 import NotificationItem from '@/components/mobile/NotificationItem';
 import Header from '@/components/mobile/Header';
 import { elapsedTime } from '@/utils/elapsedTime';
 import { NotificationProps } from '@/types/notificationType';
 
-const NotificationDetail: UserNotificationType[] = [
-  {
-    notificationId: 0,
-    message: '메시지 1입니다',
-    link: '/desktop/login',
-    isRead: false,
-    status: 'USER_RENTAL_APPLY',
-    createdAt: '2025-02-16T08:44:45.476Z',
-  },
-  {
-    notificationId: 1,
-    message: '메시지 2입니다',
-    link: '/mobile',
-    isRead: true,
-    status: 'USER_RENTAL_REJECTED',
-    createdAt: '2025-02-16T06:44:45.476Z',
-  },
-  {
-    notificationId: 2,
-    message:
-      '메시지 두 줄 테스트입니다 두 줄 테스트 두 줄 테스트 두 줄 테스트 두 줄 테스트',
-    link: '/mobile',
-    isRead: true,
-    status: 'USER_RETURN_APPLY',
-    createdAt: '2025-02-12T05:44:45.476Z',
-  },
-];
-
 type UserNotificationType = NotificationProps;
 
 export default function Notification() {
+  const [notificationDetail, setNotificationDetail] = useState<
+    UserNotificationType[]
+  >([]);
+
+  useEffect(() => {
+    const fetchNotifications = async () => {
+      const data = await userNotificationGet();
+      setNotificationDetail(data.messages);
+    };
+
+    fetchNotifications();
+  }, []);
+
+  // TODO : 로그인 여부 확인 후 로그인 안 했으면 로그인 화면으로 보내기
+
   return (
     <MobileLayout>
       <Header title="알림" />
-      {NotificationDetail.map((item) => (
-        <NotificationItem
-          key={item.notificationId}
-          message={item.message}
-          link={item.link}
-          isRead={item.isRead}
-          status={item.status}
-          createdAt={elapsedTime(item.createdAt)}
-        />
-      ))}
+      {notificationDetail.length === 0 ? (
+        <div className="flex h-dvh items-center justify-center text-gray-secondary">
+          현재 알림이 없습니다.
+        </div>
+      ) : (
+        notificationDetail.map((item) => (
+          <NotificationItem
+            key={item.notificationId}
+            message={item.message}
+            link={item.link}
+            isRead={item.isRead}
+            status={item.status}
+            createdAt={elapsedTime(item.createdAt)}
+          />
+        ))
+      )}
     </MobileLayout>
   );
 }
