@@ -4,12 +4,14 @@ interface WelfareItemProps {
   itemName: string;
   imageUrl: string;
   count: number;
+  onRentalClick: () => void;
 }
 
 export default function WelfareItem({
   itemName,
   imageUrl,
   count,
+  onRentalClick,
 }: WelfareItemProps) {
   return (
     <div className="flex w-full items-center justify-between rounded-[20px] bg-white-primary p-[15px]">
@@ -30,7 +32,7 @@ export default function WelfareItem({
 
       <button
         type="button"
-        onClick={() => console.log(itemName)}
+        onClick={onRentalClick}
         className="box-border px-1 py-2.5 text-body-2-normal_semi font-semibold text-return-blue"
       >
         대여하기
