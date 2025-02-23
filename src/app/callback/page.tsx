@@ -15,10 +15,18 @@ function Callback() {
 
     if (!status) return;
 
-    if (status === 'NEW_MEMBER') {
-      router.replace('/mobile/sign-up');
-    } else {
-      router.replace('/mobile/main');
+    switch (status) {
+      case 'NEW_MEMBER':
+        router.replace('/mobile/sign-up');
+        break;
+      case 'INVALID_EMAIL':
+        alert('국민대 이메일로 로그인 해 주세요.');
+        router.replace('/mobile/sign-in');
+        break;
+      case 'SUCCESS':
+      default:
+        router.replace('/mobile/main');
+        break;
     }
   }, [searchParams, router]);
 
