@@ -12,11 +12,36 @@ import IconNoReturn from 'public/assets/icons/icon-no-return.svg';
 import IconNoRental from 'public/assets/icons/icon-no-rental.svg';
 import IconArrow from 'public/assets/icons/icon-arrow.svg';
 import { cn } from '@/lib/utils';
-import { getReturnItems } from '@/apis/rental';
+import {
+  getRentalItems,
+  getReturnItems,
+  cancelRentalItems,
+  returnRentalItems,
+} from '@/apis/rental';
 import { ReturnData } from '@/types/returnItemType';
+import {
+  RentalHistoriesData,
+  RentalStatus,
+  RentalHistory,
+} from '@/types/rentalItemType';
 
 export default function UserRentalList() {
   const [returnItems, setReturnItems] = useState<ReturnData>({ items: [] });
+  const [rentalItems, setRentalItems] = useState<RentalHistoriesData>({
+    rentalHistories: [],
+  });
+
+  const { showDropdown, hideDropdown, isDropdownVisible } = useDropdown();
+
+  const [alertState, setAlertState] = useState<{
+    isOpen: boolean;
+    type: string | '';
+    item: RentalHistory | null;
+  }>({
+    isOpen: false,
+    type: '',
+    item: null,
+  });
 
   useEffect(() => {
     const fetchReturnItems = async () => {
@@ -24,130 +49,92 @@ export default function UserRentalList() {
         const data = await getReturnItems();
         setReturnItems(data);
       } catch (err) {
-        console.log('getReturnItems api 연동 오류 발생', err);
+        console.error('getReturnItems API 오류:', err);
+      }
+    };
+
+    const fetchRentalItems = async () => {
+      try {
+        const data = await getRentalItems();
+        setRentalItems(data);
+      } catch (err) {
+        console.error('getRentalItems API 오류:', err);
       }
     };
 
     fetchReturnItems();
+    fetchRentalItems();
   }, []);
 
-  const [rentalItems, setRentalItems] = useState([
-    {
-      rentalHistoryId: 1,
-      member: {
-        name: '황수민',
-        studentId: '20213102',
-      },
-      item: {
-        itemName: '고데기',
-        imageUrl: '/assets/icons/icon-test.svg',
-      },
-      rentAt: '2025.01.22 13:08',
-      returnedAt: '2025.01.22 13:08',
-      rentalStatus: 'PENDING',
-    },
-    {
-      rentalHistoryId: 2,
-      member: {
-        name: '황수민',
-        studentId: '20213102',
-      },
-      item: {
-        itemName: '고데기',
-        imageUrl: '/assets/icons/icon-test.svg',
-      },
-      rentAt: '2025.01.22 13:08',
-      returnedAt: '2025.01.22 13:08',
-      rentalStatus: 'CANCEL',
-    },
-    {
-      rentalHistoryId: 3,
-      member: {
-        name: '황수민',
-        studentId: '20213102',
-      },
-      item: {
-        itemName: '짱뜨거운고데기인데요사실은그게',
-        imageUrl: '/assets/icons/icon-test.svg',
-      },
-      rentAt: '2025.01.22 13:08',
-      returnedAt: '',
-      rentalStatus: 'CONFIRMED',
-    },
-    {
-      rentalHistoryId: 4,
-      member: {
-        name: '황수민',
-        studentId: '20213102',
-      },
-      item: {
-        itemName: '짱뜨거운고데기인데요사실은그게',
-        imageUrl: '/assets/icons/icon-test.svg',
-      },
-      rentAt: '2025.01.22 13:08',
-      returnedAt: '',
-      rentalStatus: 'RENTAL',
-    },
-  ]);
+  // 선택한 상태 필터링(api 호출)
+  const filterRentalItems = async (status: RentalStatus | null) => {
+    try {
+      const data = await getRentalItems(status || undefined); // 필터 적용
+      setRentalItems(data);
+    } catch (err) {
+      console.error('getRentalItems API 오류:', err);
+    }
+  };
 
-  // 사용자에게 보여지는 상태가 너무 많아서 헷갈리지는 않겠죠..?
   const dropdownActions = [
-    { title: '전체', func: () => console.log('전체') },
-    { title: '승인 대기 중', func: () => console.log('승인 대기 중') },
-    { title: '대기 취소', func: () => console.log('대기 취소') },
-    { title: '승인 완료', func: () => console.log('승인 완료') },
-    { title: '대여중', func: () => console.log('대여중') },
-    { title: '반납 대기 중', func: () => console.log('반납 대기 중') },
-    { title: '반납 승인', func: () => console.log('반납 승인') },
-    { title: '반납 완료', func: () => console.log('반납 완료') },
+    { title: '전체', func: () => filterRentalItems(null) },
+    { title: '승인 대기 중', func: () => filterRentalItems('PENDING') },
+    { title: '대기 취소', func: () => filterRentalItems('CANCEL') },
+    { title: '승인 완료', func: () => filterRentalItems('CONFIRMED') },
+    { title: '대여 불가', func: () => filterRentalItems('REJECTED') },
+    { title: '대여중', func: () => filterRentalItems('RENTAL') },
+    { title: '반납 대기 중', func: () => filterRentalItems('RETURN_PENDING') },
+    { title: '반납 승인', func: () => filterRentalItems('RETURN_CONFIRMED') },
+    { title: '반납 완료', func: () => filterRentalItems('RETURNED') },
   ];
-
-  const { showDropdown, hideDropdown, isDropdownVisible } = useDropdown();
-  const [alertState, setAlertState] = useState({
-    isOpen: false,
-    type: '',
-    item: null,
-  });
 
   const handleDropdown = () => {
     return isDropdownVisible ? hideDropdown() : showDropdown();
   };
 
-  const handleAlertOpen = (type, item) => {
+  const handleAlertOpen = (type: string, item: RentalHistory) => {
     setAlertState({ isOpen: true, type, item });
+    console.log('열어줘', alertState);
   };
 
   const handleAlertClose = () => {
     setAlertState({ isOpen: false, type: '', item: null });
+    console.log('닫아줘', alertState);
   };
 
-  const handleAlertConfirm = () => {
+  const handleAlertConfirm = async () => {
     if (!alertState.item) return;
 
-    const statusMapping = {
-      RETURN: 'RETURN_PENDING',
-      CANCEL: 'CANCEL',
-      RETURN_CANCEL: 'RENTAL',
-    };
+    try {
+      if (alertState.type === 'CANCEL') {
+        await cancelRentalItems(alertState.item.rentalHistoryId);
+      } else if (alertState.type === 'REJECTED') {
+        await returnRentalItems(alertState.item.rentalHistoryId);
+      }
 
-    setRentalItems((prevItems) =>
-      prevItems.map((rentalItem) =>
-        rentalItem.rentalHistoryId === alertState.item?.rentalHistoryId
-          ? {
-              ...rentalItem,
-              rentalStatus:
-                statusMapping[alertState.type] || rentalItem.rentalStatus,
-            }
-          : rentalItem,
-      ),
-    );
+      setRentalItems((prevItems) => ({
+        rentalHistories: prevItems.rentalHistories.map((rentalItem) =>
+          rentalItem.rentalHistoryId === alertState.item?.rentalHistoryId
+            ? {
+                ...rentalItem,
+                rentalStatus:
+                  alertState.type === 'CANCEL'
+                    ? 'CANCEL'
+                    : rentalItem.rentalStatus,
+              }
+            : rentalItem,
+        ),
+      }));
+    } catch (error) {
+      console.error('API 요청 중 오류 발생:', error);
+    }
 
     handleAlertClose();
   };
 
   // Alert창
   const alertConfig = {
-    RETURN: {
+    RENTAL: {
       content: '이 물품 반납할까요?',
       ctaButtonText: '반납할게요',
       otherButtonText: '괜찮아요',
@@ -159,7 +146,7 @@ export default function UserRentalList() {
       otherButtonText: '그냥 둘게요',
       isMainColor: false,
     },
-    RETURN_CANCEL: {
+    RETURN_PENDING: {
       content: '반납 신청을 취소할까요?',
       ctaButtonText: '취소할래요',
       otherButtonText: '그냥 둘게요',
@@ -223,18 +210,18 @@ export default function UserRentalList() {
               positionClasses="top-64 right-3"
             />
           </div>
-          {rentalItems.length > 0 ? (
-            rentalItems.map((item) => (
+          {rentalItems.rentalHistories.length > 0 ? (
+            rentalItems.rentalHistories.map((item) => (
               <RentalItem
                 key={item.rentalHistoryId}
                 item={item.item}
                 rentAt={item.rentAt}
                 returnAt={item.returnedAt}
                 rentalStatus={item.rentalStatus}
-                onReturnClick={() => handleAlertOpen('RETURN', item)}
+                onReturnClick={() => handleAlertOpen('RENTAL', item)}
                 onCancelClick={() => handleAlertOpen('CANCEL', item)}
                 onReturnCancelClick={() =>
-                  handleAlertOpen('RETURN_CANCEL', item)
+                  handleAlertOpen('RETURN_PENDING', item)
                 }
               />
             ))
