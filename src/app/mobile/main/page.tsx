@@ -7,11 +7,11 @@ import Carousel from '@/app/mobile/main/_components/Carousel';
 import WelfareItem from '@/app/mobile/main/_components/WelfareItem';
 import BottomSheet from '@/components/mobile/BottomSheet';
 import { getWelfareItems } from '@/apis/item';
-import { WelfareItemData } from '@/types/welfareItemType';
+import { WelfareItemData, Item } from '@/types/welfareItemType';
 
 export default function MobileMain() {
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
-  const [selectedItem, setSelectedItem] = useState(null);
+  const [selectedItem, setSelectedItem] = useState<Item | null>(null);
   const [welfareItems, setWelfareItems] = useState<WelfareItemData>({
     items: [],
   });
@@ -35,7 +35,7 @@ export default function MobileMain() {
     '/assets/images/test.png',
   ];
 
-  const handleOpenBottomSheet = (item: any) => {
+  const handleOpenBottomSheet = (item: Item) => {
     setSelectedItem(item);
     setIsBottomSheetOpen(true);
   };

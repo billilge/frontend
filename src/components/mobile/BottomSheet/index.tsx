@@ -10,7 +10,7 @@ import { requestItems } from '@/apis/rental';
 interface BottomSheetProps {
   isOpen: boolean;
   onCloseAction: () => void;
-  item: Item;
+  item: Item | null;
 }
 
 export default function BottomSheet({
@@ -99,6 +99,7 @@ export default function BottomSheet({
   };
 
   const handleRent = async () => {
+    if (!item) return;
     if (
       errors.quantity ||
       errors.time ||
