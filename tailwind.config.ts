@@ -30,6 +30,7 @@ export default {
         'gray-secondary': '#898C8E',
         'gray-tertiary': '#F2F1F1',
         'gray-border': '#DCDDDE',
+        'on-kookmin': '#004A98',
         card: {
           DEFAULT: 'hsl(var(--card))',
           foreground: 'hsl(var(--card-foreground))',
