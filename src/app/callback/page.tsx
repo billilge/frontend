@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
+import { decode } from 'js-base64';
 
 function Callback() {
   const searchParams = useSearchParams();
@@ -10,6 +11,7 @@ function Callback() {
   useEffect(() => {
     const status = searchParams.get('status');
     const email = searchParams.get('email');
+    const accessToken = searchParams.get('accessToken');
 
     localStorage.setItem('email', email || '');
 
@@ -25,7 +27,19 @@ function Callback() {
         break;
       case 'SUCCESS':
       default:
+        if (accessToken) {
+          localStorage.setItem('token', accessToken);
+          const payload = accessToken.split('.')[1] || '';
+          const decodedPayload = decode(payload);
+          const payloadObject = JSON.parse(decodedPayload);
+
+          const tokenRole = payloadObject.role;
+
+          localStorage.setItem('token', accessToken);
+          localStorage.setItem('role', tokenRole);
+        }
         router.replace('/mobile/main');
+
         break;
     }
   }, [searchParams, router]);
