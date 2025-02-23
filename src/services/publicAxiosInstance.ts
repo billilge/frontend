@@ -10,7 +10,7 @@ PublicAxiosInstance.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
     return {
       ...config,
-      withCredentials: true,
+      withCredentials: false,
     };
   },
   (error) => Promise.reject(error),
