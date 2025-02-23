@@ -1,6 +1,5 @@
 'use client';
 
-import { useEffect } from 'react';
 import IconClose from 'public/assets/icons/side-menu/close.svg';
 import IconRentalList from 'public/assets/icons/side-menu/rental-item-list.svg';
 import IconRentalHistory from 'public/assets/icons/side-menu/rental-history.svg';
