@@ -56,16 +56,14 @@ export default function PayerInquiryPage() {
   const [data, setData] = useState(dummyData);
   const [, setAddedData] = useState(dummyData2);
   const [isDeleteModeOriginal, setIsDeleteModeOriginal] = useState(false);
-  const [selectedOriginal, setSelectedOriginal] = useState<number[]>([]);
+  const [selectedOriginal, setSelectedOriginal] = useState<string[]>([]);
 
-  // 추가할 저장 상태
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [itemName, setItemName] = useState('');
   const [isConsumable, setIsConsumable] = useState(false);
   const [quantity, setQuantity] = useState<number | ''>('');
 
   const handleDeleteOriginal = () => {
-    // 삭제하려는 항목이 대여된 수량이 있는지 검사
     const hasRentedItems = data.some(
       (item) => selectedOriginal.includes(item.id) && item.rentedQuantity > 0,
     );
@@ -80,7 +78,6 @@ export default function PayerInquiryPage() {
     setSelectedOriginal([]);
   };
 
-  // 새로운 물품 추가
   const handleAddItem = () => {
     if (!itemName || quantity === '' || quantity <= 0) {
       alert('모든 정보를 입력하세요.');
@@ -88,7 +85,7 @@ export default function PayerInquiryPage() {
     }
 
     const newItem = {
-      id: Date.now(), // 고유 ID 생성
+      id: Date.now(),
       name: itemName,
       isConsumable,
       totalQuantity: Number(quantity),
@@ -98,7 +95,6 @@ export default function PayerInquiryPage() {
 
     setAddedData((prev) => [...prev, newItem]);
 
-    // 입력값 초기화
     setItemName('');
     setIsConsumable(false);
     setQuantity('');
@@ -106,6 +102,8 @@ export default function PayerInquiryPage() {
 
     alert('물품 등록을 완료하였습니다.');
   };
+
+  const isAddButtonDisabled = !itemName || quantity === '' || quantity <= 0;
 
   return (
     <div className="flex flex-col justify-center gap-8 px-4 md:px-16 lg:px-64">
@@ -119,7 +117,6 @@ export default function PayerInquiryPage() {
           title="복지 물품 추가하기"
           description="설명"
         >
-          {/* 이미지 업로드 */}
           <div className="flex flex-col gap-2">
             <p className="text-sm font-semibold">복지물품 이모티콘</p>
             <input
@@ -135,11 +132,20 @@ export default function PayerInquiryPage() {
             />
             <label htmlFor="imageUpload" className="cursor-pointer">
               {selectedImage ? (
-                <img
-                  src={selectedImage}
-                  alt="Preview"
-                  className="h-24 w-24 rounded-md object-cover"
-                />
+                <div className="relative">
+                  <img
+                    src={selectedImage}
+                    alt="Preview"
+                    className="h-24 w-24 rounded-md object-cover"
+                  />
+                  <button
+                    type="button"
+                    className="absolute right-0 top-0 rounded-full bg-black p-1 text-white opacity-50 hover:opacity-75"
+                    onClick={() => setSelectedImage(null)}
+                  >
+                    X
+                  </button>
+                </div>
               ) : (
                 <div className="flex h-24 w-24 items-center justify-center rounded-md bg-gray-200">
                   <span className="text-sm text-gray-500">이미지 추가</span>
@@ -148,7 +154,6 @@ export default function PayerInquiryPage() {
             </label>
           </div>
 
-          {/* 입력 필드 */}
           <div className="mt-4 flex flex-col gap-2">
             <label className="text-sm font-semibold">복지물품명</label>
             <input
@@ -189,19 +194,20 @@ export default function PayerInquiryPage() {
             />
           </div>
 
-          {/* 추가 버튼 */}
           <div className="flex justify-center">
             <Button
               size="lg"
               variant="primary"
               onClick={handleAddItem}
               className="mt-4 w-full"
+              disabled={isAddButtonDisabled}
             >
               물품 추가
             </Button>
           </div>
         </Sidebar>
       </div>
+
       <div className="flex flex-col justify-between">
         <TableComponent
           data={data}
