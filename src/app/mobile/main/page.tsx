@@ -1,11 +1,16 @@
 'use client';
 
+import { useState } from 'react';
 import MobileLayout from '@/components/mobile/layout';
 import MainHeader from '@/app/mobile/main/_components/MainHeader';
 import Carousel from '@/app/mobile/main/_components/Carousel';
 import WelfareItem from '@/app/mobile/main/_components/WelfareItem';
+import BottomSheet from '@/components/mobile/BottomSheet';
 
 export default function MobileMain() {
+  const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
+
   const imageUrls = [
     '/assets/images/test.png',
     '/assets/images/test2.png',
@@ -71,6 +76,11 @@ export default function MobileMain() {
     },
   ];
 
+  const handleOpenBottomSheet = (item: any) => {
+    setSelectedItem(item);
+    setIsBottomSheetOpen(true);
+  };
+
   return (
     <MobileLayout>
       <MainHeader name="황현진" />
@@ -86,11 +96,19 @@ export default function MobileMain() {
                 itemName={item.itemName}
                 imageUrl={item.imageUrl}
                 count={item.count}
+                onRentalClick={() => handleOpenBottomSheet(item)}
               />
             ))}
           </div>
         </section>
       </div>
+
+      {/* Bottom Sheet */}
+      <BottomSheet
+        isOpen={isBottomSheetOpen}
+        onCloseAction={() => setIsBottomSheetOpen(false)}
+        item={selectedItem}
+      />
     </MobileLayout>
   );
 }
