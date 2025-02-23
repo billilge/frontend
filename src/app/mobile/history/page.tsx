@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import MobileLayout from '@/components/mobile/layout';
 import Header from '@/components/mobile/Header';
 import ReturnItem from '@/app/mobile/history/_components/ReturnItem';
@@ -24,6 +24,7 @@ import {
   RentalStatus,
   RentalHistory,
 } from '@/types/rentalItemType';
+import { reverse } from 'lodash';
 
 export default function UserRentalList() {
   const [returnItems, setReturnItems] = useState<ReturnData>({ items: [] });
@@ -75,7 +76,9 @@ export default function UserRentalList() {
     const fetchRentalItems = async () => {
       try {
         const data = await getRentalItems();
-        setRentalItems(data);
+        setRentalItems({
+          rentalHistories: [...data.rentalHistories].reverse(), // 데이터 최신순 정렬
+        });
       } catch (err) {
         console.error('getRentalItems API 오류:', err);
       }
@@ -113,12 +116,10 @@ export default function UserRentalList() {
 
   const handleAlertOpen = (type: string, item: RentalHistory) => {
     setAlertState({ isOpen: true, type, item });
-    console.log('열어줘', alertState);
   };
 
   const handleAlertClose = () => {
     setAlertState({ isOpen: false, type: '', item: null });
-    console.log('닫아줘', alertState);
   };
 
   const handleAlertConfirm = async () => {
@@ -132,17 +133,24 @@ export default function UserRentalList() {
       }
 
       setRentalItems((prevItems) => ({
-        rentalHistories: prevItems.rentalHistories.map((rentalItem) =>
-          rentalItem.rentalHistoryId === alertState.item?.rentalHistoryId
-            ? {
-                ...rentalItem,
-                rentalStatus:
-                  alertState.type === 'CANCEL'
-                    ? 'CANCEL'
-                    : rentalItem.rentalStatus,
-              }
-            : rentalItem,
-        ),
+        rentalHistories: prevItems.rentalHistories.map((rentalItem) => {
+          if (rentalItem.rentalHistoryId === alertState.item?.rentalHistoryId) {
+            let updatedStatus = rentalItem.rentalStatus;
+
+            if (alertState.type === 'CANCEL') {
+              updatedStatus = 'CANCEL';
+            } else if (alertState.type === 'RENTAL') {
+              updatedStatus = 'RETURN_PENDING';
+            }
+
+            return {
+              ...rentalItem,
+              rentalStatus: updatedStatus,
+            };
+          }
+
+          return rentalItem;
+        }),
       }));
     } catch (error) {
       console.error('API 요청 중 오류 발생:', error);
@@ -150,6 +158,15 @@ export default function UserRentalList() {
 
     handleAlertClose();
   };
+
+  const returnItemsWithKeys = useMemo(
+    () =>
+      returnItems.items.map((item) => ({
+        ...item,
+        uniqueKey: `${item.item.itemName}-${Math.random()}`,
+      })),
+    [returnItems.items],
+  );
 
   return (
     <MobileLayout>
@@ -162,9 +179,9 @@ export default function UserRentalList() {
         </div>
         <div className="box-border flex gap-1.5 overflow-auto px-4 py-1">
           {returnItems.items.length > 0 ? (
-            returnItems.items.map((item) => (
+            returnItemsWithKeys.map((item) => (
               <ReturnItem
-                key={item.item.itemName}
+                key={item.uniqueKey}
                 name={item.item.itemName}
                 url={item.item.imageUrl}
                 dayCount={item.rentalDayCount}
