@@ -10,26 +10,12 @@ import {
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
-
-interface Invoice {
-  name: string;
-  student_id: string;
-  admin?: boolean;
-}
-
-interface TableComponentProps {
-  data: Invoice[];
-  showCheckboxes?: boolean; // 고민이에요... ESLint: propType "handleDelete" is not required, but has no corresponding defaultProps declaration 에러가 뜸
-  headers?: string[];
-  selected: string[];
-  setSelected: (selectedIds: (prev: string[]) => string[]) => void;
-  handleDelete?: (selectedIds: string[]) => void; // 22
-}
+import { Payer, TableComponentProps } from '@/types/payerInquiry';
 
 export default function TableComponent({
-  data,
+  payers,
   showCheckboxes = true,
-  headers = ['이름', '학번', '관리자 여부'], // 기본값을 설정
+  headers = ['이름', '학번', '회원 여부'], // 기본값을 설정
   selected,
   setSelected,
   handleDelete = () => {}, // 기본값으로 빈 함수 설정
@@ -45,13 +31,15 @@ export default function TableComponent({
     );
   };
 
-  const paginatedData = data.slice(
-    (currentPage - 1) * rowsPerPage,
-    currentPage * rowsPerPage,
-  );
+  // payers가 배열이 아닐 경우 기본 빈 배열로 대체
+  const paginatedData = Array.isArray(payers)
+    ? payers.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage)
+    : [];
 
   const handleSelectAll = () => {
-    const visibleIds = paginatedData.map((item) => item.student_id);
+    const visibleIds = paginatedData.map(
+      (item: { studentId: string }) => item.studentId,
+    );
     setSelected((prev: string[]) =>
       prev.length === visibleIds.length ? [] : visibleIds,
     );
@@ -78,25 +66,23 @@ export default function TableComponent({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {paginatedData.map((item) => (
-            <TableRow key={item.student_id}>
+          {paginatedData.map((item: Payer) => (
+            <TableRow key={item.studentId}>
               {showCheckboxes && (
                 <TableCell className="w-10 text-center">
                   <Checkbox
-                    checked={selected.includes(item.student_id)}
-                    onCheckedChange={() => handleSelect(item.student_id)}
+                    checked={selected.includes(item.studentId)}
+                    onCheckedChange={() => handleSelect(item.studentId)}
                   />
                 </TableCell>
               )}
               <TableCell className="w-30 text-center">{item.name}</TableCell>
               <TableCell className="w-30 text-center">
-                {item.student_id}
+                {item.studentId}
               </TableCell>
-              {headers.includes('관리자 여부') && (
-                <TableCell className="w-30 text-center">
-                  {item.admin !== undefined && (item.admin ? 'o' : 'x')}
-                </TableCell>
-              )}
+              <TableCell className="w-30 text-center">
+                {item.registered !== undefined && (item.registered ? 'o' : 'x')}
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
@@ -110,12 +96,12 @@ export default function TableComponent({
           <ChevronLeftIcon className="h-10 w-10 cursor-pointer text-black-primary" />
         </Button>
         <span>
-          {currentPage} / {Math.ceil(data.length / rowsPerPage)}
+          {currentPage} / {Math.ceil(payers.length / rowsPerPage)}
         </span>
         <Button
           className="bg-transparent shadow-transparent hover:bg-transparent"
           size="chevron"
-          disabled={currentPage === Math.ceil(data.length / rowsPerPage)}
+          disabled={currentPage === Math.ceil(payers.length / rowsPerPage)}
           onClick={() => setCurrentPage((prev) => prev + 1)}
         >
           <ChevronRightIcon className="h-6 w-6 cursor-pointer text-black-primary" />
@@ -124,8 +110,3 @@ export default function TableComponent({
     </div>
   );
 }
-
-// defaultProps를 사용하여 headers에 기본값 설정
-TableComponent.defaultProps = {
-  headers: ['이름', '학번', '관리자 여부'],
-};

@@ -6,7 +6,7 @@ export interface Payer {
 }
 
 export interface TableComponentProps {
-  data: Payer[];
+  payers: Payer[];
   showCheckboxes?: boolean;
   headers?: string[];
   selected: string[];
