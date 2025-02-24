@@ -1,6 +1,5 @@
 'use client';
 
-import { useEffect } from 'react';
 import IconClose from 'public/assets/icons/side-menu/close.svg';
 import IconRentalList from 'public/assets/icons/side-menu/rental-item-list.svg';
 import IconRentalHistory from 'public/assets/icons/side-menu/rental-history.svg';
@@ -12,6 +11,7 @@ import IconLogout from 'public/assets/icons/side-menu/logout.svg';
 interface SidebarProps {
   isOpen: boolean;
   onClose: () => void;
+  isAdmin?: boolean;
 }
 
 const menuItems = [
@@ -39,7 +39,11 @@ const logoutItem = {
   href: '/mobile/sign-in',
 };
 
-export default function Sidebar({ isOpen, onClose }: SidebarProps) {
+export default function Sidebar({
+  isOpen,
+  onClose,
+  isAdmin = true, // 여기서 관리자 여부 설정
+}: SidebarProps) {
   return (
     <>
       {/* 오버레이 배경 */}
@@ -85,22 +89,26 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
           <div className="my-5 border-t border-gray-border" />
 
           {/* 관리자 메뉴 */}
-          <ul className="text-body-2-normal_semi font-semibold text-black-primary">
-            {adminItems.map(({ icon: Icon, label, href }) => (
-              <li key={label}>
-                <a
-                  href={href}
-                  className="mt-3 flex items-center gap-3 rounded p-2 hover:bg-gray-100"
-                >
-                  <Icon />
-                  {label}
-                </a>
-              </li>
-            ))}
-          </ul>
+          {isAdmin && (
+            <>
+              <ul className="text-body-2-normal_semi font-semibold text-black-primary">
+                {adminItems.map(({ icon: Icon, label, href }) => (
+                  <li key={label}>
+                    <a
+                      href={href}
+                      className="mt-3 flex items-center gap-3 rounded p-2 hover:bg-gray-100"
+                    >
+                      <Icon />
+                      {label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
 
-          {/* 두 번째 구분선 */}
-          <div className="my-5 border-t border-gray-border" />
+              {/* 두 번째 구분선 */}
+              <div className="my-5 border-t border-gray-border" />
+            </>
+          )}
 
           {/* 로그아웃 버튼 */}
           <ul className="text-body-2-normal_semi font-semibold text-black-primary">

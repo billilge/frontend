@@ -11,3 +11,7 @@ export interface NotificationProps {
   status: AdminNotificationStatus | UserNotificationStatus;
   createdAt: string;
 }
+
+export interface NotificationCount {
+  notificationCount: number;
+}
