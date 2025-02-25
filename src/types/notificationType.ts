@@ -10,6 +10,7 @@ export interface NotificationProps {
   isRead: boolean;
   status: AdminNotificationStatus | UserNotificationStatus;
   createdAt: string;
+  handleNotification: () => void;
 }
 
 export interface NotificationCount {

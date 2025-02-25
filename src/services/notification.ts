@@ -18,4 +18,15 @@ const adminNotificationGet = async () => {
   }
 };
 
-export { adminNotificationGet, userNotificationGet };
+const readNotificationPost = async (notificationId: number) => {
+  try {
+    const response = await PrivateAxiosInstance.patch(
+      `notifications/${notificationId}`,
+    );
+    return response.data;
+  } catch (error) {
+    return [];
+  }
+};
+
+export { adminNotificationGet, userNotificationGet, readNotificationPost };

@@ -6,7 +6,10 @@ import NotificationItem from '@/components/mobile/NotificationItem';
 import Header from '@/components/mobile/Header';
 import { elapsedTime } from '@/utils/elapsedTime';
 import { NotificationProps } from '@/types/notificationType';
-import { adminNotificationGet } from '@/services/notification';
+import {
+  adminNotificationGet,
+  readNotificationPost,
+} from '@/services/notification';
 
 type AdminNotificationType = NotificationProps;
 
@@ -24,6 +27,10 @@ export default function Notification() {
     fetchNotifications();
   }, []);
 
+  const handleReadNotification = async (notificationId: number) => {
+    await readNotificationPost(notificationId);
+  };
+
   return (
     <MobileLayout>
       <Header title="관리자 알림" />
@@ -40,6 +47,9 @@ export default function Notification() {
             isRead={item.isRead}
             status={item.status}
             createdAt={elapsedTime(item.createdAt)}
+            handleNotification={() =>
+              item.notificationId && handleReadNotification(item.notificationId)
+            }
           />
         ))
       )}
