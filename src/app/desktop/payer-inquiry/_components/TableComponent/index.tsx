@@ -18,7 +18,6 @@ export default function TableComponent({
   headers = ['이름', '학번', '회원 여부'], // 기본값을 설정
   selected,
   setSelected,
-  handleDelete = () => {}, // 기본값으로 빈 함수 설정
 }: TableComponentProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const rowsPerPage = 10;
