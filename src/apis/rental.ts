@@ -3,8 +3,8 @@ import { ReturnData } from '@/types/returnItemType';
 import { RentalRequest } from '@/types/rentalRequestType';
 import { RentalHistoriesData, RentalStatus } from '@/types/rentalItemType';
 
-const apiUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
-const token = process.env.NEXT_PUBLIC_TOKEN;
+const apiUrl = process.env.NEXT_PUBLIC_API_BASE_URI;
+const token = process.env.NEXT_PUBLIC_AUTH_TOKEN;
 
 // 반납해야할 물품 리스트 불러오기
 export const getReturnItems = async (): Promise<ReturnData> => {

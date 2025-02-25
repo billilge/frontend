@@ -65,7 +65,8 @@ export default function PayerInquiryPage() {
 
   const handleDeleteOriginal = () => {
     const hasRentedItems = data.some(
-      (item) => selectedOriginal.includes(item.id) && item.rentedQuantity > 0,
+      (item) =>
+        selectedOriginal.includes(String(item.id)) && item.rentedQuantity > 0,
     );
 
     if (hasRentedItems) {
@@ -73,7 +74,7 @@ export default function PayerInquiryPage() {
       return;
     }
 
-    setData(data.filter((item) => !selectedOriginal.includes(item.id)));
+    setData(data.filter((item) => !selectedOriginal.includes(String(item.id))));
     setIsDeleteModeOriginal(false);
     setSelectedOriginal([]);
   };

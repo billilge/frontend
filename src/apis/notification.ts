@@ -1,8 +1,8 @@
 import axios from 'axios';
 import { NotificationCount } from '@/types/notificationType';
 
-const apiUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
-const token = process.env.NEXT_PUBLIC_TOKEN;
+const apiUrl = process.env.NEXT_PUBLIC_API_BASE_URI;
+const token = process.env.NEXT_PUBLIC_AUTH_TOKEN;
 
 // 반납해야할 물품 리스트 불러오기
 export const getNotificationCount = async (): Promise<NotificationCount> => {
