@@ -9,6 +9,8 @@ import BottomSheet from '@/components/mobile/BottomSheet';
 import { getWelfareItems } from '@/apis/item';
 import { WelfareItemData, Item } from '@/types/welfareItemType';
 import IconSearch from 'public/assets/icons/icon-search.svg';
+import { useRouter } from 'next/navigation';
+import { requestNotificationPermission } from '@/utils/pushNotification';
 
 export default function MobileMain() {
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
@@ -17,6 +19,7 @@ export default function MobileMain() {
     items: [],
   });
   const [searchQuery, setSearchQuery] = useState('');
+  const router = useRouter();
 
   const fetchWelfareItems = async () => {
     try {
@@ -37,7 +40,13 @@ export default function MobileMain() {
   }, [searchQuery]);
 
   useEffect(() => {
+    if (!localStorage.getItem('token')) {
+      router.replace('/mobile/sign-in');
+      return;
+    }
     fetchWelfareItems();
+
+    requestNotificationPermission();
   }, []);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
