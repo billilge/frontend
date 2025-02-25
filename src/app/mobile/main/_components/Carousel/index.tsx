@@ -13,6 +13,7 @@ interface CarouselProps {
 
 export default function Carousel({ images, onClick }: CarouselProps) {
   return (
+    // eslint-disable-next-line jsx-a11y/click-events-have-key-events
     <div onClick={onClick} className="w-full rounded-[20px]">
       <Swiper
         modules={[Pagination, Autoplay]}
@@ -23,6 +24,7 @@ export default function Carousel({ images, onClick }: CarouselProps) {
         className="rounded-lg shadow-lg"
       >
         {images.map((src, index) => (
+          // eslint-disable-next-line react/no-array-index-key
           <SwiperSlide key={index}>
             {/* 이미지의 크기가 맞지 않을 때 화면을 꽉채우게 할건지, 비율을 유지할 건지 정하기 */}
             <img

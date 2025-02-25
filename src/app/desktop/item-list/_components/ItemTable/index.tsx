@@ -18,7 +18,6 @@ export default function ItemTable({
   headers = ['로고', '물품명', '소모품', '총 수량', '대여 중'],
   selected,
   setSelected,
-  handleDelete = () => {},
 }: ItemTableProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const rowsPerPage = 10;
@@ -30,6 +29,10 @@ export default function ItemTable({
     setSelected(id); // 단일 선택으로 변경
   };
 
+  const paginatedData = items
+    ? items.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage)
+    : [];
+
   const handleSelectAll = () => {
     if (selected === paginatedData[0]?.itemId) {
       setSelected(0); // 전체 선택 해제
@@ -37,10 +40,6 @@ export default function ItemTable({
       setSelected(paginatedData[0]?.itemId); // 첫 번째 항목을 선택(전체 선택)
     }
   };
-
-  const paginatedData = items
-    ? items.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage)
-    : [];
 
   return (
     <div className="flex w-full flex-col p-10">

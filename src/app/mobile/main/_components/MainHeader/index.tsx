@@ -6,7 +6,6 @@ import { useEffect, useState } from 'react';
 import IconAlarm from 'public/assets/icons/icon-alarm.svg';
 import IconHamburger from 'public/assets/icons/icon-hamburger.svg';
 import { getNotificationCount } from '@/apis/notification';
-import { NotificationCount } from '@/types/notificationType';
 
 interface HeaderProps {
   name: string;

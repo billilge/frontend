@@ -19,7 +19,7 @@ export default function ItemListPage() {
   });
 
   const [isDeleteMode, setIsDeleteMode] = useState(false);
-  const [selectedItem, setSelectedItem] = useState<number | null>(null);
+  const [selectedItem, setSelectedItem] = useState<number>(0);
 
   const mutation = useMutation({
     mutationFn: addItems,
@@ -42,11 +42,7 @@ export default function ItemListPage() {
     },
   });
 
-  const {
-    data: originalData = [],
-    isError: originalDataError,
-    isLoading,
-  } = useQuery({
+  const { data: originalData = [] } = useQuery({
     queryKey: ['items'],
     queryFn: getItems,
   });
@@ -95,7 +91,7 @@ export default function ItemListPage() {
   // 삭제 모드 토글
   const toggleDeleteMode = () => {
     setIsDeleteMode((prev) => !prev);
-    setSelectedItem(null); // 삭제 모드에서 선택된 항목 초기화
+    setSelectedItem(0);
   };
 
   // 물품 삭제 핸들러
@@ -105,9 +101,8 @@ export default function ItemListPage() {
       return;
     }
 
-    // @ts-ignore
-    deleteMutation.mutate([selectedItem]); // selectedItem을 배열로 전달
-    setSelectedItem(null); // 삭제 후 선택 초기화
+    deleteMutation.mutate(selectedItem); // selectedItem을 배열로 전달
+    setSelectedItem(0);
   };
 
   return (
@@ -117,12 +112,9 @@ export default function ItemListPage() {
       </div>
       <div className="flex flex-wrap justify-center gap-2">
         <Search />
-        <Sidebar
-          triggerText="복지 물품 추가하기"
-          title="복지 물품 추가하기"
-          description="설명"
-        >
+        <Sidebar triggerText="복지 물품 추가하기" title="복지 물품 추가하기">
           <div className="mt-4 flex flex-col gap-2">
+            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label className="text-sm font-semibold">복지물품명</label>
             <input
               type="text"
@@ -133,6 +125,7 @@ export default function ItemListPage() {
               placeholder="등록할 복지물품의 이름을 입력해 주세요."
               className="rounded-md border px-4 py-2"
             />
+            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label className="text-sm font-semibold">소모품 여부</label>
             <div className="flex gap-2">
               <button
@@ -152,6 +145,7 @@ export default function ItemListPage() {
                 소모물품
               </button>
             </div>
+            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label className="text-sm font-semibold">수량</label>
             <input
               type="number"
@@ -165,6 +159,7 @@ export default function ItemListPage() {
               placeholder="등록할 복지물품의 수량을 입력해 주세요."
               className="rounded-md border px-4 py-2"
             />
+            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label className="text-sm font-semibold">이미지 업로드</label>
             <input type="file" accept="image/*" onChange={handleImageChange} />
             {formData.selectedImage && (

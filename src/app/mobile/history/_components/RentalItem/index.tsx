@@ -9,7 +9,7 @@ interface RentalItemProps {
   rentalStatus: string;
   onReturnClick: () => void;
   onCancelClick: () => void;
-  onReturnCancelClick: () => void;
+  // onReturnCancelClick: () => void;
 }
 
 export default function RentalItem({
@@ -19,7 +19,7 @@ export default function RentalItem({
   rentalStatus,
   onReturnClick,
   onCancelClick,
-  onReturnCancelClick,
+  // onReturnCancelClick,
 }: RentalItemProps) {
   const applicatedRentTime = convertTime(rentAt);
   const applicatedReturnTime = returnAt

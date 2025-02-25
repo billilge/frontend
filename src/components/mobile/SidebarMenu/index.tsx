@@ -47,6 +47,7 @@ export default function Sidebar({
   return (
     <>
       {/* 오버레이 배경 */}
+      {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events */}
       <div
         className={`fixed inset-0 z-40 bg-black bg-opacity-50 transition-opacity ${
           isOpen ? 'visible opacity-100' : 'invisible opacity-0'

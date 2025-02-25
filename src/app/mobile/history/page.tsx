@@ -24,7 +24,6 @@ import {
   RentalStatus,
   RentalHistory,
 } from '@/types/rentalItemType';
-import { reverse } from 'lodash';
 
 export default function UserRentalList() {
   const [returnItems, setReturnItems] = useState<ReturnData>({ items: [] });
@@ -232,9 +231,9 @@ export default function UserRentalList() {
                 rentalStatus={item.rentalStatus}
                 onReturnClick={() => handleAlertOpen('RENTAL', item)}
                 onCancelClick={() => handleAlertOpen('CANCEL', item)}
-                onReturnCancelClick={() =>
-                  handleAlertOpen('RETURN_PENDING', item)
-                }
+                // onReturnCancelClick={() =>
+                //   handleAlertOpen('RETURN_PENDING', item)
+                // }
               />
             ))
           ) : (

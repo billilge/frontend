@@ -3,7 +3,7 @@ import {
   SheetContent,
   SheetHeader,
   SheetTitle,
-  SheetDescription,
+  // SheetDescription,
   SheetTrigger,
 } from '@/components/ui/sheet';
 import { ReactNode } from 'react';
@@ -11,7 +11,7 @@ import { ReactNode } from 'react';
 interface SidebarProps {
   children: ReactNode;
   title?: string;
-  description?: string;
+  // description?: string;
   triggerText?: string;
 }
 
