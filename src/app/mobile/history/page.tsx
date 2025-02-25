@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import MobileLayout from '@/components/mobile/layout';
 import Header from '@/components/mobile/Header';
 import ReturnItem from '@/app/mobile/history/_components/ReturnItem';
@@ -12,135 +12,41 @@ import IconNoReturn from 'public/assets/icons/icon-no-return.svg';
 import IconNoRental from 'public/assets/icons/icon-no-rental.svg';
 import IconArrow from 'public/assets/icons/icon-arrow.svg';
 import { cn } from '@/lib/utils';
+import {
+  getRentalItems,
+  getReturnItems,
+  cancelRentalItems,
+  returnRentalItems,
+} from '@/apis/rental';
+import { ReturnData } from '@/types/returnItemType';
+import {
+  RentalHistoriesData,
+  RentalStatus,
+  RentalHistory,
+} from '@/types/rentalItemType';
+import { reverse } from 'lodash';
 
 export default function UserRentalList() {
-  // 반납할 물품 더미데이터입니다.
-  const returnItemDummy = [
-    { name: '현진이의 감자', url: '/assets/icons/icon-test.svg', dayCount: 3 },
-    { name: '감자', url: '/assets/icons/icon-test.svg', dayCount: 65 },
-    { name: '고구마', url: '/assets/icons/icon-test.svg', dayCount: 666 },
-    { name: '옥수수', url: '/assets/icons/icon-test.svg', dayCount: 656565 },
-    { name: '콩', url: '/assets/icons/icon-test.svg', dayCount: 6566656 },
-    { name: '팥', url: '/assets/icons/icon-test.svg', dayCount: 6 },
-  ];
-
-  const [rentalItems, setRentalItems] = useState([
-    {
-      rentalHistoryId: 1,
-      member: {
-        name: '황수민',
-        studentId: '20213102',
-      },
-      item: {
-        itemName: '고데기',
-        imageUrl: '/assets/icons/icon-test.svg',
-      },
-      rentAt: '2025.01.22 13:08',
-      returnedAt: '2025.01.22 13:08',
-      rentalStatus: 'PENDING',
-    },
-    {
-      rentalHistoryId: 2,
-      member: {
-        name: '황수민',
-        studentId: '20213102',
-      },
-      item: {
-        itemName: '고데기',
-        imageUrl: '/assets/icons/icon-test.svg',
-      },
-      rentAt: '2025.01.22 13:08',
-      returnedAt: '2025.01.22 13:08',
-      rentalStatus: 'CANCEL',
-    },
-    {
-      rentalHistoryId: 3,
-      member: {
-        name: '황수민',
-        studentId: '20213102',
-      },
-      item: {
-        itemName: '짱뜨거운고데기인데요사실은그게',
-        imageUrl: '/assets/icons/icon-test.svg',
-      },
-      rentAt: '2025.01.22 13:08',
-      returnedAt: '',
-      rentalStatus: 'CONFIRMED',
-    },
-    {
-      rentalHistoryId: 4,
-      member: {
-        name: '황수민',
-        studentId: '20213102',
-      },
-      item: {
-        itemName: '짱뜨거운고데기인데요사실은그게',
-        imageUrl: '/assets/icons/icon-test.svg',
-      },
-      rentAt: '2025.01.22 13:08',
-      returnedAt: '',
-      rentalStatus: 'RENTAL',
-    },
-  ]);
-
-  // 사용자에게 보여지는 상태가 너무 많아서 헷갈리지는 않겠죠..?
-  const dropdownActions = [
-    { title: '전체', func: () => console.log('전체') },
-    { title: '승인 대기 중', func: () => console.log('승인 대기 중') },
-    { title: '대기 취소', func: () => console.log('대기 취소') },
-    { title: '승인 완료', func: () => console.log('승인 완료') },
-    { title: '대여중', func: () => console.log('대여중') },
-    { title: '반납 대기 중', func: () => console.log('반납 대기 중') },
-    { title: '반납 승인', func: () => console.log('반납 승인') },
-    { title: '반납 완료', func: () => console.log('반납 완료') },
-  ];
+  const [returnItems, setReturnItems] = useState<ReturnData>({ items: [] });
+  const [rentalItems, setRentalItems] = useState<RentalHistoriesData>({
+    rentalHistories: [],
+  });
 
   const { showDropdown, hideDropdown, isDropdownVisible } = useDropdown();
-  const [alertState, setAlertState] = useState({
+
+  const [alertState, setAlertState] = useState<{
+    isOpen: boolean;
+    type: string | '';
+    item: RentalHistory | null;
+  }>({
     isOpen: false,
     type: '',
     item: null,
   });
 
-  const handleDropdown = () => {
-    return isDropdownVisible ? hideDropdown() : showDropdown();
-  };
-
-  const handleAlertOpen = (type, item) => {
-    setAlertState({ isOpen: true, type, item });
-  };
-
-  const handleAlertClose = () => {
-    setAlertState({ isOpen: false, type: '', item: null });
-  };
-
-  const handleAlertConfirm = () => {
-    if (!alertState.item) return;
-
-    const statusMapping = {
-      RETURN: 'RETURN_PENDING',
-      CANCEL: 'CANCEL',
-      RETURN_CANCEL: 'RENTAL',
-    };
-
-    setRentalItems((prevItems) =>
-      prevItems.map((rentalItem) =>
-        rentalItem.rentalHistoryId === alertState.item?.rentalHistoryId
-          ? {
-              ...rentalItem,
-              rentalStatus:
-                statusMapping[alertState.type] || rentalItem.rentalStatus,
-            }
-          : rentalItem,
-      ),
-    );
-
-    handleAlertClose();
-  };
-
   // Alert창
   const alertConfig = {
-    RETURN: {
+    RENTAL: {
       content: '이 물품 반납할까요?',
       ctaButtonText: '반납할게요',
       otherButtonText: '괜찮아요',
@@ -152,15 +58,115 @@ export default function UserRentalList() {
       otherButtonText: '그냥 둘게요',
       isMainColor: false,
     },
-    RETURN_CANCEL: {
-      content: '반납 신청을 취소할까요?',
-      ctaButtonText: '취소할래요',
-      otherButtonText: '그냥 둘게요',
-      isMainColor: false,
-    },
   };
 
-  const currentAlert = alertConfig[alertState.type] || {};
+  const currentAlert =
+    alertConfig[alertState.type as keyof typeof alertConfig] || {};
+
+  useEffect(() => {
+    const fetchReturnItems = async () => {
+      try {
+        const data = await getReturnItems();
+        setReturnItems(data);
+      } catch (err) {
+        console.error('getReturnItems API 오류:', err);
+      }
+    };
+
+    const fetchRentalItems = async () => {
+      try {
+        const data = await getRentalItems();
+        setRentalItems({
+          rentalHistories: [...data.rentalHistories].reverse(), // 데이터 최신순 정렬
+        });
+      } catch (err) {
+        console.error('getRentalItems API 오류:', err);
+      }
+    };
+
+    fetchReturnItems();
+    fetchRentalItems();
+  }, []);
+
+  // 선택한 상태 필터링(api 호출)
+  const filterRentalItems = async (status: RentalStatus | null) => {
+    try {
+      const data = await getRentalItems(status || undefined); // 필터 적용
+      setRentalItems(data);
+    } catch (err) {
+      console.error('getRentalItems API 오류:', err);
+    }
+  };
+
+  const dropdownActions = [
+    { title: '전체', func: () => filterRentalItems(null) },
+    { title: '승인 대기 중', func: () => filterRentalItems('PENDING') },
+    { title: '대기 취소', func: () => filterRentalItems('CANCEL') },
+    { title: '승인 완료', func: () => filterRentalItems('CONFIRMED') },
+    { title: '대여 불가', func: () => filterRentalItems('REJECTED') },
+    { title: '대여중', func: () => filterRentalItems('RENTAL') },
+    { title: '반납 대기 중', func: () => filterRentalItems('RETURN_PENDING') },
+    { title: '반납 승인', func: () => filterRentalItems('RETURN_CONFIRMED') },
+    { title: '반납 완료', func: () => filterRentalItems('RETURNED') },
+  ];
+
+  const handleDropdown = () => {
+    return isDropdownVisible ? hideDropdown() : showDropdown();
+  };
+
+  const handleAlertOpen = (type: string, item: RentalHistory) => {
+    setAlertState({ isOpen: true, type, item });
+  };
+
+  const handleAlertClose = () => {
+    setAlertState({ isOpen: false, type: '', item: null });
+  };
+
+  const handleAlertConfirm = async () => {
+    if (!alertState.item) return;
+
+    try {
+      if (alertState.type === 'CANCEL') {
+        await cancelRentalItems(alertState.item.rentalHistoryId);
+      } else if (alertState.type === 'RENTAL') {
+        await returnRentalItems(alertState.item.rentalHistoryId);
+      }
+
+      setRentalItems((prevItems) => ({
+        rentalHistories: prevItems.rentalHistories.map((rentalItem) => {
+          if (rentalItem.rentalHistoryId === alertState.item?.rentalHistoryId) {
+            let updatedStatus = rentalItem.rentalStatus;
+
+            if (alertState.type === 'CANCEL') {
+              updatedStatus = 'CANCEL';
+            } else if (alertState.type === 'RENTAL') {
+              updatedStatus = 'RETURN_PENDING';
+            }
+
+            return {
+              ...rentalItem,
+              rentalStatus: updatedStatus,
+            };
+          }
+
+          return rentalItem;
+        }),
+      }));
+    } catch (error) {
+      console.error('API 요청 중 오류 발생:', error);
+    }
+
+    handleAlertClose();
+  };
+
+  const returnItemsWithKeys = useMemo(
+    () =>
+      returnItems.items.map((item) => ({
+        ...item,
+        uniqueKey: `${item.item.itemName}-${Math.random()}`,
+      })),
+    [returnItems.items],
+  );
 
   return (
     <MobileLayout>
@@ -172,13 +178,13 @@ export default function UserRentalList() {
           반납이 필요한 물품
         </div>
         <div className="box-border flex gap-1.5 overflow-auto px-4 py-1">
-          {returnItemDummy.length > 0 ? (
-            returnItemDummy.map((item) => (
+          {returnItems.items.length > 0 ? (
+            returnItemsWithKeys.map((item) => (
               <ReturnItem
-                key={item.name}
-                name={item.name}
-                url={item.url}
-                dayCount={item.dayCount}
+                key={item.uniqueKey}
+                name={item.item.itemName}
+                url={item.item.imageUrl}
+                dayCount={item.rentalDayCount}
               />
             ))
           ) : (
@@ -216,18 +222,18 @@ export default function UserRentalList() {
               positionClasses="top-64 right-3"
             />
           </div>
-          {rentalItems.length > 0 ? (
-            rentalItems.map((item) => (
+          {rentalItems.rentalHistories.length > 0 ? (
+            rentalItems.rentalHistories.map((item) => (
               <RentalItem
                 key={item.rentalHistoryId}
                 item={item.item}
                 rentAt={item.rentAt}
                 returnAt={item.returnedAt}
                 rentalStatus={item.rentalStatus}
-                onReturnClick={() => handleAlertOpen('RETURN', item)}
+                onReturnClick={() => handleAlertOpen('RENTAL', item)}
                 onCancelClick={() => handleAlertOpen('CANCEL', item)}
                 onReturnCancelClick={() =>
-                  handleAlertOpen('RETURN_CANCEL', item)
+                  handleAlertOpen('RETURN_PENDING', item)
                 }
               />
             ))

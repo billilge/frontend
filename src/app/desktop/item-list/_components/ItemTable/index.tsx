@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
 import {
   Table,
   TableBody,
@@ -9,37 +10,52 @@ import {
 } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
-import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
-import { Payer, TableComponentProps } from '@/types/payerInquiry';
 
-export default function TableComponent({
-  payers,
+interface Item {
+  logo: string;
+  name: string;
+  isConsumable: boolean;
+  totalQuantity: number;
+  rentedQuantity: number;
+  id: string;
+  isAdmin?: boolean;
+}
+
+interface ItemTableProps {
+  data: Item[];
+  showCheckboxes?: boolean;
+  headers?: string[];
+  selected: string[];
+  setSelected: (selectedIds: (prev: string[]) => string[]) => void;
+  handleDelete?: (selectedIds: string[]) => void;
+}
+
+export default function ItemTable({
+  data,
   showCheckboxes = true,
-  headers = ['이름', '학번', '회원 여부'], // 기본값을 설정
+  headers = ['로고', '물품명', '소모품', '총 수량', '대여 중'],
   selected,
   setSelected,
-  handleDelete = () => {}, // 기본값으로 빈 함수 설정
-}: TableComponentProps) {
+  handleDelete = () => {},
+}: ItemTableProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const rowsPerPage = 10;
 
-  const handleSelect = (student_id: string) => {
+  const handleSelect = (id: string) => {
     setSelected((prev: string[]) =>
-      prev.includes(student_id)
-        ? prev.filter((id) => id !== student_id)
-        : [...prev, student_id],
+      prev.includes(id)
+        ? prev.filter((itemId) => itemId !== id)
+        : [...prev, id],
     );
   };
 
-  // payers가 배열이 아닐 경우 기본 빈 배열로 대체
-  const paginatedData = Array.isArray(payers)
-    ? payers.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage)
-    : [];
+  const paginatedData = data.slice(
+    (currentPage - 1) * rowsPerPage,
+    currentPage * rowsPerPage,
+  );
 
   const handleSelectAll = () => {
-    const visibleIds = paginatedData.map(
-      (item: { studentId: string }) => item.studentId,
-    );
+    const visibleIds = paginatedData.map((item) => item.id);
     setSelected((prev: string[]) =>
       prev.length === visibleIds.length ? [] : visibleIds,
     );
@@ -66,23 +82,32 @@ export default function TableComponent({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {paginatedData.map((item: Payer) => (
-            <TableRow key={item.studentId}>
+          {paginatedData.map((item) => (
+            <TableRow key={item.id}>
               {showCheckboxes && (
                 <TableCell className="w-10 text-center">
                   <Checkbox
-                    checked={selected.includes(item.studentId)}
-                    onCheckedChange={() => handleSelect(item.studentId)}
+                    checked={selected.includes(item.id)}
+                    onCheckedChange={() => handleSelect(item.id)}
                   />
                 </TableCell>
               )}
+              <TableCell className="w-30 text-center">{item.logo}</TableCell>
               <TableCell className="w-30 text-center">{item.name}</TableCell>
               <TableCell className="w-30 text-center">
-                {item.studentId}
+                {item.isConsumable ? '소모품' : '대여 물품'}
               </TableCell>
               <TableCell className="w-30 text-center">
-                {item.registered !== undefined && (item.registered ? 'o' : 'x')}
+                {item.totalQuantity}
               </TableCell>
+              <TableCell className="w-30 text-center">
+                {item.rentedQuantity}
+              </TableCell>
+              {headers.includes('관리자 여부') && (
+                <TableCell className="w-30 text-center">
+                  {item.isAdmin !== undefined && (item.isAdmin ? 'o' : 'x')}
+                </TableCell>
+              )}
             </TableRow>
           ))}
         </TableBody>
@@ -96,12 +121,12 @@ export default function TableComponent({
           <ChevronLeftIcon className="h-10 w-10 cursor-pointer text-black-primary" />
         </Button>
         <span>
-          {currentPage} / {Math.ceil(payers.length / rowsPerPage)}
+          {currentPage} / {Math.ceil(data.length / rowsPerPage)}
         </span>
         <Button
           className="bg-transparent shadow-transparent hover:bg-transparent"
           size="chevron"
-          disabled={currentPage === Math.ceil(payers.length / rowsPerPage)}
+          disabled={currentPage === Math.ceil(data.length / rowsPerPage)}
           onClick={() => setCurrentPage((prev) => prev + 1)}
         >
           <ChevronRightIcon className="h-6 w-6 cursor-pointer text-black-primary" />

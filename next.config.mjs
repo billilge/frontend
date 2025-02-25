@@ -24,7 +24,10 @@ const nextConfig = {
     return config;
   },
   images: {
-    domains: ['github.com'],
+    domains: [
+      'github.com',
+      'billilge-resources.s3.us-west-2.amazonaws.com', // S3 이미지 도메인 추가
+    ],
     dangerouslyAllowSVG: true,
     contentSecurityPolicy: "default-src 'self'; img-src 'self' data: https:;",
   },
