@@ -11,6 +11,7 @@ import {
   getAdmins,
   getMembers,
 } from '@/services/admins';
+import { Admins } from '@/types/admins';
 import TableComponent from './_components/AdminTable';
 
 export default function PayerInquiryPage() {
@@ -90,8 +91,8 @@ export default function PayerInquiryPage() {
     }
 
     const selectedMembers = memberData.members
-      .filter((member) => selectedAdded.includes(member.memberId))
-      .map((member) => member.memberId);
+      .filter((member: Admins) => selectedAdded.includes(member.memberId))
+      .map((member: Admins) => member.memberId);
 
     mutation.mutate(selectedMembers);
   };
@@ -103,11 +104,7 @@ export default function PayerInquiryPage() {
       </div>
       <div className="flex flex-wrap justify-center gap-2">
         <Search />
-        <Sidebar
-          triggerText="새로운 관리자 추가하기"
-          title="관리자 추가하기"
-          description="설명"
-        >
+        <Sidebar triggerText="새로운 관리자 추가하기" title="관리자 추가하기">
           <div className="flex w-full flex-col items-center justify-center">
             <div className="flex w-full flex-col">
               <TableComponent

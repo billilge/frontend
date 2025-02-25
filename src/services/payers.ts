@@ -1,4 +1,3 @@
-import PublicAxiosInstance from './publicAxiosInstance';
 import PrivateAxiosInstance from './privateAxiosInstance';
 
 export const getPayer = async () => {

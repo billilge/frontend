@@ -1,10 +1,10 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { decode } from 'js-base64';
 
-function Callback() {
+function CallbackContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -39,7 +39,6 @@ function Callback() {
           localStorage.setItem('role', tokenRole);
         }
         router.replace('/mobile/main');
-
         break;
     }
   }, [searchParams, router]);
@@ -47,4 +46,10 @@ function Callback() {
   return <p>Redirecting...</p>;
 }
 
-export default Callback;
+export default function Callback() {
+  return (
+    <Suspense fallback={<p>Loading...</p>}>
+      <CallbackContent />
+    </Suspense>
+  );
+}

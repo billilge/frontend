@@ -31,6 +31,11 @@
   },
   "plugins": ["@typescript-eslint", "react", "prettier"],
   "rules": {
+    "react/jsx-props-no-spreading": "off",
+    "react/prop-types": "off",
+    "jsx-a11y/no-static-element-interactions": "off",
+    "import/prefer-default-export":"off",
+    "@typescript-eslint/indent": "off",
     "prettier/prettier": "error",
     "react/react-in-jsx-scope": "off",
     "react/require-default-props": "off",

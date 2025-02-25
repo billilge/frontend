@@ -25,6 +25,7 @@ export default function Alert({
   return (
     <div className="fixed inset-0 z-20 flex items-center justify-center">
       {/* 반투명한 검정 배경 */}
+      {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events */}
       <div
         className="absolute inset-0 bg-black bg-opacity-50"
         onClick={onClickOther} // 배경 클릭 시 닫히도록 설정
