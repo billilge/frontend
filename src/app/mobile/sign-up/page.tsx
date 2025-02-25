@@ -52,15 +52,7 @@ export default function SignUp() {
         name: studentName,
       });
 
-      const payload = data.token.split('.')[1] || '';
-      const decodedPayload = decode(payload);
-      const payloadObject = JSON.parse(decodedPayload);
-
-      const tokenRole = payloadObject.role;
-      const tokenName = payloadObject.name;
-      const tokenId = payloadObject.sub;
-
-      const userInfo = { name: tokenName, id: tokenId, role: tokenRole };
+      const userInfo = { name: studentName, id: studentId, role: 'USER' };
 
       localStorage.setItem('token', data.token);
       localStorage.setItem('user', JSON.stringify(userInfo));
