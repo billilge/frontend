@@ -57,9 +57,13 @@ export default function SignUp() {
       const payloadObject = JSON.parse(decodedPayload);
 
       const tokenRole = payloadObject.role;
+      const tokenName = payloadObject.name;
+      const tokenId = payloadObject.sub;
 
-      localStorage.setItem('role', tokenRole);
+      const userInfo = { name: tokenName, id: tokenId, role: tokenRole };
+
       localStorage.setItem('token', data.token);
+      localStorage.setItem('user', JSON.stringify(userInfo));
 
       router.push('/mobile/main');
     } catch (e) {

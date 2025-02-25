@@ -1,8 +1,8 @@
-import PublicAxiosInstance from '@/services/publicAxiosInstance';
+import PrivateAxiosInstance from './privateAxiosInstance';
 
 const userNotificationGet = async () => {
   try {
-    const response = await PublicAxiosInstance.get('/notifications');
+    const response = await PrivateAxiosInstance.get('/notifications');
     return response.data;
   } catch (error) {
     return [];
