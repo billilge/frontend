@@ -18,7 +18,6 @@ export default function ItemTable({
   headers = ['로고', '물품명', '소모품', '총 수량', '대여 중'],
   selected,
   setSelected,
-  handleDelete = () => {},
 }: ItemTableProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const rowsPerPage = 10;
