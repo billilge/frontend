@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import MobileLayout from '@/components/mobile/layout';
 import {
   userNotificationGet,
@@ -14,9 +15,20 @@ import { NotificationProps } from '@/types/notificationType';
 type UserNotificationType = NotificationProps;
 
 export default function Notification() {
+  const router = useRouter();
+
   const [notificationDetail, setNotificationDetail] = useState<
     UserNotificationType[]
   >([]);
+
+  useEffect(() => {
+    const user = localStorage.getItem('user');
+
+    if (!user) {
+      alert('로그인 후 사용 가능합니다.');
+      router.push('/mobile/sign-in');
+    }
+  }, [router]);
 
   useEffect(() => {
     const fetchNotifications = async () => {

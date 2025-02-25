@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import MobileLayout from '@/components/mobile/layout';
 import NotificationItem from '@/components/mobile/NotificationItem';
 import Header from '@/components/mobile/Header';
@@ -14,9 +15,22 @@ import {
 type AdminNotificationType = NotificationProps;
 
 export default function Notification() {
+  const router = useRouter();
+
   const [notificationDetail, setNotificationDetail] = useState<
     AdminNotificationType[]
   >([]);
+
+  useEffect(() => {
+    const user = localStorage.getItem('user') || '{}';
+
+    const parsedUser = JSON.parse(user);
+
+    if (parsedUser.role !== 'ADMIN' || !user) {
+      alert('관리자만 사용 가능한 페이지입니다.');
+      router.push('/mobile/main');
+    }
+  }, [router]);
 
   useEffect(() => {
     const fetchNotifications = async () => {
