@@ -46,7 +46,7 @@ export default function MobileMain() {
 
   const imageUrls = [
     '/assets/images/test.png',
-    '/assets/images/test2.png',
+    '/assets/images/test.png',
     '/assets/images/test.png',
   ];
 
