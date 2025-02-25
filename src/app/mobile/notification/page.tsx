@@ -29,7 +29,7 @@ export default function Notification() {
   return (
     <MobileLayout>
       <Header title="알림" />
-      {notificationDetail.length === 0 ? (
+      {notificationDetail?.length === 0 ? (
         <div className="flex h-dvh items-center justify-center text-gray-secondary">
           현재 알림이 없습니다.
         </div>

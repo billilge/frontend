@@ -54,7 +54,7 @@ export default function SignUp() {
 
       const userInfo = { name: studentName, id: studentId, role: 'USER' };
 
-      localStorage.setItem('token', data.token);
+      localStorage.setItem('token', data.accessToken);
       localStorage.setItem('user', JSON.stringify(userInfo));
 
       router.push('/mobile/main');

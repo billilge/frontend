@@ -1,17 +1,17 @@
 import axios, { InternalAxiosRequestConfig } from 'axios';
 
 const getAccessToken = (): string | null => {
-  if (typeof window === 'undefined') return null;
-  const userInfo = localStorage.getItem('user');
-  if (!userInfo) return '';
+  const token = localStorage.getItem('token');
 
-  try {
-    const parsedUser = JSON.parse(userInfo);
-    return parsedUser?.token || '';
-  } catch (error) {
-    console.error('Failed to parse userInfo from localStorage:', error);
-    return '';
+  if (token) {
+    try {
+      return token || '';
+    } catch (error) {
+      console.error('Failed to parse user from localStorage', error);
+      return '';
+    }
   }
+  return '';
 };
 
 const PrivateAxiosInstance = axios.create({

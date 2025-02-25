@@ -9,4 +9,13 @@ const userNotificationGet = async () => {
   }
 };
 
-export { userNotificationGet };
+const adminNotificationGet = async () => {
+  try {
+    const response = await PrivateAxiosInstance.get('/admin/notifications');
+    return response.data;
+  } catch (error) {
+    return [];
+  }
+};
+
+export { adminNotificationGet, userNotificationGet };
