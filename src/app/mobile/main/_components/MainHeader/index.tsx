@@ -45,9 +45,11 @@ export default function MainHeader({ name }: HeaderProps) {
             onClick={() => router.push('/mobile/notification')}
           >
             <IconAlarm />
-            <div className="absolute -right-0.5 -top-0.5 flex h-[13px] w-[13px] items-center justify-center rounded-full bg-warning text-caption-2_midi text-white-primary">
-              {notificationCount}
-            </div>
+            {notificationCount && (
+              <div className="absolute -right-0.5 -top-0.5 flex h-[13px] w-[13px] items-center justify-center rounded-full bg-warning text-caption-2_midi text-white-primary">
+                {notificationCount}
+              </div>
+            )}
           </button>
           <button
             className="h-6 w-6 items-center justify-center"
