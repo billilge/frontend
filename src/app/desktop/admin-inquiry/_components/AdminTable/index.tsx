@@ -10,12 +10,12 @@ import {
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
-import { Payer, TableComponentProps } from '@/types/payers';
+import { Admins, TableComponentProps } from '@/types/admins';
 
-export default function TableComponent({
-  payers,
+export default function AdminTable({
+  admins,
   showCheckboxes = true,
-  headers = ['이름', '학번', '회원 여부'], // 기본값을 설정
+  headers = ['이름', '학번'], // 기본값을 설정
   selected,
   setSelected,
 }: TableComponentProps) {
@@ -31,13 +31,13 @@ export default function TableComponent({
   };
 
   // payers가 배열이 아닐 경우 기본 빈 배열로 대체
-  const paginatedData = Array.isArray(payers)
-    ? payers.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage)
+  const paginatedData = Array.isArray(admins)
+    ? admins.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage)
     : [];
 
   const handleSelectAll = () => {
     const visibleIds = paginatedData.map(
-      (item: { payerId: number }) => item.payerId,
+      (item: { memberId: number }) => item.memberId,
     );
     setSelected(
       (prev: number[]) => (prev.length === visibleIds.length ? [] : visibleIds), // 배열 길이를 비교하는 대신 선택된 아이디와 비교
@@ -65,22 +65,19 @@ export default function TableComponent({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {paginatedData.map((item: Payer) => (
-            <TableRow key={item.payerId}>
+          {paginatedData.map((item: Admins) => (
+            <TableRow key={item.memberId}>
               {showCheckboxes && (
                 <TableCell className="w-10 text-center">
                   <Checkbox
-                    checked={selected.includes(item.payerId)}
-                    onCheckedChange={() => handleSelect(item.payerId)}
+                    checked={selected.includes(item.memberId)}
+                    onCheckedChange={() => handleSelect(item.memberId)}
                   />
                 </TableCell>
               )}
               <TableCell className="w-30 text-center">{item.name}</TableCell>
               <TableCell className="w-30 text-center">
                 {item.studentId}
-              </TableCell>
-              <TableCell className="w-30 text-center">
-                {item.registered !== undefined && (item.registered ? 'o' : 'x')}
               </TableCell>
             </TableRow>
           ))}
@@ -95,12 +92,12 @@ export default function TableComponent({
           <ChevronLeftIcon className="h-10 w-10 cursor-pointer text-black-primary" />
         </Button>
         <span>
-          {currentPage} / {Math.ceil(payers.length / rowsPerPage)}
+          {currentPage} / {Math.ceil(admins.length / rowsPerPage)}
         </span>
         <Button
           className="bg-transparent shadow-transparent hover:bg-transparent"
           size="chevron"
-          disabled={currentPage === Math.ceil(payers.length / rowsPerPage)}
+          disabled={currentPage === Math.ceil(admins.length / rowsPerPage)}
           onClick={() => setCurrentPage((prev) => prev + 1)}
         >
           <ChevronRightIcon className="h-6 w-6 cursor-pointer text-black-primary" />

@@ -131,6 +131,7 @@ export default function BottomSheet({
   if (!isOpen || !item) return null;
 
   return (
+    // eslint-disable-next-line jsx-a11y/click-events-have-key-events
     <div
       onClick={handleOverlayClick}
       className={`fixed inset-0 z-50 flex items-end justify-center bg-black-primary bg-opacity-50 ${

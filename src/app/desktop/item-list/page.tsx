@@ -2,109 +2,108 @@
 
 import Sidebar from 'src/components/desktop/Sidebar';
 import Search from '@/components/desktop/Search';
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { getItems, addItems, deleteItems } from '@/services/items';
 import TableComponent from './_components/ItemTable';
 
-const dummyData = [
-  {
-    id: 1,
-    name: '물품1',
+export default function ItemListPage() {
+  const queryClient = useQueryClient();
+
+  const [formData, setFormData] = useState({
+    selectedImage: null as File | null,
+    itemName: '',
     isConsumable: false,
-    totalQuantity: 100,
-    rentedQuantity: 30,
-    logo: 'logo1.png',
-  },
-  {
-    id: 2,
-    name: '물품2',
-    isConsumable: false,
-    totalQuantity: 200,
-    rentedQuantity: 50,
-    logo: 'logo2.png',
-  },
-  {
-    id: 3,
-    name: '물품3',
-    isConsumable: false,
-    totalQuantity: 300,
-    rentedQuantity: 70,
-    logo: 'logo3.png',
-  },
-];
+    quantity: '' as number | '',
+  });
 
-const dummyData2 = [
-  {
-    id: 4,
-    name: '물품4',
-    isConsumable: false,
-    totalQuantity: 400,
-    rentedQuantity: 90,
-    logo: 'logo4.png',
-  },
-  {
-    id: 5,
-    name: '물품5',
-    isConsumable: false,
-    totalQuantity: 500,
-    rentedQuantity: 120,
-    logo: 'logo5.png',
-  },
-];
+  const [isDeleteMode, setIsDeleteMode] = useState(false);
+  const [selectedItem, setSelectedItem] = useState<number>(0);
 
-export default function PayerInquiryPage() {
-  const [data, setData] = useState(dummyData);
-  const [, setAddedData] = useState(dummyData2);
-  const [isDeleteModeOriginal, setIsDeleteModeOriginal] = useState(false);
-  const [selectedOriginal, setSelectedOriginal] = useState<string[]>([]);
+  const mutation = useMutation({
+    mutationFn: addItems,
+    onSuccess: () => {
+      alert('물품 등록이 완료되었습니다.');
+      queryClient.invalidateQueries({ queryKey: ['items'] });
+    },
+    onError: () => {
+      alert('물품 등록에 실패했습니다.');
+    },
+  });
 
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
-  const [itemName, setItemName] = useState('');
-  const [isConsumable, setIsConsumable] = useState(false);
-  const [quantity, setQuantity] = useState<number | ''>('');
+  const deleteMutation = useMutation({
+    mutationFn: deleteItems,
+    onSuccess: () => {
+      alert('선택된 물품이 삭제되었습니다.');
+    },
+    onError: () => {
+      alert('물품 삭제에 실패했습니다.');
+    },
+  });
 
-  const handleDeleteOriginal = () => {
-    const hasRentedItems = data.some(
-      (item) =>
-        selectedOriginal.includes(String(item.id)) && item.rentedQuantity > 0,
-    );
+  const { data: originalData = [] } = useQuery({
+    queryKey: ['items'],
+    queryFn: getItems,
+  });
 
-    if (hasRentedItems) {
-      alert('대여 중인 물품은 삭제할 수 없습니다.');
-      return;
-    }
+  // 물품 추가 핸들러
+  const handleAddItem = useCallback(() => {
+    const { itemName, quantity, selectedImage, isConsumable } = formData;
 
-    setData(data.filter((item) => !selectedOriginal.includes(String(item.id))));
-    setIsDeleteModeOriginal(false);
-    setSelectedOriginal([]);
-  };
-
-  const handleAddItem = () => {
     if (!itemName || quantity === '' || quantity <= 0) {
       alert('모든 정보를 입력하세요.');
       return;
     }
 
-    const newItem = {
-      id: Date.now(),
+    const newFormData = new FormData();
+    if (selectedImage) newFormData.append('image', selectedImage);
+
+    const itemData = {
       name: itemName,
-      isConsumable,
-      totalQuantity: Number(quantity),
-      rentedQuantity: 0,
-      logo: selectedImage || 'default.png',
+      type: isConsumable ? 'CONSUMPTION' : 'RENTAL',
+      count: Number(quantity),
     };
 
-    setAddedData((prev) => [...prev, newItem]);
+    newFormData.append(
+      'itemRequest',
+      new Blob([JSON.stringify(itemData)], { type: 'application/json' }),
+    );
 
-    setItemName('');
-    setIsConsumable(false);
-    setQuantity('');
-    setSelectedImage(null);
+    mutation.mutate(newFormData);
 
-    alert('물품 등록을 완료하였습니다.');
+    setFormData({
+      selectedImage: null,
+      itemName: '',
+      isConsumable: false,
+      quantity: '',
+    });
+  }, [formData, mutation]);
+
+  // 이미지 파일 선택 핸들러
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      setFormData((prev) => ({ ...prev, selectedImage: file }));
+    }
   };
 
-  const isAddButtonDisabled = !itemName || quantity === '' || quantity <= 0;
+  // 삭제 모드 토글
+  const toggleDeleteMode = () => {
+    setIsDeleteMode((prev) => !prev);
+    setSelectedItem(0);
+  };
+
+  // 물품 삭제 핸들러
+  const handleDeleteItem = () => {
+    if (selectedItem === null) {
+      alert('삭제할 물품을 선택해 주세요.');
+      return;
+    }
+
+    deleteMutation.mutate(selectedItem); // selectedItem을 배열로 전달
+    setSelectedItem(0);
+  };
 
   return (
     <div className="flex flex-col justify-center gap-8 px-4 md:px-16 lg:px-64">
@@ -113,95 +112,75 @@ export default function PayerInquiryPage() {
       </div>
       <div className="flex flex-wrap justify-center gap-2">
         <Search />
-        <Sidebar
-          triggerText="복지 물품 추가하기"
-          title="복지 물품 추가하기"
-          description="설명"
-        >
-          <div className="flex flex-col gap-2">
-            <p className="text-sm font-semibold">복지물품 이모티콘</p>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={(e) => {
-                if (e.target.files && e.target.files[0]) {
-                  setSelectedImage(URL.createObjectURL(e.target.files[0]));
-                }
-              }}
-              className="hidden"
-              id="imageUpload"
-            />
-            <label htmlFor="imageUpload" className="cursor-pointer">
-              {selectedImage ? (
-                <div className="relative">
-                  <img
-                    src={selectedImage}
-                    alt="Preview"
-                    className="h-24 w-24 rounded-md object-cover"
-                  />
-                  <button
-                    type="button"
-                    className="absolute right-0 top-0 rounded-full bg-black p-1 text-white opacity-50 hover:opacity-75"
-                    onClick={() => setSelectedImage(null)}
-                  >
-                    X
-                  </button>
-                </div>
-              ) : (
-                <div className="flex h-24 w-24 items-center justify-center rounded-md bg-gray-200">
-                  <span className="text-sm text-gray-500">이미지 추가</span>
-                </div>
-              )}
-            </label>
-          </div>
-
+        <Sidebar triggerText="복지 물품 추가하기" title="복지 물품 추가하기">
           <div className="mt-4 flex flex-col gap-2">
+            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label className="text-sm font-semibold">복지물품명</label>
             <input
               type="text"
-              value={itemName}
-              onChange={(e) => setItemName(e.target.value)}
+              value={formData.itemName}
+              onChange={(e) =>
+                setFormData({ ...formData, itemName: e.target.value })
+              }
               placeholder="등록할 복지물품의 이름을 입력해 주세요."
               className="rounded-md border px-4 py-2"
             />
-
+            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label className="text-sm font-semibold">소모품 여부</label>
             <div className="flex gap-2">
               <button
                 type="button"
-                className={`rounded-md border px-4 py-2 ${!isConsumable ? 'bg-blue-500 text-white' : 'text-blue-500'}`}
-                onClick={() => setIsConsumable(false)}
+                className={`rounded-md border px-4 py-2 ${!formData.isConsumable ? 'bg-blue-500 text-white' : 'text-blue-500'}`}
+                onClick={() =>
+                  setFormData({ ...formData, isConsumable: false })
+                }
               >
                 대여물품
               </button>
               <button
                 type="button"
-                className={`rounded-md border px-4 py-2 ${isConsumable ? 'bg-blue-500 text-white' : 'text-blue-500'}`}
-                onClick={() => setIsConsumable(true)}
+                className={`rounded-md border px-4 py-2 ${formData.isConsumable ? 'bg-blue-500 text-white' : 'text-blue-500'}`}
+                onClick={() => setFormData({ ...formData, isConsumable: true })}
               >
                 소모물품
               </button>
             </div>
-
+            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label className="text-sm font-semibold">수량</label>
             <input
               type="number"
-              value={quantity}
+              value={formData.quantity}
               onChange={(e) =>
-                setQuantity(e.target.value ? Number(e.target.value) : '')
+                setFormData({
+                  ...formData,
+                  quantity: e.target.value ? Number(e.target.value) : '',
+                })
               }
               placeholder="등록할 복지물품의 수량을 입력해 주세요."
               className="rounded-md border px-4 py-2"
             />
+            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+            <label className="text-sm font-semibold">이미지 업로드</label>
+            <input type="file" accept="image/*" onChange={handleImageChange} />
+            {formData.selectedImage && (
+              <img
+                src={URL.createObjectURL(formData.selectedImage)}
+                alt="미리보기"
+                className="mt-2 h-32 w-32 rounded-md object-cover"
+              />
+            )}
           </div>
-
           <div className="flex justify-center">
             <Button
               size="lg"
               variant="primary"
               onClick={handleAddItem}
               className="mt-4 w-full"
-              disabled={isAddButtonDisabled}
+              disabled={
+                !formData.itemName ||
+                formData.quantity === '' ||
+                formData.quantity <= 0
+              }
             >
               물품 추가
             </Button>
@@ -211,24 +190,26 @@ export default function PayerInquiryPage() {
 
       <div className="flex flex-col justify-between">
         <TableComponent
-          data={data}
-          showCheckboxes={isDeleteModeOriginal}
-          selected={selectedOriginal}
-          setSelected={setSelectedOriginal}
+          items={originalData?.items || []}
+          showCheckboxes={isDeleteMode}
+          selected={selectedItem}
+          setSelected={setSelectedItem}
         />
         <div className="flex justify-end gap-2">
           <Button
             size="sm"
+            type="button"
             variant="deleteSecondary"
-            onClick={() => setIsDeleteModeOriginal(!isDeleteModeOriginal)}
+            onClick={toggleDeleteMode}
           >
-            {isDeleteModeOriginal ? '취소' : '삭제'}
+            {isDeleteMode ? '취소' : '삭제'}
           </Button>
-          {isDeleteModeOriginal && (
+          {isDeleteMode && (
             <Button
+              type="button"
               size="sm"
               variant="deletePrimary"
-              onClick={handleDeleteOriginal}
+              onClick={handleDeleteItem}
             >
               완료
             </Button>

@@ -5,18 +5,18 @@ import Search from '@/components/desktop/Search';
 import { useState, useEffect } from 'react';
 import AddStudentId from '@/components/desktop/AddStudentId';
 import { Button } from '@/components/ui/button';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { getPayer, addPayer } from '@/services/payer-inquiry';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { getPayer, addPayer, deletePayer } from '@/services/payers';
+import { Payer } from '@/types/payers';
 import TableComponent from './_components/TableComponent';
 import AddInput from '../../../components/desktop/AddInput';
 
 export default function PayerInquiryPage() {
-  const queryClient = useQueryClient();
-  const [addedData, setAddedData] = useState<any[]>([]);
+  const [addedData, setAddedData] = useState<Payer[]>([]);
   const [isDeleteModeOriginal, setIsDeleteModeOriginal] = useState(false);
   const [isDeleteModeAdded, setIsDeleteModeAdded] = useState(false);
-  const [selectedOriginal, setSelectedOriginal] = useState<string[]>([]);
-  const [selectedAdded, setSelectedAdded] = useState<string[]>([]);
+  const [selectedOriginal, setSelectedOriginal] = useState<number[]>([]); // 수정: payerId 배열로
+  const [selectedAdded, setSelectedAdded] = useState<number[]>([]); // 수정: payerId 배열로
 
   const [newStudentId, setNewStudentId] = useState('');
   const [newStudentName, setNewStudentName] = useState('');
@@ -29,6 +29,17 @@ export default function PayerInquiryPage() {
     },
     onError: () => {
       alert('추가된 납부자 정보 저장에 실패했습니다.');
+    },
+  });
+
+  const deletemutation = useMutation({
+    mutationFn: deletePayer,
+    onSuccess: () => {
+      alert('선택된 납부자 정보가 성공적으로 삭제되었습니다.');
+      setAddedData([]);
+    },
+    onError: () => {
+      alert('납부자 정보 삭제에 실패했습니다.');
     },
   });
 
@@ -74,6 +85,8 @@ export default function PayerInquiryPage() {
     }
 
     const newEntry = { name: newStudentName, studentId: newStudentId };
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
     setAddedData((prev) => [...prev, newEntry]);
     setNewStudentId('');
     setNewStudentName('');
@@ -81,11 +94,14 @@ export default function PayerInquiryPage() {
 
   const handleDeleteData = (mode: 'original' | 'added') => {
     if (mode === 'original') {
+      // payerId 배열을 직접 전달
+      deletemutation.mutate(selectedOriginal); // payerId 배열을 전달
       setSelectedOriginal([]);
       setIsDeleteModeOriginal(false);
     } else {
+      // addedData에서 삭제할 때도 payerId로 삭제
       const updatedData = addedData.filter(
-        (item) => !selectedAdded.includes(item.studentId),
+        (item) => !selectedAdded.includes(item.payerId), // studentId로 비교 후 삭제
       );
       setAddedData(updatedData);
       setSelectedAdded([]);
@@ -103,6 +119,7 @@ export default function PayerInquiryPage() {
     }
   };
 
+  // eslint-disable-next-line consistent-return
   const handleApply = () => {
     if (addedData.length === 0) return alert('추가된 데이터가 없습니다.');
     mutation.mutate({ payers: addedData });
@@ -118,7 +135,6 @@ export default function PayerInquiryPage() {
         <Sidebar
           triggerText="새로운 납부자 추가하기"
           title="학생회비 납부자 추가하기"
-          description="설명"
         >
           <div className="flex w-full flex-col items-center justify-center">
             <div className="flex items-end justify-center gap-4">

@@ -10,55 +10,35 @@ import {
 } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
-
-interface Item {
-  logo: string;
-  name: string;
-  isConsumable: boolean;
-  totalQuantity: number;
-  rentedQuantity: number;
-  id: string;
-  isAdmin?: boolean;
-}
-
-interface ItemTableProps {
-  data: Item[];
-  showCheckboxes?: boolean;
-  headers?: string[];
-  selected: string[];
-  setSelected: (selectedIds: (prev: string[]) => string[]) => void;
-  handleDelete?: (selectedIds: string[]) => void;
-}
+import { Item, ItemTableProps } from '@/types/items';
 
 export default function ItemTable({
-  data,
+  items = [],
   showCheckboxes = true,
   headers = ['로고', '물품명', '소모품', '총 수량', '대여 중'],
   selected,
   setSelected,
-  handleDelete = () => {},
 }: ItemTableProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const rowsPerPage = 10;
 
-  const handleSelect = (id: string) => {
-    setSelected((prev: string[]) =>
-      prev.includes(id)
-        ? prev.filter((itemId) => itemId !== id)
-        : [...prev, id],
-    );
+  const totalPages = Math.ceil((items?.length || 0) / rowsPerPage);
+
+  // 선택된 항목을 다루는 함수
+  const handleSelect = (id: number) => {
+    setSelected(id); // 단일 선택으로 변경
   };
 
-  const paginatedData = data.slice(
-    (currentPage - 1) * rowsPerPage,
-    currentPage * rowsPerPage,
-  );
+  const paginatedData = items
+    ? items.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage)
+    : [];
 
   const handleSelectAll = () => {
-    const visibleIds = paginatedData.map((item) => item.id);
-    setSelected((prev: string[]) =>
-      prev.length === visibleIds.length ? [] : visibleIds,
-    );
+    if (selected === paginatedData[0]?.itemId) {
+      setSelected(0); // 전체 선택 해제
+    } else {
+      setSelected(paginatedData[0]?.itemId); // 첫 번째 항목을 선택(전체 선택)
+    }
   };
 
   return (
@@ -69,7 +49,7 @@ export default function ItemTable({
             {showCheckboxes && (
               <TableHead className="w-10 text-center">
                 <Checkbox
-                  checked={selected.length === paginatedData.length}
+                  checked={selected === paginatedData[0]?.itemId} // 선택된 첫 번째 항목이 전체 항목과 일치하는지 확인
                   onCheckedChange={handleSelectAll}
                 />
               </TableHead>
@@ -82,55 +62,68 @@ export default function ItemTable({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {paginatedData.map((item) => (
-            <TableRow key={item.id}>
-              {showCheckboxes && (
-                <TableCell className="w-10 text-center">
-                  <Checkbox
-                    checked={selected.includes(item.id)}
-                    onCheckedChange={() => handleSelect(item.id)}
+          {paginatedData.length > 0 ? (
+            paginatedData.map((item: Item) => (
+              <TableRow key={item.itemId}>
+                {showCheckboxes && (
+                  <TableCell className="w-10 text-center">
+                    <Checkbox
+                      checked={selected === item.itemId} // selected 상태가 현재 itemId와 일치하면 체크
+                      onCheckedChange={() => handleSelect(item.itemId)}
+                    />
+                  </TableCell>
+                )}
+                <TableCell className="w-30 text-center">
+                  <img
+                    src={item.imageUrl}
+                    alt="item"
+                    className="h-10 w-10 rounded"
                   />
                 </TableCell>
-              )}
-              <TableCell className="w-30 text-center">{item.logo}</TableCell>
-              <TableCell className="w-30 text-center">{item.name}</TableCell>
-              <TableCell className="w-30 text-center">
-                {item.isConsumable ? '소모품' : '대여 물품'}
-              </TableCell>
-              <TableCell className="w-30 text-center">
-                {item.totalQuantity}
-              </TableCell>
-              <TableCell className="w-30 text-center">
-                {item.rentedQuantity}
-              </TableCell>
-              {headers.includes('관리자 여부') && (
                 <TableCell className="w-30 text-center">
-                  {item.isAdmin !== undefined && (item.isAdmin ? 'o' : 'x')}
+                  {item.itemName}
                 </TableCell>
-              )}
+                <TableCell className="w-30 text-center">
+                  {item.itemType ? 'RENTAL' : 'CONSUMPTION'}
+                </TableCell>
+                <TableCell className="w-30 text-center">{item.count}</TableCell>
+                <TableCell className="w-30 text-center">
+                  {item.renterCount}
+                </TableCell>
+              </TableRow>
+            ))
+          ) : (
+            <TableRow>
+              <TableCell
+                colSpan={headers.length + (showCheckboxes ? 1 : 0)}
+                className="text-center"
+              >
+                데이터가 없습니다.
+              </TableCell>
             </TableRow>
-          ))}
+          )}
         </TableBody>
       </Table>
-      <div className="flex items-center justify-center pt-4">
-        <Button
-          className="bg-transparent shadow-transparent hover:bg-transparent"
-          disabled={currentPage === 1}
-          onClick={() => setCurrentPage((prev) => prev - 1)}
-        >
-          <ChevronLeftIcon className="h-10 w-10 cursor-pointer text-black-primary" />
-        </Button>
-        <span>
-          {currentPage} / {Math.ceil(data.length / rowsPerPage)}
-        </span>
-        <Button
-          className="bg-transparent shadow-transparent hover:bg-transparent"
-          size="chevron"
-          disabled={currentPage === Math.ceil(data.length / rowsPerPage)}
-          onClick={() => setCurrentPage((prev) => prev + 1)}
-        >
-          <ChevronRightIcon className="h-6 w-6 cursor-pointer text-black-primary" />
-        </Button>
+      <div className="flex items-center justify-between pt-4">
+        <div className="flex items-center gap-2">
+          <Button
+            className="bg-transparent shadow-transparent hover:bg-transparent"
+            disabled={currentPage === 1 || totalPages === 0}
+            onClick={() => setCurrentPage((prev) => prev - 1)}
+          >
+            <ChevronLeftIcon className="h-10 w-10 cursor-pointer text-black-primary" />
+          </Button>
+          <span>
+            {totalPages > 0 ? `${currentPage} / ${totalPages}` : '0 / 0'}
+          </span>
+          <Button
+            className="bg-transparent shadow-transparent hover:bg-transparent"
+            disabled={currentPage === totalPages || totalPages === 0}
+            onClick={() => setCurrentPage((prev) => prev + 1)}
+          >
+            <ChevronRightIcon className="h-6 w-6 cursor-pointer text-black-primary" />
+          </Button>
+        </div>
       </div>
     </div>
   );

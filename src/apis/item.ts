@@ -5,6 +5,7 @@ const apiUrl = process.env.NEXT_PUBLIC_API_BASE_URI;
 const token = process.env.NEXT_PUBLIC_AUTH_TOKEN;
 
 // 대여 가능한 복지물품 리스트 불러오기
+// eslint-disable-next-line import/prefer-default-export
 export const getWelfareItems = async (
   searchQuery?: string,
 ): Promise<WelfareItemData> => {

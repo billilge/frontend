@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/prefer-default-export
 export const elapsedTime = (date: string): string => {
   const start = new Date(date);
   const end = new Date();

@@ -1,15 +1,14 @@
-export interface Payer {
-  payerId: number;
+export interface Admins {
+  memberId: number;
   name: string;
   studentId: string;
-  registered: boolean;
 }
 
 export interface TableComponentProps {
-  payers: Payer[];
+  admins: Admins[];
   showCheckboxes?: boolean;
   headers?: string[];
-  selected: string[];
-  setSelected: (selectedIds: (prev: string[]) => string[]) => void;
+  selected: number[];
+  setSelected: (selectedIds: (prev: number[]) => number[]) => void;
   handleDelete?: (selectedIds: string[]) => void;
 }
