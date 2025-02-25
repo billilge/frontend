@@ -10,7 +10,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
-import { Payer, TableComponentProps } from '@/types/payerInquiry';
+import { Payer, TableComponentProps } from '@/types/payers';
 
 export default function TableComponent({
   payers,
@@ -18,16 +18,15 @@ export default function TableComponent({
   headers = ['이름', '학번', '회원 여부'], // 기본값을 설정
   selected,
   setSelected,
-  handleDelete = () => {}, // 기본값으로 빈 함수 설정
 }: TableComponentProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const rowsPerPage = 10;
 
-  const handleSelect = (student_id: string) => {
-    setSelected((prev: string[]) =>
-      prev.includes(student_id)
-        ? prev.filter((id) => id !== student_id)
-        : [...prev, student_id],
+  const handleSelect = (payerId: number) => {
+    setSelected((prev: number[]) =>
+      prev.includes(payerId)
+        ? prev.filter((id) => id !== payerId)
+        : [...prev, payerId],
     );
   };
 
@@ -38,10 +37,10 @@ export default function TableComponent({
 
   const handleSelectAll = () => {
     const visibleIds = paginatedData.map(
-      (item: { studentId: string }) => item.studentId,
+      (item: { payerId: number }) => item.payerId,
     );
-    setSelected((prev: string[]) =>
-      prev.length === visibleIds.length ? [] : visibleIds,
+    setSelected(
+      (prev: number[]) => (prev.length === visibleIds.length ? [] : visibleIds), // 배열 길이를 비교하는 대신 선택된 아이디와 비교
     );
   };
 
@@ -67,12 +66,12 @@ export default function TableComponent({
         </TableHeader>
         <TableBody>
           {paginatedData.map((item: Payer) => (
-            <TableRow key={item.studentId}>
+            <TableRow key={item.payerId}>
               {showCheckboxes && (
                 <TableCell className="w-10 text-center">
                   <Checkbox
-                    checked={selected.includes(item.studentId)}
-                    onCheckedChange={() => handleSelect(item.studentId)}
+                    checked={selected.includes(item.payerId)}
+                    onCheckedChange={() => handleSelect(item.payerId)}
                   />
                 </TableCell>
               )}

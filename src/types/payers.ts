@@ -9,7 +9,7 @@ export interface TableComponentProps {
   payers: Payer[];
   showCheckboxes?: boolean;
   headers?: string[];
-  selected: string[];
-  setSelected: (selectedIds: (prev: string[]) => string[]) => void;
+  selected: number[];
+  setSelected: (selectedIds: (prev: number[]) => number[]) => void;
   handleDelete?: (selectedIds: string[]) => void;
 }

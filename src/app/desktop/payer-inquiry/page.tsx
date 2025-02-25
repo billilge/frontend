@@ -6,7 +6,7 @@ import { useState, useEffect } from 'react';
 import AddStudentId from '@/components/desktop/AddStudentId';
 import { Button } from '@/components/ui/button';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { getPayer, addPayer } from '@/services/payer-inquiry';
+import { getPayer, addPayer, deletePayer } from '@/services/payers';
 import TableComponent from './_components/TableComponent';
 import AddInput from '../../../components/desktop/AddInput';
 
@@ -15,8 +15,8 @@ export default function PayerInquiryPage() {
   const [addedData, setAddedData] = useState<any[]>([]);
   const [isDeleteModeOriginal, setIsDeleteModeOriginal] = useState(false);
   const [isDeleteModeAdded, setIsDeleteModeAdded] = useState(false);
-  const [selectedOriginal, setSelectedOriginal] = useState<string[]>([]);
-  const [selectedAdded, setSelectedAdded] = useState<string[]>([]);
+  const [selectedOriginal, setSelectedOriginal] = useState<number[]>([]); // 수정: payerId 배열로
+  const [selectedAdded, setSelectedAdded] = useState<number[]>([]); // 수정: payerId 배열로
 
   const [newStudentId, setNewStudentId] = useState('');
   const [newStudentName, setNewStudentName] = useState('');
@@ -29,6 +29,17 @@ export default function PayerInquiryPage() {
     },
     onError: () => {
       alert('추가된 납부자 정보 저장에 실패했습니다.');
+    },
+  });
+
+  const deletemutation = useMutation({
+    mutationFn: deletePayer,
+    onSuccess: () => {
+      alert('선택된 납부자 정보가 성공적으로 삭제되었습니다.');
+      setAddedData([]);
+    },
+    onError: () => {
+      alert('납부자 정보 삭제에 실패했습니다.');
     },
   });
 
@@ -81,11 +92,14 @@ export default function PayerInquiryPage() {
 
   const handleDeleteData = (mode: 'original' | 'added') => {
     if (mode === 'original') {
+      // payerId 배열을 직접 전달
+      deletemutation.mutate(selectedOriginal); // payerId 배열을 전달
       setSelectedOriginal([]);
       setIsDeleteModeOriginal(false);
     } else {
+      // addedData에서 삭제할 때도 payerId로 삭제
       const updatedData = addedData.filter(
-        (item) => !selectedAdded.includes(item.studentId),
+        (item) => !selectedAdded.includes(item.studentId), // studentId로 비교 후 삭제
       );
       setAddedData(updatedData);
       setSelectedAdded([]);
