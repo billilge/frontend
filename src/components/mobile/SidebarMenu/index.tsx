@@ -33,17 +33,16 @@ const adminItems = [
   },
 ];
 
-const logoutItem = {
-  icon: IconLogout,
-  label: '로그아웃',
-  href: '/mobile/sign-in',
-};
-
 export default function Sidebar({
   isOpen,
   onClose,
   role = 'USER', // 여기서 관리자 여부 설정
 }: SidebarProps) {
+  const handleLogout = () => {
+    localStorage.clear(); // 로컬 스토리지 전체 삭제
+    window.location.href = '/mobile/sign-in'; // 로그인 페이지로 이동
+  };
+
   return (
     <>
       {/* 오버레이 배경 */}
@@ -113,14 +112,15 @@ export default function Sidebar({
 
           {/* 로그아웃 버튼 */}
           <ul className="text-body-2-normal_semi font-semibold text-black-primary">
-            <li key={logoutItem.label}>
-              <a
-                href={logoutItem.href}
-                className="mt-3 flex items-center gap-3 rounded p-2 hover:bg-gray-100"
+            <li key="logout">
+              <button
+                type="button"
+                onClick={handleLogout}
+                className="mt-3 flex w-full items-center gap-3 rounded p-2 hover:bg-gray-100"
               >
-                <logoutItem.icon />
-                {logoutItem.label}
-              </a>
+                <IconLogout />
+                로그아웃
+              </button>
             </li>
           </ul>
         </nav>
