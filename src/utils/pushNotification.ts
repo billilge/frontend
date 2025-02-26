@@ -16,11 +16,13 @@ const onForegroundMessage = async () => {
 
   if (messagingInstance != null) {
     onMessage(messagingInstance, (payload: MessagePayload) => {
-      console.log('포그라운드 메시지 수신:', payload);
-      // eslint-disable-next-line no-new
-      new Notification(<string>payload.notification?.title, {
-        body: payload.notification?.body,
-        icon: '/icons/icon-192x192.png',
+      // console.log('포그라운드 메시지 수신:', payload);
+
+      navigator.serviceWorker.ready.then((registration) => {
+        registration.showNotification(payload.notification?.title as string, {
+          body: payload.notification?.body,
+          icon: '/icons/manifest/icon-192x192.png',
+        });
       });
     });
   }
