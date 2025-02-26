@@ -1,5 +1,13 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {
+import PWAOptions from 'next-pwa';
+
+const withPWA = PWAOptions({
+  dest: 'public',
+  register: true,
+  skipWaiting: true,
+});
+
+const nextConfig = withPWA({
   env: {
     DB_NAME: process.env.DB_NAME,
   },
@@ -31,6 +39,6 @@ const nextConfig = {
     dangerouslyAllowSVG: true,
     contentSecurityPolicy: "default-src 'self'; img-src 'self' data: https:;",
   },
-};
+});
 
 export default nextConfig;

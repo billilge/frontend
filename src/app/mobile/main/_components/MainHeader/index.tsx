@@ -33,7 +33,7 @@ export default function MainHeader({ name }: HeaderProps) {
 
   return (
     <>
-      <section className="fixed top-0 z-10 flex h-10 w-full max-w-3xl items-center justify-between bg-[#F3F4F6] px-4 py-1.5">
+      <section className="fixed top-0 z-10 flex h-10 w-full max-w-md items-center justify-between bg-[#F3F4F6] px-4 py-1.5">
         <div className="text-heading-3_D font-semibold text-black-primary">
           {name}님
         </div>
