@@ -20,5 +20,9 @@ export default function MobileLayout({ children }: MobileLayoutProps) {
     };
   }, []);
 
-  return <div className="flex min-h-screen max-w-3xl flex-col">{children}</div>;
+  return (
+    <div className="flex min-h-screen justify-center">
+      <div className="flex w-full max-w-md flex-col">{children}</div>
+    </div>
+  );
 }
