@@ -28,15 +28,18 @@ function CallbackContent() {
       case 'SUCCESS':
       default:
         if (accessToken) {
-          localStorage.setItem('token', accessToken);
           const payload = accessToken.split('.')[1] || '';
           const decodedPayload = decode(payload);
           const payloadObject = JSON.parse(decodedPayload);
 
           const tokenRole = payloadObject.role;
+          const tokenName = payloadObject.name;
+          const tokenId = payloadObject.sub;
+
+          const userInfo = { name: tokenName, id: tokenId, role: tokenRole };
 
           localStorage.setItem('token', accessToken);
-          localStorage.setItem('role', tokenRole);
+          localStorage.setItem('user', JSON.stringify(userInfo));
         }
         router.replace('/mobile/main');
         break;

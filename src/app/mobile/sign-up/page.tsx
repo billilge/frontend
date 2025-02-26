@@ -4,7 +4,6 @@ import axios from 'axios';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import postSignUp from '@/services/sign-up';
-import { decode } from 'js-base64';
 
 export default function SignUp() {
   const router = useRouter();
@@ -52,14 +51,10 @@ export default function SignUp() {
         name: studentName,
       });
 
-      const payload = data.token.split('.')[1] || '';
-      const decodedPayload = decode(payload);
-      const payloadObject = JSON.parse(decodedPayload);
+      const userInfo = { name: studentName, id: studentId, role: 'USER' };
 
-      const tokenRole = payloadObject.role;
-
-      localStorage.setItem('role', tokenRole);
-      localStorage.setItem('token', data.token);
+      localStorage.setItem('token', data.accessToken);
+      localStorage.setItem('user', JSON.stringify(userInfo));
 
       router.push('/mobile/main');
     } catch (e) {

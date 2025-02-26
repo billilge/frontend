@@ -5,7 +5,6 @@ const PublicAxiosInstance = axios.create({
   headers: { 'Content-Type': 'application/json' },
   withCredentials: true,
 });
-
 PublicAxiosInstance.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
     return {

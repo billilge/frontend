@@ -1,5 +1,10 @@
 const registerFirebaseServiceWorker = () => {
+  if (typeof window === 'undefined') {
+    return; // 서버에서는 실행되지 않도록 검사
+  }
+
   console.log('register service worker');
+
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker
       .register('/firebase-messaging-sw.js')
@@ -14,4 +19,7 @@ const registerFirebaseServiceWorker = () => {
   }
 };
 
-registerFirebaseServiceWorker();
+// 클라이언트 사이드에서만 실행
+if (typeof window !== 'undefined') {
+  registerFirebaseServiceWorker();
+}
