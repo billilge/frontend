@@ -1,36 +1,22 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import MobileLayout from '@/components/mobile/layout';
 import Header from '@/components/mobile/Header';
 import Dropdown from '@/components/mobile/Dropdown';
 import useDropdown from '@/hooks/useDropdown';
 import IconArrow from 'public/assets/icons/icon-arrow.svg';
 import { cn } from '@/lib/utils';
+import { adminDashboardGet, adminRentalPatch } from '@/services/dashboard';
+import { DashboardProps } from '@/types/dashboardType';
 import DashboardItem from './_components/DashboardItem';
 
-const RentalApplicationDetail = [
-  {
-    id: 0,
-    itemName: '우산',
-    imageUrl:
-      'https://github.com/user-attachments/assets/1b8c9ae9-a840-4756-a87d-c092958a2854',
-    renterName: '윤신지',
-    studentId: 20213102,
-    status: 'PENDING',
-    applicatedAt: '2025-02-16T08:44:45.476Z',
-  },
-  {
-    id: 1,
-    itemName: '타이레놀',
-    imageUrl:
-      'https://github.com/user-attachments/assets/159ee697-5a2e-43c8-a5a0-8ab73ae869fd',
-    renterName: '황현진',
-    studentId: 20213102,
-    status: 'RETURN_PENDING',
-    applicatedAt: '2025-02-13T08:44:45.476Z',
-  },
-];
+type DashboardType = DashboardProps;
+
+interface RentalRequestProps {
+  rentalHistoryId: number;
+  status: string;
+}
 
 export default function Dashboard() {
   const RentalFilterText: Record<string, string> = {
@@ -39,6 +25,7 @@ export default function Dashboard() {
     RETURN_PENDING: '반납 신청',
   };
 
+  const [dashboardDetail, setDashboardDetail] = useState<DashboardType[]>([]);
   const [filter, setFilter] = useState('ALL');
 
   const { showDropdown, hideDropdown, isDropdownVisible } = useDropdown();
@@ -57,6 +44,36 @@ export default function Dashboard() {
     { title: '대여 신청', func: () => handleFilter('PENDING') },
     { title: '반납 신청', func: () => handleFilter('RETURN_PENDING') },
   ];
+
+  useEffect(() => {
+    const fetchNotifications = async () => {
+      const data = await adminDashboardGet();
+      setDashboardDetail(data.applications);
+    };
+
+    fetchNotifications();
+  }, []);
+
+  const handleApproveBtnClick = async ({
+    rentalHistoryId,
+    status,
+  }: RentalRequestProps) => {
+    const statusMap: Record<string, string> = {
+      PENDING: 'CONFIRMED',
+      RETURN_PENDING: 'RETURN_CONFIRMED',
+      RETURN_CONFIRMED: 'RETURNED',
+    };
+
+    const newStatus = statusMap[status] ?? status;
+
+    const data = { rentalHistoryId, rentalStatus: newStatus };
+    await adminRentalPatch(data);
+  };
+
+  const handleCancelBtnClick = async (rentalHistoryId: number) => {
+    const data = { rentalHistoryId, rentalStatus: 'CANCEL' };
+    await adminRentalPatch(data);
+  };
 
   return (
     <MobileLayout>
@@ -81,17 +98,36 @@ export default function Dashboard() {
           />
         </button>
       </section>
-      {RentalApplicationDetail.map((item) => (
-        <DashboardItem
-          key={item.id}
-          itemName={item.itemName}
-          imageUrl={item.imageUrl}
-          renterName={item.renterName}
-          studentId={item.studentId}
-          status={item.status}
-          applicatedAt={item.applicatedAt}
-        />
-      ))}
+      {dashboardDetail?.length === 0 ? (
+        <div className="flex h-dvh items-center justify-center text-gray-secondary">
+          현재 대기 중인 요청이 없습니다.
+        </div>
+      ) : (
+        dashboardDetail.map((item) => (
+          <DashboardItem
+            key={item.rentalHistoryId}
+            itemName={item.itemName}
+            imageUrl={item.imageUrl}
+            renterName={item.renterName}
+            studentId={item.studentId}
+            status={item.status}
+            applicatedAt={item.applicatedAt}
+            handleApproveBtnClick={() => {
+              if (item.rentalHistoryId !== undefined) {
+                handleApproveBtnClick({
+                  rentalHistoryId: item.rentalHistoryId,
+                  status: item.status,
+                });
+              }
+            }}
+            handleCancelBtnClick={() => {
+              if (item.rentalHistoryId !== undefined) {
+                handleCancelBtnClick(item.rentalHistoryId);
+              }
+            }}
+          />
+        ))
+      )}
 
       <Dropdown
         actions={dropdownActions}

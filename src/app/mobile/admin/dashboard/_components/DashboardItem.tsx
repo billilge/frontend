@@ -1,14 +1,6 @@
 import Image from 'next/image';
 import convertTime from '@/utils/convertTime';
-
-interface DashboardItemProps {
-  itemName: string;
-  imageUrl: string;
-  renterName: string;
-  studentId: number;
-  status: string;
-  applicatedAt: string;
-}
+import { DashboardProps } from '@/types/dashboardType';
 
 export default function DashboardItem({
   itemName,
@@ -17,10 +9,21 @@ export default function DashboardItem({
   studentId,
   status,
   applicatedAt,
-}: DashboardItemProps) {
-  const RentalBtnText: Record<string, string> = {
-    PENDING: '대여',
-    RETURN_PENDING: '반납',
+  handleApproveBtnClick,
+  handleCancelBtnClick,
+}: DashboardProps) {
+  const RentalApproveBtnText: Record<string, string> = {
+    PENDING: '대여 승인',
+    RETURN_PENDING: '반납 승인',
+    RETURN_CONFIRMED: '반납 완료',
+  };
+
+  const handleApproveBtn = () => {
+    handleApproveBtnClick();
+  };
+
+  const handleCancelBtn = () => {
+    handleCancelBtnClick();
   };
 
   const applicatedTime = convertTime(applicatedAt);
@@ -54,20 +57,20 @@ export default function DashboardItem({
       </section>
 
       <section className="flex gap-2.5 text-sm font-semibold">
-        {/* TODO : API 보고 onClick 연결하기 */}
         <button
           type="button"
-          onClick={() => console.log('수락!')}
+          onClick={handleApproveBtn}
           className="text-return-blue"
         >
-          {RentalBtnText[status]} 승인
+          {RentalApproveBtnText[status]}
         </button>
         <button
           type="button"
-          onClick={() => console.log('취소!')}
+          onClick={handleCancelBtn}
           className="text-return-red"
         >
-          {RentalBtnText[status]} 취소
+          {/* PENDING일 때만 가능하도록 */}
+          대여 취소
         </button>
       </section>
     </section>
