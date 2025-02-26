@@ -7,6 +7,7 @@ import IconUserAlarm from 'public/assets/icons/side-menu/user-alarm.svg';
 import IconAdminDashboard from 'public/assets/icons/side-menu/admin-dashboard.svg';
 import IconAdminAlarm from 'public/assets/icons/side-menu/admin-alarm.svg';
 import IconLogout from 'public/assets/icons/side-menu/logout.svg';
+import { useRouter } from 'next/navigation';
 
 interface SidebarProps {
   isOpen: boolean;
@@ -38,9 +39,11 @@ export default function Sidebar({
   onClose,
   role = 'USER', // 여기서 관리자 여부 설정
 }: SidebarProps) {
+  const router = useRouter();
+
   const handleLogout = () => {
     localStorage.clear(); // 로컬 스토리지 전체 삭제
-    window.location.href = '/mobile/sign-in'; // 로그인 페이지로 이동
+    router.replace('/mobile/sign-in'); // 로그인 페이지로 이동
   };
 
   return (
