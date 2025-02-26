@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import Sidebar from '@/components/mobile/SidebarMenu/index';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import IconArrow from 'public/assets/icons/icon-arrow.svg';
 import IconHamburger from 'public/assets/icons/icon-hamburger.svg';
 
@@ -14,6 +14,18 @@ interface HeaderProps {
 export default function Header({ title, menu = false }: HeaderProps) {
   const router = useRouter();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [user, setUser] = useState<{
+    name: string;
+    id: string;
+    role: string;
+  } | null>(null);
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+  }, []);
 
   return (
     <>
@@ -39,7 +51,11 @@ export default function Header({ title, menu = false }: HeaderProps) {
         )}
       </section>
 
-      <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
+      <Sidebar
+        isOpen={isSidebarOpen}
+        onClose={() => setIsSidebarOpen(false)}
+        role={user?.role}
+      />
     </>
   );
 }
