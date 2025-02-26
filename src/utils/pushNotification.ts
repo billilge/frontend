@@ -2,13 +2,13 @@ import { MessagePayload, onMessage } from 'firebase/messaging';
 import { handleFCMToken, messaging } from '@/lib/firebase';
 
 export const requestNotificationPermission = async () => {
-  const permission = await Notification.requestPermission();
-
-  if (permission === 'granted') {
-    await handleFCMToken();
-  } else {
-    alert('알림이 허용되지 않았습니다.');
-  }
+  await Notification.requestPermission().then(async (permission) => {
+    if (permission === 'granted') {
+      await handleFCMToken();
+    } else {
+      alert('알림이 허용되지 않았습니다.');
+    }
+  });
 };
 
 const onForegroundMessage = async () => {
