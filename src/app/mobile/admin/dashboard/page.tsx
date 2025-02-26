@@ -23,10 +23,12 @@ export default function Dashboard() {
     ALL: '전체',
     PENDING: '대여 신청',
     RETURN_PENDING: '반납 신청',
+    RETURN_CONFIRMED: '반납 대기',
   };
 
   const [dashboardDetail, setDashboardDetail] = useState<DashboardType[]>([]);
   const [filter, setFilter] = useState('ALL');
+  const [refreshTrigger, setRefreshTrigger] = useState(false);
 
   const { showDropdown, hideDropdown, isDropdownVisible } = useDropdown();
 
@@ -34,15 +36,20 @@ export default function Dashboard() {
     return isDropdownVisible ? hideDropdown() : showDropdown();
   };
 
-  const handleFilter = (filterText: string) => {
+  const handleFilter = async (filterText: string) => {
     setFilter(filterText);
-    // 여기에 필터링 GET 쏘는 API 추가
+
+    const rentalStatus = filterText !== 'ALL' ? filterText : undefined;
+    const data = await adminDashboardGet(rentalStatus);
+
+    setDashboardDetail(data.applications);
   };
 
   const dropdownActions = [
     { title: '전체', func: () => handleFilter('ALL') },
     { title: '대여 신청', func: () => handleFilter('PENDING') },
     { title: '반납 신청', func: () => handleFilter('RETURN_PENDING') },
+    { title: '반납 대기', func: () => handleFilter('RETURN_CONFIRMED') },
   ];
 
   useEffect(() => {
@@ -52,7 +59,9 @@ export default function Dashboard() {
     };
 
     fetchNotifications();
-  }, []);
+  }, [refreshTrigger]);
+
+  useEffect(() => {}, [filter]);
 
   const handleApproveBtnClick = async ({
     rentalHistoryId,
@@ -68,11 +77,16 @@ export default function Dashboard() {
 
     const data = { rentalHistoryId, rentalStatus: newStatus };
     await adminRentalPatch(data);
+    // TODO : 현재 임시로 상태로 관리 -> 추후 refetch로 변경
+    setRefreshTrigger((prev) => !prev);
   };
 
   const handleCancelBtnClick = async (rentalHistoryId: number) => {
     const data = { rentalHistoryId, rentalStatus: 'CANCEL' };
     await adminRentalPatch(data);
+
+    // TODO : 현재 임시로 상태로 관리 -> 추후 refetch로 변경
+    setRefreshTrigger((prev) => !prev);
   };
 
   return (
@@ -133,7 +147,7 @@ export default function Dashboard() {
         actions={dropdownActions}
         isVisible={isDropdownVisible}
         hideDropdown={hideDropdown}
-        positionClasses="top-15 right-5"
+        positionClasses="top-[80px] right-5"
       />
     </MobileLayout>
   );

@@ -1,8 +1,13 @@
 import PrivateAxiosInstance from './privateAxiosInstance';
 
-const adminDashboardGet = async () => {
+const adminDashboardGet = async (rentalStatus?: string) => {
   try {
-    const response = await PrivateAxiosInstance.get('/admin/rentals/dashboard');
+    const response = await PrivateAxiosInstance.get(
+      '/admin/rentals/dashboard',
+      {
+        params: { rentalStatus },
+      },
+    );
     return response.data;
   } catch (error) {
     return [];

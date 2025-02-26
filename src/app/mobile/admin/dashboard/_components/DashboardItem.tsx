@@ -32,7 +32,9 @@ export default function DashboardItem({
     <section className="flex w-full items-center justify-between px-5 py-4">
       <section className="flex items-center gap-4">
         <section className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-tertiary p-2.5">
-          <Image src={imageUrl} width={24} height={24} alt="물품 아이콘" />
+          {imageUrl && (
+            <Image src={imageUrl} width={24} height={24} alt="물품 아이콘" />
+          )}
         </section>
 
         <section className="flex flex-col gap-2">
@@ -64,14 +66,15 @@ export default function DashboardItem({
         >
           {RentalApproveBtnText[status]}
         </button>
-        <button
-          type="button"
-          onClick={handleCancelBtn}
-          className="text-return-red"
-        >
-          {/* PENDING일 때만 가능하도록 */}
-          대여 취소
-        </button>
+        {status === 'PENDING' && (
+          <button
+            type="button"
+            onClick={handleCancelBtn}
+            className="text-return-red"
+          >
+            대여 취소
+          </button>
+        )}
       </section>
     </section>
   );
