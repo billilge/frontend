@@ -7,16 +7,17 @@ import IconAlarm from 'public/assets/icons/icon-alarm.svg';
 import IconHamburger from 'public/assets/icons/icon-hamburger.svg';
 import { getNotificationCount } from '@/apis/notification';
 
-interface HeaderProps {
-  name: string;
-}
-
-export default function MainHeader({ name }: HeaderProps) {
+export default function MainHeader() {
   const router = useRouter();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [notificationCount, setNotificationCount] = useState<number | null>(
     null,
   );
+  const [user, setUser] = useState<{
+    name: string;
+    id: string;
+    role: string;
+  } | null>(null);
 
   useEffect(() => {
     const fetchNotificationCount = async () => {
@@ -31,11 +32,18 @@ export default function MainHeader({ name }: HeaderProps) {
     fetchNotificationCount();
   }, []);
 
+  useEffect(() => {
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+  }, []);
+
   return (
     <>
       <section className="fixed top-0 z-10 flex h-10 w-full max-w-md items-center justify-between bg-[#F3F4F6] px-4 py-1.5">
         <div className="text-heading-3_D font-semibold text-black-primary">
-          {name}님
+          {user?.name}님
         </div>
         <div className="flex gap-[7px]">
           <button
@@ -60,7 +68,11 @@ export default function MainHeader({ name }: HeaderProps) {
         </div>
       </section>
 
-      <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
+      <Sidebar
+        isOpen={isSidebarOpen}
+        onClose={() => setIsSidebarOpen(false)}
+        role={user?.role}
+      />
     </>
   );
 }

@@ -11,7 +11,7 @@ import IconLogout from 'public/assets/icons/side-menu/logout.svg';
 interface SidebarProps {
   isOpen: boolean;
   onClose: () => void;
-  isAdmin?: boolean;
+  role?: string;
 }
 
 const menuItems = [
@@ -42,7 +42,7 @@ const logoutItem = {
 export default function Sidebar({
   isOpen,
   onClose,
-  isAdmin = true, // 여기서 관리자 여부 설정
+  role = 'USER', // 여기서 관리자 여부 설정
 }: SidebarProps) {
   return (
     <>
@@ -90,7 +90,7 @@ export default function Sidebar({
           <div className="my-5 border-t border-gray-border" />
 
           {/* 관리자 메뉴 */}
-          {isAdmin && (
+          {role === 'ADMIN' && (
             <>
               <ul className="text-body-2-normal_semi font-semibold text-black-primary">
                 {adminItems.map(({ icon: Icon, label, href }) => (

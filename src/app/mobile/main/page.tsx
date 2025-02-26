@@ -66,7 +66,7 @@ export default function MobileMain() {
 
   return (
     <MobileLayout>
-      <MainHeader name="황현진" />
+      <MainHeader />
       <div className="mt-10 flex flex-col gap-[50px] px-4 pt-4">
         <Carousel
           images={imageUrls}
