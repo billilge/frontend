@@ -121,7 +121,7 @@ export default function Dashboard() {
           <DashboardItem
             key={item.rentalHistoryId}
             itemName={item.itemName}
-            imageUrl={item.imageUrl}
+            itemImageUrl={item.itemImageUrl}
             renterName={item.renterName}
             studentId={item.studentId}
             status={item.status}

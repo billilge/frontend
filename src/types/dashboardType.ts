@@ -1,7 +1,7 @@
 export interface DashboardProps {
   rentalHistoryId?: number;
   itemName: string;
-  imageUrl: string;
+  itemImageUrl: string;
   renterName: string;
   studentId: string;
   status: string;

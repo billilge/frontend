@@ -4,7 +4,7 @@ import { DashboardProps } from '@/types/dashboardType';
 
 export default function DashboardItem({
   itemName,
-  imageUrl,
+  itemImageUrl,
   renterName,
   studentId,
   status,
@@ -32,9 +32,14 @@ export default function DashboardItem({
     <section className="flex w-full items-center justify-between px-5 py-4">
       <section className="flex items-center gap-4">
         <section className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-tertiary p-2.5">
-          {/* {imageUrl && ( */}
-          <Image src={imageUrl} width={24} height={24} alt="물품 아이콘" />
-          {/* )} */}
+          {itemImageUrl && (
+            <Image
+              src={itemImageUrl}
+              width={24}
+              height={24}
+              alt="물품 아이콘"
+            />
+          )}
         </section>
 
         <section className="flex flex-col gap-2">
