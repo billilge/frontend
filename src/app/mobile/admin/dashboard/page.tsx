@@ -15,7 +15,9 @@ type DashboardType = DashboardProps;
 
 interface RentalRequestProps {
   rentalHistoryId: number;
-  status: string;
+  itemName: string;
+  renterName: string;
+  status?: string;
 }
 
 export default function Dashboard() {
@@ -65,25 +67,37 @@ export default function Dashboard() {
 
   const handleApproveBtnClick = async ({
     rentalHistoryId,
+    itemName,
+    renterName,
     status,
   }: RentalRequestProps) => {
     const statusMap: Record<string, string> = {
       PENDING: 'CONFIRMED',
+      CONFIRMED: 'RENTAL',
       RETURN_PENDING: 'RETURN_CONFIRMED',
       RETURN_CONFIRMED: 'RETURNED',
     };
 
-    const newStatus = statusMap[status] ?? status;
+    const newStatus = statusMap[status!] ?? status;
 
     const data = { rentalHistoryId, rentalStatus: newStatus };
     await adminRentalPatch(data);
+
+    alert(`${renterName} 님의 ${itemName} 요청이 처리되었습니다.`);
+
     // TODO : 현재 임시로 상태로 관리 -> 추후 refetch로 변경
     setRefreshTrigger((prev) => !prev);
   };
 
-  const handleCancelBtnClick = async (rentalHistoryId: number) => {
+  const handleCancelBtnClick = async ({
+    rentalHistoryId,
+    itemName,
+    renterName,
+  }: RentalRequestProps) => {
     const data = { rentalHistoryId, rentalStatus: 'CANCEL' };
     await adminRentalPatch(data);
+
+    alert(`${renterName} 님의 ${itemName} 요청이 처리되었습니다.`);
 
     // TODO : 현재 임시로 상태로 관리 -> 추후 refetch로 변경
     setRefreshTrigger((prev) => !prev);
@@ -130,13 +144,19 @@ export default function Dashboard() {
               if (item.rentalHistoryId !== undefined) {
                 handleApproveBtnClick({
                   rentalHistoryId: item.rentalHistoryId,
+                  itemName: item.itemName,
+                  renterName: item.renterName,
                   status: item.status,
                 });
               }
             }}
             handleCancelBtnClick={() => {
               if (item.rentalHistoryId !== undefined) {
-                handleCancelBtnClick(item.rentalHistoryId);
+                handleCancelBtnClick({
+                  rentalHistoryId: item.rentalHistoryId,
+                  itemName: item.itemName,
+                  renterName: item.renterName,
+                });
               }
             }}
           />
