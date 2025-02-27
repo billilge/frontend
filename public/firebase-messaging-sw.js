@@ -27,7 +27,7 @@ messaging.onBackgroundMessage(async (payload) => {
   );
 
   if (!alreadyExists) {
-    self.registration.showNotification(payload.notification.title, {
+    await self.registration.showNotification(payload.notification.title, {
       body: payload.notification.body,
       icon: '/icons/manifest/icon-192x192.png',
     });
