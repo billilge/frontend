@@ -9,6 +9,7 @@ import IconArrow from 'public/assets/icons/icon-arrow.svg';
 import { cn } from '@/lib/utils';
 import { adminDashboardGet, adminRentalPatch } from '@/services/dashboard';
 import { DashboardProps } from '@/types/dashboardType';
+import { RentalStatusText } from '@/constants/rentalStatus';
 import DashboardItem from './_components/DashboardItem';
 
 type DashboardType = DashboardProps;
@@ -17,7 +18,7 @@ interface RentalRequestProps {
   rentalHistoryId: number;
   itemName: string;
   renterName: string;
-  status?: string;
+  status: string;
 }
 
 export default function Dashboard() {
@@ -83,7 +84,9 @@ export default function Dashboard() {
     const data = { rentalHistoryId, rentalStatus: newStatus };
     await adminRentalPatch(data);
 
-    alert(`${renterName} 님의 ${itemName} 요청이 처리되었습니다.`);
+    alert(
+      `${renterName} 님의 ${itemName} ${RentalStatusText[status]} 요청이 처리되었습니다.`,
+    );
 
     // TODO : 현재 임시로 상태로 관리 -> 추후 refetch로 변경
     setRefreshTrigger((prev) => !prev);
@@ -93,11 +96,14 @@ export default function Dashboard() {
     rentalHistoryId,
     itemName,
     renterName,
+    status,
   }: RentalRequestProps) => {
     const data = { rentalHistoryId, rentalStatus: 'CANCEL' };
     await adminRentalPatch(data);
 
-    alert(`${renterName} 님의 ${itemName} 요청이 처리되었습니다.`);
+    alert(
+      `${renterName} 님의 ${itemName} ${RentalStatusText[status]} 요청이 처리되었습니다.`,
+    );
 
     // TODO : 현재 임시로 상태로 관리 -> 추후 refetch로 변경
     setRefreshTrigger((prev) => !prev);
@@ -156,6 +162,7 @@ export default function Dashboard() {
                   rentalHistoryId: item.rentalHistoryId,
                   itemName: item.itemName,
                   renterName: item.renterName,
+                  status: item.status,
                 });
               }
             }}
