@@ -1,26 +1,29 @@
 import Image from 'next/image';
 import convertTime from '@/utils/convertTime';
-
-interface DashboardItemProps {
-  itemName: string;
-  imageUrl: string;
-  renterName: string;
-  studentId: number;
-  status: string;
-  applicatedAt: string;
-}
+import { DashboardProps } from '@/types/dashboardType';
 
 export default function DashboardItem({
   itemName,
-  imageUrl,
+  itemImageUrl,
   renterName,
   studentId,
   status,
   applicatedAt,
-}: DashboardItemProps) {
-  const RentalBtnText: Record<string, string> = {
-    PENDING: '대여',
-    RETURN_PENDING: '반납',
+  handleApproveBtnClick,
+  handleCancelBtnClick,
+}: DashboardProps) {
+  const RentalApproveBtnText: Record<string, string> = {
+    PENDING: '대여 승인',
+    RETURN_PENDING: '반납 승인',
+    RETURN_CONFIRMED: '반납 완료',
+  };
+
+  const handleApproveBtn = () => {
+    handleApproveBtnClick();
+  };
+
+  const handleCancelBtn = () => {
+    handleCancelBtnClick();
   };
 
   const applicatedTime = convertTime(applicatedAt);
@@ -29,7 +32,14 @@ export default function DashboardItem({
     <section className="flex w-full items-center justify-between px-5 py-4">
       <section className="flex items-center gap-4">
         <section className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-tertiary p-2.5">
-          <Image src={imageUrl} width={24} height={24} alt="물품 아이콘" />
+          {itemImageUrl && (
+            <Image
+              src={itemImageUrl}
+              width={24}
+              height={24}
+              alt="물품 아이콘"
+            />
+          )}
         </section>
 
         <section className="flex flex-col gap-2">
@@ -54,20 +64,23 @@ export default function DashboardItem({
       </section>
 
       <section className="flex gap-2.5 text-sm font-semibold">
-        {/* TODO : API 보고 onClick 연결하기 */}
+        {status === 'PENDING' ? (
+          <button
+            type="button"
+            onClick={handleCancelBtn}
+            className="w-14 text-return-red"
+          >
+            대여 취소
+          </button>
+        ) : (
+          <div className="w-14" />
+        )}
         <button
           type="button"
-          onClick={() => console.log('수락!')}
+          onClick={handleApproveBtn}
           className="text-return-blue"
         >
-          {RentalBtnText[status]} 승인
-        </button>
-        <button
-          type="button"
-          onClick={() => console.log('취소!')}
-          className="text-return-red"
-        >
-          {RentalBtnText[status]} 취소
+          {RentalApproveBtnText[status]}
         </button>
       </section>
     </section>
