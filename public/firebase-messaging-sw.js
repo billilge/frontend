@@ -16,12 +16,20 @@ firebase.initializeApp({
 
 const messaging = firebase.messaging();
 
-messaging.onBackgroundMessage((payload) => {
+messaging.onBackgroundMessage(async (payload) => {
   console.log('백그라운드 메시지 수신: ', payload);
   if (!payload.notification) return;
 
-  self.registration.showNotification(payload.notification.title, {
-    body: payload.notification.body,
-    icon: '/icons/manifest/icon-192x192.png',
-  });
+  const existingNotifications = await self.registration.getNotifications();
+
+  const alreadyExists = existingNotifications.some(
+    (n) => n.title === payload.notification.title,
+  );
+
+  if (!alreadyExists) {
+    self.registration.showNotification(payload.notification.title, {
+      body: payload.notification.body,
+      icon: '/icons/manifest/icon-192x192.png',
+    });
+  }
 });
