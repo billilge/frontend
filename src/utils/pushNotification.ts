@@ -6,12 +6,10 @@ export const requestNotificationPermission = async () => {
 
   if (permission === 'granted') {
     await handleFCMToken();
-  } else if (permission !== 'denied') {
+  } else if (permission === 'default') {
     await Notification.requestPermission().then((newPermission) => {
       if (newPermission === 'granted') {
         alert('푸시 알림이 허용되었습니다.');
-      } else if (newPermission === 'denied') {
-        alert('푸시 알림이 거부되었습니다.');
       }
     });
   }
