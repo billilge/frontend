@@ -18,6 +18,7 @@ const messaging = firebase.messaging();
 
 messaging.onBackgroundMessage((payload) => {
   //console.log('백그라운드 메시지 수신: ', payload);
+  if (!payload.notification) return;
 
   self.registration.showNotification(payload.notification.title, {
     body: payload.notification.body,
