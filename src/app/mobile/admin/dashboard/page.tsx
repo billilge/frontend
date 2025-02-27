@@ -22,13 +22,6 @@ interface RentalRequestProps {
 }
 
 export default function Dashboard() {
-  const RentalFilterText: Record<string, string> = {
-    ALL: '전체',
-    PENDING: '대여 신청',
-    RETURN_PENDING: '반납 신청',
-    RETURN_CONFIRMED: '반납 대기',
-  };
-
   const [dashboardDetail, setDashboardDetail] = useState<DashboardType[]>([]);
   const [filter, setFilter] = useState('ALL');
   const [refreshTrigger, setRefreshTrigger] = useState(false);
@@ -50,9 +43,10 @@ export default function Dashboard() {
 
   const dropdownActions = [
     { title: '전체', func: () => handleFilter('ALL') },
-    { title: '대여 신청', func: () => handleFilter('PENDING') },
-    { title: '반납 신청', func: () => handleFilter('RETURN_PENDING') },
-    { title: '반납 대기', func: () => handleFilter('RETURN_CONFIRMED') },
+    { title: '대여 요청', func: () => handleFilter('PENDING') },
+    { title: '대여 승인', func: () => handleFilter('CONFIRMED') },
+    { title: '반납 요청', func: () => handleFilter('RETURN_PENDING') },
+    { title: '반납 승인', func: () => handleFilter('RETURN_CONFIRMED') },
   ];
 
   useEffect(() => {
@@ -123,7 +117,7 @@ export default function Dashboard() {
           className={`flex items-center gap-2.5 ${isDropdownVisible && 'pointer-events-none'}`}
         >
           <div className="flex text-sm font-semibold">
-            {RentalFilterText[filter]}
+            {filter === 'ALL' ? '전체' : RentalStatusText[filter]}
           </div>
           <IconArrow
             className={
