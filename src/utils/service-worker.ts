@@ -7,12 +7,18 @@ const registerFirebaseServiceWorker = () => {
 
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker
-      .register('/firebase-messaging-sw.js')
-      .then(async (registration) => {
-        console.log('Service Worker 등록 완료:', registration);
-      })
-      .catch((error) => {
-        console.error('Service Worker 등록 실패:', error);
+      .getRegistration('/firebase-messaging-sw.js')
+      .then((registration) => {
+        if (!registration) {
+          navigator.serviceWorker
+            .register('/firebase-messaging-sw.js')
+            .then(async (newRegistration) => {
+              console.log('Service Worker 등록 완료:', newRegistration);
+            })
+            .catch((error) => {
+              console.error('Service Worker 등록 실패:', error);
+            });
+        }
       });
   } else {
     console.warn('Service Worker가 지원되지 않는 환경입니다.');
