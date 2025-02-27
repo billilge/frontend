@@ -24,10 +24,15 @@ const onForegroundMessage = async () => {
         Notification.permission === 'granted' &&
         document.visibilityState === 'visible'
       ) {
-        new Notification(payload.notification?.title as string, {
-          body: payload.notification?.body,
-          icon: '/icons/manifest/icon-192x192.png',
-        });
+        const notification = new Notification(
+          payload.notification?.title as string,
+          {
+            body: payload.notification?.body,
+            icon: '/icons/manifest/icon-192x192.png',
+          },
+        );
+
+        console.log(`${notification.title}: ${notification.body}`);
       }
     });
   }
