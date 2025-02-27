@@ -1,20 +1,12 @@
-import axios from 'axios';
 import { NotificationCount } from '@/types/notificationType';
-
-const apiUrl = process.env.NEXT_PUBLIC_API_BASE_URI;
-const token = process.env.NEXT_PUBLIC_AUTH_TOKEN;
+import PrivateAxiosInstance from '@/services/privateAxiosInstance';
 
 // 반납해야할 물품 리스트 불러오기
 // eslint-disable-next-line import/prefer-default-export
 export const getNotificationCount = async (): Promise<NotificationCount> => {
   try {
-    const response = await axios.get<NotificationCount>(
-      `${apiUrl}/notifications/count`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      },
+    const response = await PrivateAxiosInstance.get<NotificationCount>(
+      '/notifications/count',
     );
 
     return response.data;

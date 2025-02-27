@@ -1,8 +1,5 @@
-import axios from 'axios';
 import { WelfareItemData } from '@/types/welfareItemType';
-
-const apiUrl = process.env.NEXT_PUBLIC_API_BASE_URI;
-const token = process.env.NEXT_PUBLIC_AUTH_TOKEN;
+import PrivateAxiosInstance from '@/services/privateAxiosInstance';
 
 // 대여 가능한 복지물품 리스트 불러오기
 // eslint-disable-next-line import/prefer-default-export
@@ -10,10 +7,7 @@ export const getWelfareItems = async (
   searchQuery?: string,
 ): Promise<WelfareItemData> => {
   try {
-    const response = await axios.get<WelfareItemData>(`${apiUrl}/items`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+    const response = await PrivateAxiosInstance.get<WelfareItemData>('/items', {
       params: searchQuery ? { search: searchQuery } : {}, // 검색어가 있으면 추가
     });
 

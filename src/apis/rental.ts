@@ -1,21 +1,13 @@
-import axios from 'axios';
 import { ReturnData } from '@/types/returnItemType';
 import { RentalRequest } from '@/types/rentalRequestType';
 import { RentalHistoriesData, RentalStatus } from '@/types/rentalItemType';
-
-const apiUrl = process.env.NEXT_PUBLIC_API_BASE_URI;
-const token = process.env.NEXT_PUBLIC_AUTH_TOKEN;
+import PrivateAxiosInstance from '@/services/privateAxiosInstance';
 
 // 반납해야할 물품 리스트 불러오기
 export const getReturnItems = async (): Promise<ReturnData> => {
   try {
-    const response = await axios.get<ReturnData>(
-      `${apiUrl}/rentals/return-required`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      },
+    const response = await PrivateAxiosInstance.get<ReturnData>(
+      '/rentals/return-required',
     );
 
     return response.data;
@@ -29,12 +21,12 @@ export const getRentalItems = async (
   rentalStatus?: RentalStatus,
 ): Promise<RentalHistoriesData> => {
   try {
-    const response = await axios.get<RentalHistoriesData>(`${apiUrl}/rentals`, {
-      params: rentalStatus ? { rentalStatus } : {},
-      headers: {
-        Authorization: `Bearer ${token}`,
+    const response = await PrivateAxiosInstance.get<RentalHistoriesData>(
+      '/rentals',
+      {
+        params: rentalStatus ? { rentalStatus } : {},
       },
-    });
+    );
 
     return response.data;
   } catch (error) {
@@ -47,9 +39,8 @@ export const requestItems = async (
   requestData: RentalRequest,
 ): Promise<void> => {
   try {
-    await axios.post(`${apiUrl}/rentals`, requestData, {
+    await PrivateAxiosInstance.post('/rentals', requestData, {
       headers: {
-        Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
     });
@@ -61,14 +52,10 @@ export const requestItems = async (
 // 대여 취소하기
 export const cancelRentalItems = async (rentalHistoryId: number) => {
   try {
-    const response = await axios.patch(
-      `${apiUrl}/rentals/${rentalHistoryId}`,
+    const response = await PrivateAxiosInstance.patch(
+      `/rentals/${rentalHistoryId}`,
       {},
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      },
+      {},
     );
 
     return response.data;
@@ -80,14 +67,10 @@ export const cancelRentalItems = async (rentalHistoryId: number) => {
 // 반납하기
 export const returnRentalItems = async (rentalHistoryId: number) => {
   try {
-    const response = await axios.patch(
-      `${apiUrl}/rentals/return/${rentalHistoryId}`,
+    const response = await PrivateAxiosInstance.patch(
+      `/rentals/return/${rentalHistoryId}`,
       {},
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      },
+      {},
     );
 
     return response.data;
