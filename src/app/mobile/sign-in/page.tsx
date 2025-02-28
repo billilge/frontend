@@ -28,7 +28,7 @@ export default function SignIn() {
       </section>
       <ImageLoginLogo className="absolute top-24" />
       <button
-        className="absolute bottom-44 flex w-11/12 justify-between rounded-2xl border bg-white-primary px-6 py-4"
+        className="absolute bottom-44 flex w-11/12 max-w-md justify-between rounded-2xl border bg-white-primary px-6 py-4"
         type="button"
         onClick={handleLogin}
       >
