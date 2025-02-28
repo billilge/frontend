@@ -2,11 +2,21 @@
 
 import ImageLoginLogo from 'public/assets/images/image-login-logo.svg';
 import IconGoogle from 'public/assets/icons/icon-google.svg';
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function SignIn() {
+  const router = useRouter();
+
   const handleLogin = () => {
     window.location.href = `${process.env.NEXT_PUBLIC_API_BASE_URI}/oauth2/authorization/google`;
   };
+
+  useEffect(() => {
+    if (localStorage.getItem('token')) {
+      router.replace('/mobile/main');
+    }
+  }, []);
 
   return (
     <section className="relative flex h-dvh w-full flex-col items-center justify-start overflow-hidden">
