@@ -14,6 +14,7 @@ export default function DashboardItem({
 }: DashboardProps) {
   const RentalApproveBtnText: Record<string, string> = {
     PENDING: '대여 승인',
+    CONFIRMED: '대여 완료',
     RETURN_PENDING: '반납 승인',
     RETURN_CONFIRMED: '반납 완료',
   };

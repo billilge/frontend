@@ -9,23 +9,19 @@ import IconArrow from 'public/assets/icons/icon-arrow.svg';
 import { cn } from '@/lib/utils';
 import { adminDashboardGet, adminRentalPatch } from '@/services/dashboard';
 import { DashboardProps } from '@/types/dashboardType';
+import { RentalStatusText } from '@/constants/rentalStatus';
 import DashboardItem from './_components/DashboardItem';
 
 type DashboardType = DashboardProps;
 
 interface RentalRequestProps {
   rentalHistoryId: number;
+  itemName: string;
+  renterName: string;
   status: string;
 }
 
 export default function Dashboard() {
-  const RentalFilterText: Record<string, string> = {
-    ALL: '전체',
-    PENDING: '대여 신청',
-    RETURN_PENDING: '반납 신청',
-    RETURN_CONFIRMED: '반납 대기',
-  };
-
   const [dashboardDetail, setDashboardDetail] = useState<DashboardType[]>([]);
   const [filter, setFilter] = useState('ALL');
   const [refreshTrigger, setRefreshTrigger] = useState(false);
@@ -47,9 +43,10 @@ export default function Dashboard() {
 
   const dropdownActions = [
     { title: '전체', func: () => handleFilter('ALL') },
-    { title: '대여 신청', func: () => handleFilter('PENDING') },
-    { title: '반납 신청', func: () => handleFilter('RETURN_PENDING') },
-    { title: '반납 대기', func: () => handleFilter('RETURN_CONFIRMED') },
+    { title: '대여 요청', func: () => handleFilter('PENDING') },
+    { title: '대여 승인', func: () => handleFilter('CONFIRMED') },
+    { title: '반납 요청', func: () => handleFilter('RETURN_PENDING') },
+    { title: '반납 승인', func: () => handleFilter('RETURN_CONFIRMED') },
   ];
 
   useEffect(() => {
@@ -65,25 +62,42 @@ export default function Dashboard() {
 
   const handleApproveBtnClick = async ({
     rentalHistoryId,
+    itemName,
+    renterName,
     status,
   }: RentalRequestProps) => {
     const statusMap: Record<string, string> = {
       PENDING: 'CONFIRMED',
+      CONFIRMED: 'RENTAL',
       RETURN_PENDING: 'RETURN_CONFIRMED',
       RETURN_CONFIRMED: 'RETURNED',
     };
 
-    const newStatus = statusMap[status] ?? status;
+    const newStatus = statusMap[status!] ?? status;
 
     const data = { rentalHistoryId, rentalStatus: newStatus };
     await adminRentalPatch(data);
+
+    alert(
+      `${renterName} 님의 ${itemName} ${RentalStatusText[status]} 요청이 처리되었습니다.`,
+    );
+
     // TODO : 현재 임시로 상태로 관리 -> 추후 refetch로 변경
     setRefreshTrigger((prev) => !prev);
   };
 
-  const handleCancelBtnClick = async (rentalHistoryId: number) => {
+  const handleCancelBtnClick = async ({
+    rentalHistoryId,
+    itemName,
+    renterName,
+    status,
+  }: RentalRequestProps) => {
     const data = { rentalHistoryId, rentalStatus: 'CANCEL' };
     await adminRentalPatch(data);
+
+    alert(
+      `${renterName} 님의 ${itemName} ${RentalStatusText[status]} 요청이 처리되었습니다.`,
+    );
 
     // TODO : 현재 임시로 상태로 관리 -> 추후 refetch로 변경
     setRefreshTrigger((prev) => !prev);
@@ -103,7 +117,7 @@ export default function Dashboard() {
           className={`flex items-center gap-2.5 ${isDropdownVisible && 'pointer-events-none'}`}
         >
           <div className="flex text-sm font-semibold">
-            {RentalFilterText[filter]}
+            {filter === 'ALL' ? '전체' : RentalStatusText[filter]}
           </div>
           <IconArrow
             className={
@@ -130,13 +144,20 @@ export default function Dashboard() {
               if (item.rentalHistoryId !== undefined) {
                 handleApproveBtnClick({
                   rentalHistoryId: item.rentalHistoryId,
+                  itemName: item.itemName,
+                  renterName: item.renterName,
                   status: item.status,
                 });
               }
             }}
             handleCancelBtnClick={() => {
               if (item.rentalHistoryId !== undefined) {
-                handleCancelBtnClick(item.rentalHistoryId);
+                handleCancelBtnClick({
+                  rentalHistoryId: item.rentalHistoryId,
+                  itemName: item.itemName,
+                  renterName: item.renterName,
+                  status: item.status,
+                });
               }
             }}
           />
