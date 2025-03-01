@@ -10,9 +10,7 @@ import { getNotificationCount } from '@/apis/notification';
 export default function MainHeader() {
   const router = useRouter();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [notificationCount, setNotificationCount] = useState<number | null>(
-    null,
-  );
+  const [notificationCount, setNotificationCount] = useState(0);
   const [user, setUser] = useState<{
     name: string;
     id: string;
@@ -52,7 +50,7 @@ export default function MainHeader() {
             onClick={() => router.push('/mobile/notification')}
           >
             <IconAlarm />
-            {notificationCount && (
+            {notificationCount > 0 && (
               <div className="absolute -right-0.5 -top-0.5 flex h-[13px] w-[13px] items-center justify-center rounded-full bg-warning text-caption-2_midi text-white-primary">
                 {notificationCount}
               </div>
