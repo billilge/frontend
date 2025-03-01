@@ -28,6 +28,14 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: React.PropsWithChildren) {
   return (
     <html lang="en">
+      <head>
+        {/* viewport metadata에 추가 했을 시, 경고가 떠서 이쪽에 적었고 head태그를 사용하려면 title도 필요하여 title도 추가하게 되었습니다. */}
+        <meta
+          name="viewport"
+          content="initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width"
+        />
+        <title>빌릴게</title>
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
