@@ -1,17 +1,18 @@
 'use client';
 
 import Sidebar from 'src/components/desktop/Sidebar';
-import Search from '@/components/desktop/Search';
 import { useState, useEffect } from 'react';
 import AddStudentId from '@/components/desktop/AddStudentId';
 import { Button } from '@/components/ui/button';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { getPayer, addPayer, deletePayer } from '@/services/payers';
 import { Payer } from '@/types/payers';
+import { SearchInput } from '@/components/ui/search-input';
 import TableComponent from './_components/TableComponent';
 import AddInput from '../../../components/desktop/AddInput';
 
 export default function PayerInquiryPage() {
+  const [searchQuery, setSearchQuery] = useState('');
   const [addedData, setAddedData] = useState<Payer[]>([]);
   const [isDeleteModeOriginal, setIsDeleteModeOriginal] = useState(false);
   const [isDeleteModeAdded, setIsDeleteModeAdded] = useState(false);
@@ -32,7 +33,7 @@ export default function PayerInquiryPage() {
     },
   });
 
-  const deletemutation = useMutation({
+  const deleteMutation = useMutation({
     mutationFn: deletePayer,
     onSuccess: () => {
       alert('선택된 납부자 정보가 성공적으로 삭제되었습니다.');
@@ -47,9 +48,10 @@ export default function PayerInquiryPage() {
     data: originalData = [],
     isError: originalDataError,
     isLoading,
+    refetch,
   } = useQuery({
     queryKey: ['payers'],
-    queryFn: getPayer,
+    queryFn: () => getPayer(searchQuery),
   });
 
   useEffect(() => {
@@ -95,7 +97,7 @@ export default function PayerInquiryPage() {
   const handleDeleteData = (mode: 'original' | 'added') => {
     if (mode === 'original') {
       // payerId 배열을 직접 전달
-      deletemutation.mutate(selectedOriginal); // payerId 배열을 전달
+      deleteMutation.mutate(selectedOriginal); // payerId 배열을 전달
       setSelectedOriginal([]);
       setIsDeleteModeOriginal(false);
     } else {
@@ -131,7 +133,12 @@ export default function PayerInquiryPage() {
         <p className="text-2xl">학생회비 납부자 조회하기</p>
       </div>
       <div className="flex flex-wrap justify-center gap-2">
-        <Search />
+        <SearchInput
+          placeholder="이름을 입력해 주세요"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          onSearch={refetch}
+        />
         <Sidebar
           triggerText="새로운 납부자 추가하기"
           title="학생회비 납부자 추가하기"

@@ -1,7 +1,6 @@
 'use client';
 
 import Sidebar from 'src/components/desktop/Sidebar';
-import Search from '@/components/desktop/Search';
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { useMutation, useQuery } from '@tanstack/react-query';
@@ -12,6 +11,7 @@ import {
   getMembers,
 } from '@/services/admins';
 import { Admins } from '@/types/admins';
+import { SearchInput } from '@/components/ui/search-input';
 import TableComponent from './_components/AdminTable';
 
 export default function PayerInquiryPage() {
@@ -19,6 +19,7 @@ export default function PayerInquiryPage() {
   const [, setIsDeleteModeAdded] = useState(false);
   const [selectedOriginal, setSelectedOriginal] = useState<number[]>([]);
   const [selectedAdded, setSelectedAdded] = useState<number[]>([]);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const mutation = useMutation({
     mutationFn: addAdmins,
@@ -26,7 +27,7 @@ export default function PayerInquiryPage() {
     onError: () => alert('추가된 관리자 정보 저장에 실패했습니다.'),
   });
 
-  const deletemutation = useMutation({
+  const deleteMutation = useMutation({
     mutationFn: deleteAdmins,
     onSuccess: () => alert('선택된 관리자 정보가 성공적으로 삭제되었습니다.'),
     onError: () => alert('관리자 정보 삭제에 실패했습니다.'),
@@ -36,9 +37,10 @@ export default function PayerInquiryPage() {
     data: originalData = [],
     isError: originalDataError,
     isLoading,
+    refetch,
   } = useQuery({
     queryKey: ['admins'],
-    queryFn: getAdmins,
+    queryFn: () => getAdmins(searchQuery),
   });
 
   const { data: memberData = [] } = useQuery({
@@ -56,7 +58,7 @@ export default function PayerInquiryPage() {
   const handleDeleteData = (mode: 'original' | 'added') => {
     const selectedIds = mode === 'original' ? selectedOriginal : selectedAdded;
     if (selectedIds.length > 0) {
-      deletemutation.mutate(selectedIds);
+      deleteMutation.mutate(selectedIds);
     }
 
     if (mode === 'original') {
@@ -103,7 +105,12 @@ export default function PayerInquiryPage() {
         <p className="text-2xl">관리자 조회하기</p>
       </div>
       <div className="flex flex-wrap justify-center gap-2">
-        <Search />
+        <SearchInput
+          placeholder="이름을 입력해 주세요"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          onSearch={refetch}
+        />
         <Sidebar triggerText="새로운 관리자 추가하기" title="관리자 추가하기">
           <div className="flex w-full flex-col items-center justify-center">
             <div className="flex w-full flex-col">

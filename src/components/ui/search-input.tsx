@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils';
 import { Search } from 'lucide-react';
 
 interface SearchInputProps extends React.ComponentProps<'input'> {
-  onSearch: (query: string) => void; // 검색 실행 시 호출될 함수
+  onSearch: () => void; // 검색 실행 시 호출될 함수
 }
 
 const SearchInput = React.forwardRef<HTMLInputElement, SearchInputProps>(
@@ -14,7 +14,7 @@ const SearchInput = React.forwardRef<HTMLInputElement, SearchInputProps>(
 
     const handleSearch = () => {
       if (onSearch) {
-        onSearch(query);
+        onSearch();
       }
     };
 

@@ -1,11 +1,11 @@
 'use client';
 
 import Sidebar from 'src/components/desktop/Sidebar';
-import Search from '@/components/desktop/Search';
 import { useState, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { getItems, addItems, deleteItems } from '@/services/items';
+import { SearchInput } from '@/components/ui/search-input';
 import TableComponent from './_components/ItemTable';
 
 export default function ItemListPage() {
@@ -20,6 +20,7 @@ export default function ItemListPage() {
 
   const [isDeleteMode, setIsDeleteMode] = useState(false);
   const [selectedItem, setSelectedItem] = useState<number>(0);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const mutation = useMutation({
     mutationFn: addItems,
@@ -42,9 +43,9 @@ export default function ItemListPage() {
     },
   });
 
-  const { data: originalData = [] } = useQuery({
+  const { data: originalData = [], refetch } = useQuery({
     queryKey: ['items'],
-    queryFn: getItems,
+    queryFn: () => getItems(searchQuery),
   });
 
   // 물품 추가 핸들러
@@ -111,7 +112,12 @@ export default function ItemListPage() {
         <p className="text-2xl">새로운 복지 물품 추가하기</p>
       </div>
       <div className="flex flex-wrap justify-center gap-2">
-        <Search />
+        <SearchInput
+          placeholder="물품 이름을 입력해 주세요"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          onSearch={refetch}
+        />
         <Sidebar triggerText="복지 물품 추가하기" title="복지 물품 추가하기">
           <div className="mt-4 flex flex-col gap-2">
             {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}

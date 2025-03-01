@@ -1,7 +1,9 @@
 import PrivateAxiosInstance from './privateAxiosInstance';
 
-export const getItems = async () => {
-  const response = await PrivateAxiosInstance.get('/admin/items');
+export const getItems = async (searchQuery?: string) => {
+  const response = await PrivateAxiosInstance.get('/admin/items', {
+    params: searchQuery ? { search: searchQuery } : {},
+  });
   return response.data;
 };
 
