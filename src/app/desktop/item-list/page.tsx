@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { getItems, addItems, deleteItems } from '@/services/items';
 import { SearchInput } from '@/components/ui/search-input';
+import Image from 'next/image';
 import TableComponent from './_components/ItemTable';
 
 export default function ItemListPage() {
@@ -169,8 +170,10 @@ export default function ItemListPage() {
             <label className="text-sm font-semibold">이미지 업로드</label>
             <input type="file" accept="image/*" onChange={handleImageChange} />
             {formData.selectedImage && (
-              <img
+              <Image
                 src={URL.createObjectURL(formData.selectedImage)}
+                width={24}
+                height={24}
                 alt="미리보기"
                 className="mt-2 h-32 w-32 rounded-md object-cover"
               />

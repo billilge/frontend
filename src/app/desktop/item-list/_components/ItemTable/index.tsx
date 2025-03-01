@@ -11,6 +11,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Item, ItemTableProps } from '@/types/items';
+import Image from 'next/image';
 
 export default function ItemTable({
   items = [],
@@ -73,9 +74,11 @@ export default function ItemTable({
                     />
                   </TableCell>
                 )}
-                <TableCell className="w-30 text-center">
-                  <img
+                <TableCell className="w-30 flex items-center justify-center text-center">
+                  <Image
                     src={item.imageUrl}
+                    width={24}
+                    height={24}
                     alt="item"
                     className="h-10 w-10 rounded"
                   />
