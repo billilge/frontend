@@ -77,7 +77,7 @@ export default function RentalsTable({
           )}
         </TableBody>
       </Table>
-      <div className="flex items-center justify-between pt-4">
+      <div className="flex items-center justify-center pt-4">
         <div className="flex items-center gap-2">
           <Button
             className="bg-transparent shadow-transparent hover:bg-transparent"
