@@ -5,10 +5,7 @@ export const handleLoginSuccess = (accessToken: string | null) => {
     const payload = accessToken.split('.')[1] || '';
     const decodedPayload = decode(payload);
     const payloadObject = JSON.parse(decodedPayload);
-
-    const tokenRole = payloadObject.role;
-    const tokenName = payloadObject.name;
-    const tokenId = payloadObject.sub;
+    const { role: tokenRole, name: tokenName, sub: tokenId } = payloadObject;
 
     const userInfo = { name: tokenName, id: tokenId, role: tokenRole };
 

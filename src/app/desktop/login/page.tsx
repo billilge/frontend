@@ -12,19 +12,19 @@ export default function Login() {
   const studentIdRef = useRef<HTMLInputElement | null>(null);
   const passwordRef = useRef<HTMLInputElement | null>(null);
 
-  const validateLoginForm = () => {
-    if (!studentIdRef.current || !studentIdRef.current.value) {
+  const validateLoginForm = (studentId: string, password: string) => {
+    if (!studentId) {
       alert('학번을 입력해 주세요!');
       return false;
     }
 
-    if (!passwordRef.current || !passwordRef.current.value) {
+    if (!password) {
       alert('비밀번호를 입력해 주세요!');
       return false;
     }
 
     const idRegex = /^\d{8}$/;
-    if (!idRegex.test(studentIdRef.current.value)) {
+    if (!idRegex.test(studentId)) {
       alert('학번은 숫자 8자리여야 합니다.');
       return false;
     }
@@ -33,10 +33,10 @@ export default function Login() {
   };
 
   const handleAdminLogin = async () => {
-    if (!validateLoginForm()) return;
+    const studentId = studentIdRef?.current?.value || '';
+    const password = passwordRef?.current?.value || '';
 
-    const studentId = studentIdRef?.current?.value as string;
-    const password = passwordRef?.current?.value as string;
+    if (!validateLoginForm(studentId, password)) return;
 
     try {
       const data = await postAdminLogin({
