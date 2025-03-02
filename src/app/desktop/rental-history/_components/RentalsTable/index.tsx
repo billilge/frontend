@@ -10,6 +10,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { RentalsTableProps } from '@/types/rentals';
 import { PageChangeAction } from '@/types/paginationType';
+import StatusBadge from '@/app/mobile/history/_components/StatusBadge';
 
 export default function RentalsTable({
   rentalHistories,
@@ -69,7 +70,9 @@ export default function RentalsTable({
                   {rental.itemName}
                 </TableCell>
                 <TableCell className="w-30 text-center">
-                  {rental.rentalStatus}
+                  <div className="flex items-center justify-center">
+                    <StatusBadge status={rental.rentalStatus} />
+                  </div>
                 </TableCell>
               </TableRow>
             ))
