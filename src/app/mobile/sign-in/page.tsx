@@ -13,7 +13,7 @@ export default function SignIn() {
   };
 
   useEffect(() => {
-    if (localStorage.getItem('token')) {
+    if (localStorage.getItem('token') && localStorage.getItem('user')) {
       router.replace('/mobile/main');
     }
   }, []);

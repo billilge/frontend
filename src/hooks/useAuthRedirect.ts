@@ -17,32 +17,28 @@ const useAuthRedirect = () => {
       currentPage === '/desktop/login';
 
     const userString = localStorage.getItem('user');
-    const user = userString ? JSON.parse(userString) : null;
+    const isLogin = userString && localStorage.getItem('token');
+    const user = userString ? JSON.parse(userString) : undefined;
 
-    console.log(currentPage);
-
-    if (!user && !checkCurrentPages) {
-      setTimeout(() => {
+    if (!isLogin) {
+      localStorage.clear();
+      if (!checkCurrentPages) {
+        alert('로그인 후 이용 가능한 페이지입니다.');
         if (currentPage.startsWith('/desktop')) {
           router.replace('/desktop/login');
-        } else if (currentPage.startsWith('/mobile')) {
-          router.replace('/mobile/sign-in');
         } else {
           router.replace('/mobile/sign-in');
         }
-      }, 0);
+      }
     } else {
       if (currentPage.startsWith('/desktop') && user.role !== 'ADMIN') {
-        setTimeout(() => {
-          router.replace('/desktop/login');
-        }, 0);
+        alert('관리자만 이용 가능한 페이지입니다.');
+        router.replace('/desktop/login');
         return;
       }
-
       if (currentPage.startsWith('/mobile/admin') && user.role !== 'ADMIN') {
-        setTimeout(() => {
-          router.replace('/mobile/main');
-        }, 0);
+        alert('관리자만 이용 가능한 페이지입니다.');
+        router.replace('/mobile/main');
       }
     }
   }, [router, pathname]);

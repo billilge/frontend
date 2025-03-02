@@ -19,7 +19,7 @@ export default function MobileLayout({ children }: MobileLayoutProps) {
     // MobileLayout이 마운트될 때 배경색 적용(모바일에서만 적용하기 위함)
     document.body.style.backgroundColor = '#F3F4F6';
 
-    setStyle({ '--main--position--': '350px' });
+    // setStyle({ '--main--position--': '350px' });
 
     return () => {
       // MobileLayout이 언마운트될 때 원래 배경색 복구
