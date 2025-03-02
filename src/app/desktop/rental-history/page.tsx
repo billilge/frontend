@@ -3,13 +3,29 @@
 import { useQuery } from '@tanstack/react-query';
 
 import { getRentals } from '@/services/rentals';
+import { useEffect, useState } from 'react';
+import { PageChangeAction } from '@/types/paginationType';
 import RentalsTable from './_components/RentalsTable';
 
 export default function RentalHistoryPage() {
-  const { data: originalData = [] } = useQuery({
+  const [page, setPage] = useState(1);
+
+  const { data: originalData = [], refetch } = useQuery({
     queryKey: ['rentals'],
-    queryFn: getRentals,
+    queryFn: () => getRentals(page - 1),
   });
+
+  useEffect(() => {
+    refetch();
+  }, [page]);
+
+  const handlePageChange = async (pageChangeAction: PageChangeAction) => {
+    console.log('PageChange:', pageChangeAction);
+    setPage((current) =>
+      pageChangeAction === 'NEXT' ? current + 1 : current - 1,
+    );
+    console.log(`page: ${page}`);
+  };
 
   return (
     <div className="flex flex-col justify-center gap-8 px-4 md:px-16 lg:px-64">
@@ -18,7 +34,12 @@ export default function RentalHistoryPage() {
       </div>
 
       <div className="flex flex-col justify-between">
-        <RentalsTable rentalHistories={originalData.rentalHistories || []} />
+        <RentalsTable
+          rentalHistories={originalData.rentalHistories || []}
+          currentPage={page}
+          totalPage={originalData.totalPage}
+          onPageChange={handlePageChange}
+        />
       </div>
     </div>
   );

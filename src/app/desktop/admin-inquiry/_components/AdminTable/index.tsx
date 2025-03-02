@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import {
   Table,
   TableBody,
@@ -11,6 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
 import { Admins, TableComponentProps } from '@/types/admins';
+import { PageChangeAction } from '@/types/paginationType';
 
 export default function AdminTable({
   admins,
@@ -18,10 +18,12 @@ export default function AdminTable({
   headers = ['이름', '학번'], // 기본값을 설정
   selected,
   setSelected,
+  currentPage = 1,
+  totalPage = 1,
+  onPageChange = (pageAction: PageChangeAction) => {
+    console.log(pageAction);
+  },
 }: TableComponentProps) {
-  const [currentPage, setCurrentPage] = useState(1);
-  const rowsPerPage = 10;
-
   const handleSelect = (payerId: number) => {
     setSelected((prev: number[]) =>
       prev.includes(payerId)
@@ -30,13 +32,20 @@ export default function AdminTable({
     );
   };
 
+  const handlePageChangeBtnClick = (
+    event: React.MouseEvent<HTMLElement, MouseEvent>,
+    pageChangeAction: PageChangeAction,
+  ) => {
+    event.preventDefault();
+    onPageChange(pageChangeAction);
+  };
   // payers가 배열이 아닐 경우 기본 빈 배열로 대체
-  const paginatedData = Array.isArray(admins)
-    ? admins.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage)
-    : [];
+  // const  = Array.isArray(admins)
+  //   ? admins.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage)
+  //   : [];
 
   const handleSelectAll = () => {
-    const visibleIds = paginatedData.map(
+    const visibleIds = admins.map(
       (item: { memberId: number }) => item.memberId,
     );
     setSelected(
@@ -52,7 +61,7 @@ export default function AdminTable({
             {showCheckboxes && (
               <TableHead className="w-10 text-center">
                 <Checkbox
-                  checked={selected.length === paginatedData.length}
+                  checked={selected.length === admins.length}
                   onCheckedChange={handleSelectAll}
                 />
               </TableHead>
@@ -65,7 +74,7 @@ export default function AdminTable({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {paginatedData.map((item: Admins) => (
+          {admins.map((item: Admins) => (
             <TableRow key={item.memberId}>
               {showCheckboxes && (
                 <TableCell className="w-10 text-center">
@@ -87,18 +96,18 @@ export default function AdminTable({
         <Button
           className="bg-transparent shadow-transparent hover:bg-transparent"
           disabled={currentPage === 1}
-          onClick={() => setCurrentPage((prev) => prev - 1)}
+          onClick={(event) => handlePageChangeBtnClick(event, 'PREV')}
         >
           <ChevronLeftIcon className="h-10 w-10 cursor-pointer text-black-primary" />
         </Button>
         <span>
-          {currentPage} / {Math.ceil(admins.length / rowsPerPage)}
+          {currentPage} / {totalPage}
         </span>
         <Button
           className="bg-transparent shadow-transparent hover:bg-transparent"
           size="chevron"
-          disabled={currentPage === Math.ceil(admins.length / rowsPerPage)}
-          onClick={() => setCurrentPage((prev) => prev + 1)}
+          disabled={currentPage === totalPage}
+          onClick={(event) => handlePageChangeBtnClick(event, 'NEXT')}
         >
           <ChevronRightIcon className="h-6 w-6 cursor-pointer text-black-primary" />
         </Button>

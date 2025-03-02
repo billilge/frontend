@@ -1,9 +1,12 @@
 import PublicAxiosInstance from '@/services/publicAxiosInstance';
 import PrivateAxiosInstance from './privateAxiosInstance';
 
-export const getAdmins = async (searchQuery?: string) => {
+export const getAdmins = async (searchQuery?: string, page?: number) => {
   const response = await PrivateAxiosInstance.get('/admin/members/admins', {
-    params: searchQuery ? { search: searchQuery } : searchQuery,
+    params: {
+      pageNo: page || 0,
+      search: searchQuery || '',
+    },
   });
   return response.data;
 };

@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
 import {
   Table,
@@ -10,6 +9,7 @@ import {
 } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
 import { RentalsTableProps } from '@/types/rentals';
+import { PageChangeAction } from '@/types/paginationType';
 
 export default function RentalsTable({
   rentalHistories,
@@ -21,16 +21,19 @@ export default function RentalsTable({
     '대여 물품',
     '물품 상태',
   ],
+  currentPage = 1,
+  totalPage = 1,
+  onPageChange = (pageChangeAction: PageChangeAction) => {
+    console.log(pageChangeAction);
+  },
 }: RentalsTableProps) {
-  const [currentPage, setCurrentPage] = useState(1);
-  const rowsPerPage = 10;
-
-  const totalPages = Math.ceil(rentalHistories.length / rowsPerPage);
-
-  const paginatedData = rentalHistories.slice(
-    (currentPage - 1) * rowsPerPage,
-    currentPage * rowsPerPage,
-  );
+  const handlePageChangeBtnClick = (
+    event: React.MouseEvent<HTMLElement, MouseEvent>,
+    pageChangeAction: PageChangeAction,
+  ) => {
+    event.preventDefault();
+    onPageChange(pageChangeAction);
+  };
 
   return (
     <div className="flex w-full flex-col p-10">
@@ -45,8 +48,8 @@ export default function RentalsTable({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {paginatedData.length > 0 ? (
-            paginatedData.map((rental) => (
+          {rentalHistories.length > 0 ? (
+            rentalHistories.map((rental) => (
               <TableRow key={rental.rentalHistoryId}>
                 <TableCell className="w-30 text-center">
                   {rental.member.name}
@@ -81,18 +84,18 @@ export default function RentalsTable({
         <div className="flex items-center gap-2">
           <Button
             className="bg-transparent shadow-transparent hover:bg-transparent"
-            disabled={currentPage === 1 || totalPages === 0}
-            onClick={() => setCurrentPage((prev) => prev - 1)}
+            disabled={currentPage === 1}
+            onClick={(event) => handlePageChangeBtnClick(event, 'PREV')}
           >
             <ChevronLeftIcon className="h-10 w-10 cursor-pointer text-black-primary" />
           </Button>
           <span>
-            {totalPages > 0 ? `${currentPage} / ${totalPages}` : '0 / 0'}
+            {currentPage} / {totalPage}
           </span>
           <Button
             className="bg-transparent shadow-transparent hover:bg-transparent"
-            disabled={currentPage === totalPages || totalPages === 0}
-            onClick={() => setCurrentPage((prev) => prev + 1)}
+            disabled={currentPage === totalPage}
+            onClick={(event) => handlePageChangeBtnClick(event, 'NEXT')}
           >
             <ChevronRightIcon className="h-6 w-6 cursor-pointer text-black-primary" />
           </Button>

@@ -1,8 +1,11 @@
 import PrivateAxiosInstance from './privateAxiosInstance';
 
-export const getPayer = async (searchQuery?: string) => {
+export const getPayer = async (searchQuery?: string, page?: number) => {
   const response = await PrivateAxiosInstance.get('/admin/members/payers', {
-    params: searchQuery ? { search: searchQuery } : {},
+    params: {
+      pageNo: page || 0,
+      search: searchQuery || '',
+    },
   });
   return response.data;
 };

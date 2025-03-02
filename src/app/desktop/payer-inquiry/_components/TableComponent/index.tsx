@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import {
   Table,
   TableBody,
@@ -11,6 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
 import { Payer, TableComponentProps } from '@/types/payers';
+import { PageChangeAction } from '@/types/paginationType';
 
 export default function TableComponent({
   payers,
@@ -18,10 +18,12 @@ export default function TableComponent({
   headers = ['이름', '학번', '회원 여부'], // 기본값을 설정
   selected,
   setSelected,
+  currentPage = 1,
+  totalPage = 1,
+  onPageChange = (pageChangeAction: PageChangeAction) => {
+    console.log(pageChangeAction);
+  },
 }: TableComponentProps) {
-  const [currentPage, setCurrentPage] = useState(1);
-  const rowsPerPage = 10;
-
   const handleSelect = (payerId: number) => {
     setSelected((prev: number[]) =>
       prev.includes(payerId)
@@ -30,18 +32,19 @@ export default function TableComponent({
     );
   };
 
-  // payers가 배열이 아닐 경우 기본 빈 배열로 대체
-  const paginatedData = Array.isArray(payers)
-    ? payers.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage)
-    : [];
-
   const handleSelectAll = () => {
-    const visibleIds = paginatedData.map(
-      (item: { payerId: number }) => item.payerId,
-    );
+    const visibleIds = payers.map((item: { payerId: number }) => item.payerId);
     setSelected(
       (prev: number[]) => (prev.length === visibleIds.length ? [] : visibleIds), // 배열 길이를 비교하는 대신 선택된 아이디와 비교
     );
+  };
+
+  const handlePageChangeBtnClick = (
+    event: React.MouseEvent<HTMLElement, MouseEvent>,
+    pageChangeAction: PageChangeAction,
+  ) => {
+    event.preventDefault();
+    onPageChange(pageChangeAction);
   };
 
   return (
@@ -52,7 +55,7 @@ export default function TableComponent({
             {showCheckboxes && (
               <TableHead className="w-10 text-center">
                 <Checkbox
-                  checked={selected.length === paginatedData.length}
+                  checked={selected.length === payers.length}
                   onCheckedChange={handleSelectAll}
                 />
               </TableHead>
@@ -65,8 +68,8 @@ export default function TableComponent({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {paginatedData.map((item: Payer) => (
-            <TableRow key={item.payerId}>
+          {payers.map((item: Payer) => (
+            <TableRow key={`${item.payerId}${item.studentId}`}>
               {showCheckboxes && (
                 <TableCell className="w-10 text-center">
                   <Checkbox
@@ -90,18 +93,18 @@ export default function TableComponent({
         <Button
           className="bg-transparent shadow-transparent hover:bg-transparent"
           disabled={currentPage === 1}
-          onClick={() => setCurrentPage((prev) => prev - 1)}
+          onClick={(event) => handlePageChangeBtnClick(event, 'PREV')}
         >
           <ChevronLeftIcon className="h-10 w-10 cursor-pointer text-black-primary" />
         </Button>
         <span>
-          {currentPage} / {Math.ceil(payers.length / rowsPerPage)}
+          {currentPage} / {totalPage}
         </span>
         <Button
           className="bg-transparent shadow-transparent hover:bg-transparent"
           size="chevron"
-          disabled={currentPage === Math.ceil(payers.length / rowsPerPage)}
-          onClick={() => setCurrentPage((prev) => prev + 1)}
+          disabled={currentPage === totalPage}
+          onClick={(event) => handlePageChangeBtnClick(event, 'NEXT')}
         >
           <ChevronRightIcon className="h-6 w-6 cursor-pointer text-black-primary" />
         </Button>

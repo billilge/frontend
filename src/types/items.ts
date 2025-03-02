@@ -1,3 +1,5 @@
+import { PaginationProps } from '@/types/paginationType';
+
 export interface Item {
   itemId: number;
   itemName: string;
@@ -7,7 +9,7 @@ export interface Item {
   imageUrl: string;
 }
 
-export interface ItemTableProps {
+export interface ItemTableProps extends PaginationProps {
   items: Item[];
   showCheckboxes?: boolean;
   headers?: string[];
