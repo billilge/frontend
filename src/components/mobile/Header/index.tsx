@@ -29,22 +29,24 @@ export default function Header({ title, menu = false }: HeaderProps) {
 
   return (
     <>
-      <section className="h-8.5 flex w-full items-center justify-between px-4 py-1.5">
+      <section className="sticky top-0 flex h-9 w-full items-center justify-between bg-[#F3F4F6] px-4 py-1.5">
         <button
           className="h-6 w-6 items-center justify-center"
           type="button"
           onClick={() => router.back()}
         >
-          <IconArrow />
+          <IconArrow className="scale-125" />
         </button>
-        <div className="font-medium leading-6 text-black-primary">{title}</div>
+        <div className="font-semibold leading-6 text-black-primary">
+          {title}
+        </div>
         {menu ? (
           <button
             className="h-6 w-6 items-center justify-center"
             type="button"
             onClick={() => setIsSidebarOpen(true)}
           >
-            <IconHamburger />
+            <IconHamburger className="scale-125" />
           </button>
         ) : (
           <div className="h-6 w-6" />
