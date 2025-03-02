@@ -1,46 +1,51 @@
-import { useEffect } from 'react';
-import { useRouter } from 'next/router';
+'use client';
 
-const useAuthRedirect = (requiredRole?: string) => {
+import { useEffect } from 'react';
+import { useRouter, usePathname } from 'next/navigation';
+
+const useAuthRedirect = () => {
   const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
-    const currentPage = router.pathname;
-    if (currentPage === '/sign-up' || currentPage === '/sign-in') {
-      return;
-    }
+    const currentPage = pathname;
+    const checkCurrentPages =
+      currentPage === '/mobile/sign-up' ||
+      currentPage === '/mobile/sign-in' ||
+      currentPage === '/desktop/login';
 
     const userString = localStorage.getItem('user');
     const user = userString ? JSON.parse(userString) : null;
 
-    if (!user) {
-      if (currentPage.startsWith('/desktop')) {
-        router.replace('/desktop/login');
-      } else if (currentPage.startsWith('/mobile')) {
-        router.replace('/mobile/sign-in');
-      } else {
-        router.replace('/mobile/sign-in');
-      }
-      return;
-    }
+    console.log(currentPage);
 
-    // 역할별로 다르게 처리
-    if (requiredRole === 'DESKTOP-ADMIN') {
-      if (user.role !== 'ADMIN') {
-        router.replace('/desktop/login');
+    if (!user && !checkCurrentPages) {
+      setTimeout(() => {
+        if (currentPage.startsWith('/desktop')) {
+          router.replace('/desktop/login');
+        } else if (currentPage.startsWith('/mobile')) {
+          router.replace('/mobile/sign-in');
+        } else {
+          router.replace('/mobile/sign-in');
+        }
+      }, 0);
+    } else {
+      if (currentPage.startsWith('/desktop') && user.role !== 'ADMIN') {
+        setTimeout(() => {
+          router.replace('/desktop/login');
+        }, 0);
+        return;
       }
-    } else if (requiredRole === 'MOBILE-ADMIN') {
-      if (user.role !== 'ADMIN') {
-        router.replace('/mobile/main');
-      }
-    } else if (requiredRole === 'USER') {
-      if (user.role !== 'USER') {
-        router.replace('/mobile/sign-in');
+
+      if (currentPage.startsWith('/mobile/admin') && user.role !== 'ADMIN') {
+        setTimeout(() => {
+          router.replace('/mobile/main');
+        }, 0);
       }
     }
-  }, [router, requiredRole]);
+  }, [router, pathname]);
 };
 
 export default useAuthRedirect;
