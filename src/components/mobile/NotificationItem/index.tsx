@@ -43,7 +43,7 @@ export default function NotificationItem({
         <IconBell />
       </div>
 
-      <section className="flex w-full flex-col items-start gap-2.5 text-left text-sm font-medium">
+      <section className="flex w-full flex-col items-start gap-2.5 whitespace-pre-line text-left text-sm font-medium">
         <section className="flex w-full justify-between text-xs">
           <div
             className={cn(
@@ -59,7 +59,7 @@ export default function NotificationItem({
           </div>
           <div className="font-medium text-gray-secondary">{createdAt}</div>
         </section>
-        {message}
+        {`${message}`}
       </section>
     </button>
   );
