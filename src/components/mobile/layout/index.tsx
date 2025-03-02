@@ -1,7 +1,7 @@
 'use client';
 
 import useAuthRedirect from '@/hooks/useAuthRedirect';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 
 interface MobileLayoutProps {
   children: React.ReactNode;
