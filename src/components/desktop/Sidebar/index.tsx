@@ -23,7 +23,7 @@ export default function Sidebar({
 }: SidebarProps) {
   return (
     <Sheet>
-      <SheetTrigger className="whitespace-nowrap rounded-md bg-gray-primary px-3 py-1 text-sm text-white-primary">
+      <SheetTrigger className="whitespace-nowrap rounded-md bg-on-kookmin px-3 py-1 text-sm text-white-primary">
         {triggerText}
       </SheetTrigger>
       <SheetContent className="max-w-[40rem]! w-full">
