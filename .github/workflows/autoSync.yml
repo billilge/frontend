@@ -13,13 +13,13 @@ jobs:
       - name: Checkout develop
         uses: actions/checkout@v4
         with:
-          token: ${{ secrets.AUTO_ACTIONS }}
+          token: ${{ secrets.AUTO_SYNC_TOKEN }}
           fetch-depth: 0
           ref: develop
 
       - name: Add remote-url
         run: |
-          git remote add forked-repo https://tnals0924:${{ secrets.AUTO_ACTIONS }}@github.com/tnals0924/billilge-frontend
+          git remote add forked-repo https://tnals0924:${{ secrets.AUTO_SYNC_TOKEN }}@github.com/tnals0924/billilge-frontend
           git config user.name tnals0924
           git config user.email ${{ secrets.EMAIL }}
 
