@@ -31,6 +31,7 @@ export default function UserRentalList() {
     rentalHistories: [],
   });
 
+  const [selectedStatus, setSelectedStatus] = useState<string>('대여 상태');
   const { showDropdown, hideDropdown, isDropdownVisible } = useDropdown();
 
   const [alertState, setAlertState] = useState<{
@@ -88,25 +89,50 @@ export default function UserRentalList() {
   }, []);
 
   // 선택한 상태 필터링(api 호출)
-  const filterRentalItems = async (status: RentalStatus | null) => {
+  const filterRentalItems = async (
+    status: RentalStatus | null,
+    statusName: string,
+  ) => {
     try {
       const data = await getRentalItems(status || undefined); // 필터 적용
       setRentalItems(data);
+      setSelectedStatus(statusName); // 선택한 필터의 이름으로 변경
     } catch (err) {
       console.error('getRentalItems API 오류:', err);
     }
   };
 
   const dropdownActions = [
-    { title: '전체', func: () => filterRentalItems(null) },
-    { title: '승인 대기 중', func: () => filterRentalItems('PENDING') },
-    { title: '대기 취소', func: () => filterRentalItems('CANCEL') },
-    { title: '승인 완료', func: () => filterRentalItems('CONFIRMED') },
-    { title: '대여 불가', func: () => filterRentalItems('REJECTED') },
-    { title: '대여중', func: () => filterRentalItems('RENTAL') },
-    { title: '반납 대기 중', func: () => filterRentalItems('RETURN_PENDING') },
-    { title: '반납 승인', func: () => filterRentalItems('RETURN_CONFIRMED') },
-    { title: '반납 완료', func: () => filterRentalItems('RETURNED') },
+    { title: '전체', func: () => filterRentalItems(null, '대여 상태') },
+    {
+      title: '승인 대기 중',
+      func: () => filterRentalItems('PENDING', '승인 대기 중'),
+    },
+    {
+      title: '대기 취소',
+      func: () => filterRentalItems('CANCEL', '대기 취소'),
+    },
+    {
+      title: '승인 완료',
+      func: () => filterRentalItems('CONFIRMED', '승인 완료'),
+    },
+    {
+      title: '대여 불가',
+      func: () => filterRentalItems('REJECTED', '대여 불가'),
+    },
+    { title: '대여중', func: () => filterRentalItems('RENTAL', '대여중') },
+    {
+      title: '반납 대기 중',
+      func: () => filterRentalItems('RETURN_PENDING', '반납 대기 중'),
+    },
+    {
+      title: '반납 승인',
+      func: () => filterRentalItems('RETURN_CONFIRMED', '반납 승인'),
+    },
+    {
+      title: '반납 완료',
+      func: () => filterRentalItems('RETURNED', '반납 완료'),
+    },
   ];
 
   const handleDropdown = () => {
@@ -123,6 +149,8 @@ export default function UserRentalList() {
 
   const handleAlertConfirm = async () => {
     if (!alertState.item) return;
+
+    handleAlertClose();
 
     try {
       if (alertState.type === 'CANCEL') {
@@ -154,8 +182,6 @@ export default function UserRentalList() {
     } catch (error) {
       console.error('API 요청 중 오류 발생:', error);
     }
-
-    handleAlertClose();
   };
 
   const returnItemsWithKeys = useMemo(
@@ -206,7 +232,7 @@ export default function UserRentalList() {
               className={`${isDropdownVisible && 'pointer-events-none'} relative flex items-center gap-2.5`}
             >
               <div className="text-body-2-normal_semi font-semibold text-black-primary">
-                대여 상태
+                {selectedStatus}
               </div>
               <IconArrow
                 className={
