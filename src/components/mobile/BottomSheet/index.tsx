@@ -6,6 +6,8 @@ import IconHomeIndicator from 'public/assets/icons/bottom-sheet/icon-home-indica
 import Image from 'next/image';
 import { Item } from '@/types/welfareItemType';
 import { requestItems } from '@/apis/rental';
+import Alert from '@/components/mobile/Alert';
+import { AxiosError } from 'axios';
 
 interface BottomSheetProps {
   isOpen: boolean;
@@ -24,10 +26,18 @@ export default function BottomSheet({
   const [errors, setErrors] = useState<{ quantity?: string; time?: string }>(
     {},
   );
+  const [alertState, setAlertState] = useState<{
+    isOpen: boolean;
+  }>({
+    isOpen: false,
+  });
+
+  // 현재 시간 가져오기 (현재 시간 이후로만 입력 가능하도록 하기 위함)
+  const now = new Date();
+  const currentHour = now.getHours();
+  const currentMinute = now.getMinutes();
 
   const maxQuantity = item?.count || 0;
-  const minHour = 10;
-  const maxHour = 17;
 
   // 모달이 열릴 때마다 입력값 초기화
   useEffect(() => {
@@ -36,6 +46,7 @@ export default function BottomSheet({
       setHour('');
       setMinute('');
       setErrors({});
+      setAlertState({ isOpen: false });
     }
   }, [isOpen]);
 
@@ -73,8 +84,15 @@ export default function BottomSheet({
 
     if (Number.isNaN(numHour)) {
       errorMsg = '올바른 시간을 입력해주세요.';
-    } else if (numHour < minHour || numHour >= maxHour) {
-      errorMsg = `대여 가능 시간은 ${minHour}:00 ~ ${maxHour}:00입니다. 다시 입력해주세요.`;
+    } else if (numHour < 10 || numHour >= 17) {
+      errorMsg = '대여 가능 시간은 10:00 ~ 17:00입니다.'; // 10시 ~ 17시 사이가 아닐 경우
+    } else if (numHour < currentHour) {
+      errorMsg = '대여는 현재 시간 이후로만 가능합니다.'; // 현재 시간보다 이전이면 무조건 오류
+    } else if (
+      numHour === currentHour &&
+      parseInt(minute || '0', 10) <= currentMinute
+    ) {
+      errorMsg = '대여는 현재 시간 이후로만 가능합니다.'; // 현재 시각과 같다면, 분이 현재 분보다 커야 함
     }
 
     setErrors((prevErrors) => ({ ...prevErrors, time: errorMsg }));
@@ -91,14 +109,18 @@ export default function BottomSheet({
 
     if (Number.isNaN(numHour) || Number.isNaN(numMinute)) {
       errorMsg = '올바른 시간을 입력해주세요.';
-    } else if (numHour < minHour || numHour >= maxHour) {
-      errorMsg = `대여 가능 시간은 ${minHour}:00 ~ ${maxHour}:00입니다. 다시 입력해주세요.`;
+    } else if (numHour < 10 || numHour >= 17) {
+      errorMsg = '대여 가능 시간은 10:00 ~ 17:00입니다.';
+    } else if (numHour < currentHour) {
+      errorMsg = '대여는 현재 시간 이후로만 가능합니다.';
+    } else if (numHour === currentHour && numMinute <= currentMinute) {
+      errorMsg = '대여는 현재 시간 이후로만 가능합니다.';
     }
 
     setErrors((prevErrors) => ({ ...prevErrors, time: errorMsg }));
   };
 
-  const handleRent = async () => {
+  const handleRent = async (ignoreDuplicate = false) => {
     if (!item) return;
     if (
       errors.quantity ||
@@ -118,28 +140,36 @@ export default function BottomSheet({
           hour: parseInt(hour, 10),
           minute: parseInt(minute, 10),
         },
-        ignoreDuplicate: false,
+        ignoreDuplicate,
       });
 
       console.log(`${item.itemName} 대여가 완료되었습니다!`);
       onCloseAction();
     } catch (error) {
-      console.error('대여 신청 실패:', error);
+      console.error('대여 신청 실패(중복대여 시도 시 409 에러 발생):', error);
+
+      if (error instanceof AxiosError && error.response?.status === 409) {
+        onCloseAction(); // BottomSheet를 먼저 닫고
+        setTimeout(() => {
+          setAlertState({ isOpen: true });
+        }, 300); // Alert창 표시
+      }
     }
   };
 
-  if (!isOpen || !item) return null;
+  if (!item) return null;
 
   return (
-    // eslint-disable-next-line jsx-a11y/click-events-have-key-events
-    <div
-      onClick={handleOverlayClick}
-      className={`fixed inset-0 z-50 flex items-end justify-center bg-black-primary bg-opacity-50 ${
-        isOpen ? 'visible opacity-100' : 'invisible opacity-0'
-      }`}
-    >
+    <>
+      {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events */}
       <div
-        className={`flex w-full transform flex-col items-center gap-5 rounded-t-[20px] bg-white px-[30px] pb-[30px] pt-[10px] transition-transform ${
+        onClick={handleOverlayClick}
+        className={`fixed inset-0 z-40 flex items-end justify-center bg-black-primary bg-opacity-50 transition-opacity ${
+          isOpen ? 'visible opacity-100' : 'invisible opacity-0'
+        }`}
+      />
+      <div
+        className={`fixed bottom-0 z-50 flex w-full max-w-md transform flex-col items-center gap-5 rounded-t-[20px] bg-white px-[30px] pb-[30px] pt-[10px] transition-transform ${
           isOpen ? 'translate-y-0' : 'translate-y-full'
         }`}
       >
@@ -235,7 +265,7 @@ export default function BottomSheet({
           {/* 대여하기 버튼 */}
           <button
             type="button"
-            onClick={handleRent}
+            onClick={() => handleRent(false)}
             className={`w-full rounded-[10px] p-3 text-body-1-normal_semi font-semibold transition ${
               !errors.quantity &&
               !errors.time &&
@@ -259,6 +289,21 @@ export default function BottomSheet({
           </button>
         </div>
       </div>
-    </div>
+
+      {/* 중복 대여 확인 모달 (BottomSheet 닫힌 후 Alert 표시) */}
+      {alertState.isOpen && (
+        <Alert
+          content={'이 물품은 이미 대여 중이에요.\n 그래도 한 번 더 빌릴까요?'}
+          ctaButtonText="대여할게요"
+          otherButtonText="괜찮아요"
+          isMainColor
+          onClickCta={() => {
+            handleRent(true);
+            setAlertState({ isOpen: false });
+          }}
+          onClickOther={() => setAlertState({ isOpen: false })}
+        />
+      )}
+    </>
   );
 }

@@ -33,7 +33,7 @@ export default function Alert({
 
       <div className="relative flex w-[275px] flex-col gap-2.5 rounded-[20px] bg-white-primary p-5">
         {/*  문구 */}
-        <div className="py-5 text-center text-body-1-normal_medi font-medium">
+        <div className="whitespace-pre-line py-5 text-center text-body-1-normal_medi font-medium">
           {content}
         </div>
 
