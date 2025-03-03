@@ -38,6 +38,7 @@ export const getRentalItems = async (
 export const requestItems = async (
   requestData: RentalRequest,
 ): Promise<void> => {
+  // eslint-disable-next-line no-useless-catch
   try {
     await PrivateAxiosInstance.post('/rentals', requestData, {
       headers: {
