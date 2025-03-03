@@ -1,3 +1,5 @@
+import { PaginationProps } from '@/types/paginationType';
+
 export interface Member {
   name: string;
   studentId: string;
@@ -13,7 +15,7 @@ export interface Rentals {
   count?: number; // 물품 수량 (필요시 추가)
 }
 
-export interface RentalsTableProps {
+export interface RentalsTableProps extends PaginationProps {
   rentalHistories: Rentals[];
   headers?: string[];
 }

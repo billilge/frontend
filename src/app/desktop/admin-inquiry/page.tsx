@@ -12,6 +12,7 @@ import {
 } from '@/services/admins';
 import { Admins } from '@/types/admins';
 import { SearchInput } from '@/components/ui/search-input';
+import { PageChangeAction } from '@/types/paginationType';
 import TableComponent from './_components/AdminTable';
 
 export default function PayerInquiryPage() {
@@ -20,18 +21,7 @@ export default function PayerInquiryPage() {
   const [selectedOriginal, setSelectedOriginal] = useState<number[]>([]);
   const [selectedAdded, setSelectedAdded] = useState<number[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
-
-  const mutation = useMutation({
-    mutationFn: addAdmins,
-    onSuccess: () => alert('추가된 관리자 정보가 성공적으로 저장되었습니다.'),
-    onError: () => alert('추가된 관리자 정보 저장에 실패했습니다.'),
-  });
-
-  const deleteMutation = useMutation({
-    mutationFn: deleteAdmins,
-    onSuccess: () => alert('선택된 관리자 정보가 성공적으로 삭제되었습니다.'),
-    onError: () => alert('관리자 정보 삭제에 실패했습니다.'),
-  });
+  const [page, setPage] = useState(1);
 
   const {
     data: originalData = [],
@@ -40,7 +30,7 @@ export default function PayerInquiryPage() {
     refetch,
   } = useQuery({
     queryKey: ['admins'],
-    queryFn: () => getAdmins(searchQuery),
+    queryFn: () => getAdmins(searchQuery, page - 1),
   });
 
   const { data: memberData = [] } = useQuery({
@@ -48,9 +38,32 @@ export default function PayerInquiryPage() {
     queryFn: getMembers,
   });
 
+  const deleteMutation = useMutation({
+    mutationFn: deleteAdmins,
+    onSuccess: () => {
+      alert('선택된 관리자 정보가 성공적으로 삭제되었습니다.');
+      refetch();
+    },
+    onError: () => alert('관리자 정보 삭제에 실패했습니다.'),
+  });
+
+  const mutation = useMutation({
+    mutationFn: addAdmins,
+    onSuccess: () => {
+      alert('추가된 관리자 정보가 성공적으로 저장되었습니다.');
+      refetch();
+    },
+    onError: () => alert('추가된 관리자 정보 저장에 실패했습니다.'),
+  });
+
   useEffect(() => {
     console.log('Updated originalData:', originalData);
   }, [originalData]);
+
+  useEffect(() => {
+    refetch();
+    console.log('refetch:', page);
+  }, [page]);
 
   if (isLoading) return <p>데이터를 불러오는 중...</p>;
   if (originalDataError) console.error('기존 데이터 로드 중 오류 발생');
@@ -68,6 +81,14 @@ export default function PayerInquiryPage() {
       setSelectedAdded([]);
       setIsDeleteModeAdded(false);
     }
+  };
+
+  const handlePageChange = async (pageChangeAction: PageChangeAction) => {
+    console.log('PageChange:', pageChangeAction);
+    setPage((current) =>
+      pageChangeAction === 'NEXT' ? current + 1 : current - 1,
+    );
+    console.log(`page: ${page}`);
   };
 
   const toggleDeleteMode = (mode: 'original' | 'added') => {
@@ -136,6 +157,9 @@ export default function PayerInquiryPage() {
           showCheckboxes={isDeleteModeOriginal}
           selected={selectedOriginal}
           setSelected={setSelectedOriginal}
+          currentPage={page}
+          totalPage={originalData.totalPage}
+          onPageChange={handlePageChange}
         />
         <div className="flex justify-end gap-2">
           <Button

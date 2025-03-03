@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
 import {
   Table,
@@ -12,6 +11,7 @@ import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Item, ItemTableProps } from '@/types/items';
 import Image from 'next/image';
+import { PageChangeAction } from '@/types/paginationType';
 
 export default function ItemTable({
   items = [],
@@ -19,27 +19,31 @@ export default function ItemTable({
   headers = ['로고', '물품명', '소모품', '총 수량', '대여 중'],
   selected,
   setSelected,
+  currentPage = 1,
+  totalPage = 1,
+  onPageChange = (pageAction: PageChangeAction) => {
+    console.log(pageAction);
+  },
 }: ItemTableProps) {
-  const [currentPage, setCurrentPage] = useState(1);
-  const rowsPerPage = 10;
-
-  const totalPages = Math.ceil((items?.length || 0) / rowsPerPage);
-
   // 선택된 항목을 다루는 함수
   const handleSelect = (id: number) => {
     setSelected(id); // 단일 선택으로 변경
   };
 
-  const paginatedData = items
-    ? items.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage)
-    : [];
-
   const handleSelectAll = () => {
-    if (selected === paginatedData[0]?.itemId) {
+    if (selected === items[0]?.itemId) {
       setSelected(0); // 전체 선택 해제
     } else {
-      setSelected(paginatedData[0]?.itemId); // 첫 번째 항목을 선택(전체 선택)
+      setSelected(items[0]?.itemId); // 첫 번째 항목을 선택(전체 선택)
     }
+  };
+
+  const handlePageChangeBtnClick = (
+    event: React.MouseEvent<HTMLElement, MouseEvent>,
+    pageChangeAction: PageChangeAction,
+  ) => {
+    event.preventDefault();
+    onPageChange(pageChangeAction);
   };
 
   return (
@@ -50,7 +54,7 @@ export default function ItemTable({
             {showCheckboxes && (
               <TableHead className="w-10 text-center">
                 <Checkbox
-                  checked={selected === paginatedData[0]?.itemId} // 선택된 첫 번째 항목이 전체 항목과 일치하는지 확인
+                  checked={selected === items[0]?.itemId} // 선택된 첫 번째 항목이 전체 항목과 일치하는지 확인
                   onCheckedChange={handleSelectAll}
                 />
               </TableHead>
@@ -63,9 +67,9 @@ export default function ItemTable({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {paginatedData.length > 0 ? (
-            paginatedData.map((item: Item) => (
-              <TableRow key={item.itemId}>
+          {items.length > 0 ? (
+            items.map((item: Item) => (
+              <TableRow key={`${item.itemId}${item.itemName}`}>
                 {showCheckboxes && (
                   <TableCell className="w-10 text-center">
                     <Checkbox
@@ -111,18 +115,18 @@ export default function ItemTable({
         <div className="flex items-center gap-2">
           <Button
             className="bg-transparent shadow-transparent hover:bg-transparent"
-            disabled={currentPage === 1 || totalPages === 0}
-            onClick={() => setCurrentPage((prev) => prev - 1)}
+            disabled={currentPage === 1}
+            onClick={(event) => handlePageChangeBtnClick(event, 'PREV')}
           >
             <ChevronLeftIcon className="h-10 w-10 cursor-pointer text-black-primary" />
           </Button>
           <span>
-            {totalPages > 0 ? `${currentPage} / ${totalPages}` : '0 / 0'}
+            {currentPage} / {totalPage}
           </span>
           <Button
             className="bg-transparent shadow-transparent hover:bg-transparent"
-            disabled={currentPage === totalPages || totalPages === 0}
-            onClick={() => setCurrentPage((prev) => prev + 1)}
+            disabled={currentPage === totalPage}
+            onClick={(event) => handlePageChangeBtnClick(event, 'NEXT')}
           >
             <ChevronRightIcon className="h-6 w-6 cursor-pointer text-black-primary" />
           </Button>

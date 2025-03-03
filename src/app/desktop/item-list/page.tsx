@@ -1,12 +1,13 @@
 'use client';
 
 import Sidebar from 'src/components/desktop/Sidebar';
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { getItems, addItems, deleteItems } from '@/services/items';
 import { SearchInput } from '@/components/ui/search-input';
 import Image from 'next/image';
+import { PageChangeAction } from '@/types/paginationType';
 import TableComponent from './_components/ItemTable';
 
 export default function ItemListPage() {
@@ -19,6 +20,7 @@ export default function ItemListPage() {
     quantity: '' as number | '',
   });
 
+  const [page, setPage] = useState(1);
   const [isDeleteMode, setIsDeleteMode] = useState(false);
   const [selectedItem, setSelectedItem] = useState<number>(0);
   const [searchQuery, setSearchQuery] = useState('');
@@ -46,7 +48,7 @@ export default function ItemListPage() {
 
   const { data: originalData = [], refetch } = useQuery({
     queryKey: ['items'],
-    queryFn: () => getItems(searchQuery),
+    queryFn: () => getItems(searchQuery, page - 1),
   });
 
   // 물품 추가 핸들러
@@ -82,6 +84,10 @@ export default function ItemListPage() {
     });
   }, [formData, mutation]);
 
+  useEffect(() => {
+    refetch();
+  }, [page]);
+
   // 이미지 파일 선택 핸들러
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -90,6 +96,13 @@ export default function ItemListPage() {
     }
   };
 
+  const handlePageChange = async (pageChangeAction: PageChangeAction) => {
+    console.log('PageChange:', pageChangeAction);
+    setPage((current) =>
+      pageChangeAction === 'NEXT' ? current + 1 : current - 1,
+    );
+    console.log(`page: ${page}`);
+  };
   // 삭제 모드 토글
   const toggleDeleteMode = () => {
     setIsDeleteMode((prev) => !prev);
@@ -203,6 +216,9 @@ export default function ItemListPage() {
           showCheckboxes={isDeleteMode}
           selected={selectedItem}
           setSelected={setSelectedItem}
+          currentPage={page}
+          totalPage={originalData?.totalPage}
+          onPageChange={handlePageChange}
         />
         <div className="flex justify-end gap-2">
           <Button

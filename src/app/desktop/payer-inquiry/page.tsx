@@ -8,6 +8,7 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { getPayer, addPayer, deletePayer } from '@/services/payers';
 import { Payer } from '@/types/payers';
 import { SearchInput } from '@/components/ui/search-input';
+import { PageChangeAction } from '@/types/paginationType';
 import TableComponent from './_components/TableComponent';
 import AddInput from '../../../components/desktop/AddInput';
 
@@ -18,15 +19,27 @@ export default function PayerInquiryPage() {
   const [isDeleteModeAdded, setIsDeleteModeAdded] = useState(false);
   const [selectedOriginal, setSelectedOriginal] = useState<number[]>([]); // 수정: payerId 배열로
   const [selectedAdded, setSelectedAdded] = useState<number[]>([]); // 수정: payerId 배열로
+  const [page, setPage] = useState(1);
 
   const [newStudentId, setNewStudentId] = useState('');
   const [newStudentName, setNewStudentName] = useState('');
+
+  const {
+    data: originalData = [],
+    isError: originalDataError,
+    isLoading,
+    refetch,
+  } = useQuery({
+    queryKey: ['payers'],
+    queryFn: () => getPayer(searchQuery, page - 1),
+  });
 
   const mutation = useMutation({
     mutationFn: addPayer,
     onSuccess: () => {
       alert('추가된 납부자 정보가 성공적으로 저장되었습니다.');
       setAddedData([]);
+      refetch();
     },
     onError: () => {
       alert('추가된 납부자 정보 저장에 실패했습니다.');
@@ -38,25 +51,20 @@ export default function PayerInquiryPage() {
     onSuccess: () => {
       alert('선택된 납부자 정보가 성공적으로 삭제되었습니다.');
       setAddedData([]);
+      refetch();
     },
     onError: () => {
       alert('납부자 정보 삭제에 실패했습니다.');
     },
   });
 
-  const {
-    data: originalData = [],
-    isError: originalDataError,
-    isLoading,
-    refetch,
-  } = useQuery({
-    queryKey: ['payers'],
-    queryFn: () => getPayer(searchQuery),
-  });
-
   useEffect(() => {
     console.log('Updated originalData:', originalData);
   }, [originalData]);
+
+  useEffect(() => {
+    refetch();
+  }, [page]);
 
   if (isLoading) {
     return <p>데이터를 불러오는 중...</p>;
@@ -109,6 +117,14 @@ export default function PayerInquiryPage() {
       setSelectedAdded([]);
       setIsDeleteModeAdded(false);
     }
+  };
+
+  const handlePageChange = async (pageChangeAction: PageChangeAction) => {
+    console.log('PageChange:', pageChangeAction);
+    setPage((current) =>
+      pageChangeAction === 'NEXT' ? current + 1 : current - 1,
+    );
+    console.log(`page: ${page}`);
   };
 
   const toggleDeleteMode = (mode: 'original' | 'added') => {
@@ -198,6 +214,9 @@ export default function PayerInquiryPage() {
           showCheckboxes={isDeleteModeOriginal}
           selected={selectedOriginal}
           setSelected={setSelectedOriginal}
+          currentPage={page}
+          totalPage={originalData.totalPage}
+          onPageChange={handlePageChange}
         />
         <div className="flex justify-end gap-2">
           <Button
