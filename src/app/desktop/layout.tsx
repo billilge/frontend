@@ -1,14 +1,15 @@
-'use client';
-
-import useAuthRedirect from '@/hooks/useAuthRedirect';
 import React from 'react';
+import { Toaster } from 'react-hot-toast';
 
 interface DesktopLayoutProps {
   children: React.ReactNode;
 }
 
 export default function DesktopLayout({ children }: DesktopLayoutProps) {
-  useAuthRedirect();
-
-  return <div>{children}</div>;
+  return (
+    <div>
+      <Toaster />
+      {children}
+    </div>
+  );
 }

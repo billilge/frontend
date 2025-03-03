@@ -1,6 +1,6 @@
 'use client';
 
-import Sidebar from 'src/components/desktop/Sidebar';
+import Sidebar from '@/components/desktop/Sidebar';
 import { useState, useEffect } from 'react';
 import AddStudentId from '@/components/desktop/AddStudentId';
 import { Button } from '@/components/ui/button';
@@ -9,8 +9,9 @@ import { getPayer, addPayer, deletePayer } from '@/services/payers';
 import { Payer } from '@/types/payers';
 import { SearchInput } from '@/components/ui/search-input';
 import { PageChangeAction } from '@/types/paginationType';
+import toast from 'react-hot-toast';
 import TableComponent from './_components/TableComponent';
-import AddInput from '../../../components/desktop/AddInput';
+import AddInput from '../../../../components/desktop/AddInput';
 
 export default function PayerInquiryPage() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -37,24 +38,24 @@ export default function PayerInquiryPage() {
   const mutation = useMutation({
     mutationFn: addPayer,
     onSuccess: () => {
-      alert('추가된 납부자 정보가 성공적으로 저장되었습니다.');
+      toast.success('추가된 납부자 정보가 성공적으로 저장되었습니다.');
       setAddedData([]);
       refetch();
     },
     onError: () => {
-      alert('추가된 납부자 정보 저장에 실패했습니다.');
+      toast.error('추가된 납부자 정보 저장에 실패했습니다.');
     },
   });
 
   const deleteMutation = useMutation({
     mutationFn: deletePayer,
     onSuccess: () => {
-      alert('선택된 납부자 정보가 성공적으로 삭제되었습니다.');
+      toast.success('선택된 납부자 정보가 성공적으로 삭제되었습니다.');
       setAddedData([]);
       refetch();
     },
     onError: () => {
-      alert('납부자 정보 삭제에 실패했습니다.');
+      toast.error('납부자 정보 삭제에 실패했습니다.');
     },
   });
 
@@ -84,13 +85,13 @@ export default function PayerInquiryPage() {
 
   const handleAddStudent = () => {
     if (!newStudentId || !newStudentName) {
-      alert('이름과 학번을 입력해주세요.');
+      toast.error('이름과 학번을 입력해주세요.');
       return;
     }
 
     const studentIdPattern = /^\d{8}$/;
     if (!studentIdPattern.test(newStudentId)) {
-      alert('학번은 8자리 숫자로 입력해야 합니다.');
+      toast.error('학번은 8자리 숫자로 입력해야 합니다.');
       return;
     }
 
@@ -120,11 +121,9 @@ export default function PayerInquiryPage() {
   };
 
   const handlePageChange = async (pageChangeAction: PageChangeAction) => {
-    console.log('PageChange:', pageChangeAction);
     setPage((current) =>
       pageChangeAction === 'NEXT' ? current + 1 : current - 1,
     );
-    console.log(`page: ${page}`);
   };
 
   const toggleDeleteMode = (mode: 'original' | 'added') => {

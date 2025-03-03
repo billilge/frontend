@@ -17,3 +17,8 @@ export interface ItemTableProps extends PaginationProps {
   setSelected: (selectedIds: number) => void;
   handleDelete?: (selectedIds: string) => void;
 }
+
+export const ItemTypeText: Record<string, string> = {
+  CONSUMPTION: '소모품',
+  RENTAL: '대여품',
+} as const;

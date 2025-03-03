@@ -1,6 +1,6 @@
 'use client';
 
-import Sidebar from 'src/components/desktop/Sidebar';
+import Sidebar from '@/components/desktop/Sidebar';
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { useMutation, useQuery } from '@tanstack/react-query';
@@ -13,9 +13,10 @@ import {
 import { Admins } from '@/types/admins';
 import { SearchInput } from '@/components/ui/search-input';
 import { PageChangeAction } from '@/types/paginationType';
+import toast from 'react-hot-toast';
 import TableComponent from './_components/AdminTable';
 
-export default function PayerInquiryPage() {
+export default function AdminInquiryPage() {
   const [isDeleteModeOriginal, setIsDeleteModeOriginal] = useState(false);
   const [, setIsDeleteModeAdded] = useState(false);
   const [selectedOriginal, setSelectedOriginal] = useState<number[]>([]);
@@ -41,19 +42,19 @@ export default function PayerInquiryPage() {
   const deleteMutation = useMutation({
     mutationFn: deleteAdmins,
     onSuccess: () => {
-      alert('선택된 관리자 정보가 성공적으로 삭제되었습니다.');
+      toast.success('선택된 관리자 정보가 성공적으로 삭제되었습니다.');
       refetch();
     },
-    onError: () => alert('관리자 정보 삭제에 실패했습니다.'),
+    onError: () => toast.error('관리자 정보 삭제에 실패했습니다.'),
   });
 
   const mutation = useMutation({
     mutationFn: addAdmins,
     onSuccess: () => {
-      alert('추가된 관리자 정보가 성공적으로 저장되었습니다.');
+      toast.success('추가된 관리자 정보가 성공적으로 저장되었습니다.');
       refetch();
     },
-    onError: () => alert('추가된 관리자 정보 저장에 실패했습니다.'),
+    onError: () => toast.error('추가된 관리자 정보 저장에 실패했습니다.'),
   });
 
   useEffect(() => {
@@ -104,12 +105,12 @@ export default function PayerInquiryPage() {
   const handleApply = () => {
     if (!memberData || !Array.isArray(memberData.members)) {
       console.error('memberData가 올바른 형식이 아닙니다.', memberData);
-      alert('데이터를 불러오는 중입니다. 잠시 후 다시 시도해주세요.');
+      toast.loading('데이터를 불러오는 중입니다. 잠시 후 다시 시도해주세요.');
       return;
     }
 
     if (selectedAdded.length === 0) {
-      alert('추가할 관리자를 선택해주세요.');
+      toast.error('추가할 관리자를 선택해주세요.');
       return;
     }
 

@@ -9,14 +9,14 @@ import {
 } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Item, ItemTableProps } from '@/types/items';
+import { Item, ItemTableProps, ItemTypeText } from '@/types/items';
 import Image from 'next/image';
 import { PageChangeAction } from '@/types/paginationType';
 
 export default function ItemTable({
   items = [],
   showCheckboxes = true,
-  headers = ['로고', '물품명', '소모품', '총 수량', '대여 중'],
+  headers = ['로고', '물품명', '소모품/대여품', '총 수량', '대여 중'],
   selected,
   setSelected,
   currentPage = 1,
@@ -91,7 +91,7 @@ export default function ItemTable({
                   {item.itemName}
                 </TableCell>
                 <TableCell className="w-30 text-center">
-                  {item.itemType ? 'RENTAL' : 'CONSUMPTION'}
+                  {ItemTypeText[item.itemType]}
                 </TableCell>
                 <TableCell className="w-30 text-center">{item.count}</TableCell>
                 <TableCell className="w-30 text-center">
