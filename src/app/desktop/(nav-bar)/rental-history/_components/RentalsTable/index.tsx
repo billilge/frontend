@@ -78,7 +78,9 @@ export default function RentalsTable({
             ))
           ) : (
             <TableRow>
-              <TableCell className="text-center">데이터가 없습니다.</TableCell>
+              <TableCell colSpan={headers.length} className="text-center">
+                데이터가 없습니다.
+              </TableCell>
             </TableRow>
           )}
         </TableBody>
