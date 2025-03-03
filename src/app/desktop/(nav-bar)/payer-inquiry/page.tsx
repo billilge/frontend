@@ -214,7 +214,7 @@ export default function PayerInquiryPage() {
           selected={selectedOriginal}
           setSelected={setSelectedOriginal}
           currentPage={page}
-          totalPage={originalData.totalPage}
+          totalPage={originalData.totalPage > 0 ? originalData.totalPage : 1}
           onPageChange={handlePageChange}
         />
         <div className="flex justify-end gap-2">

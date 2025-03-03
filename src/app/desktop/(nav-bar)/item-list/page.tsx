@@ -26,11 +26,17 @@ export default function ItemListPage() {
   const [selectedItem, setSelectedItem] = useState<number>(0);
   const [searchQuery, setSearchQuery] = useState('');
 
+  const { data: originalData = [], refetch } = useQuery({
+    queryKey: ['items'],
+    queryFn: () => getItems(searchQuery, page - 1),
+  });
+
   const mutation = useMutation({
     mutationFn: addItems,
     onSuccess: () => {
       toast.success('물품 등록이 완료되었습니다.');
       queryClient.invalidateQueries({ queryKey: ['items'] });
+      refetch();
     },
     onError: () => {
       toast.error('물품 등록에 실패했습니다.');
@@ -41,15 +47,11 @@ export default function ItemListPage() {
     mutationFn: deleteItems,
     onSuccess: () => {
       toast.success('선택된 물품이 삭제되었습니다.');
+      refetch();
     },
     onError: () => {
       toast.error('물품 삭제에 실패했습니다.');
     },
-  });
-
-  const { data: originalData = [], refetch } = useQuery({
-    queryKey: ['items'],
-    queryFn: () => getItems(searchQuery, page - 1),
   });
 
   // 물품 추가 핸들러
@@ -216,7 +218,7 @@ export default function ItemListPage() {
           selected={selectedItem}
           setSelected={setSelectedItem}
           currentPage={page}
-          totalPage={originalData?.totalPage}
+          totalPage={originalData?.totalPage > 0 ? originalData?.totalPage : 1}
           onPageChange={handlePageChange}
         />
         <div className="flex justify-end gap-2">

@@ -37,7 +37,7 @@ export default function RentalHistoryPage() {
         <RentalsTable
           rentalHistories={originalData.rentalHistories || []}
           currentPage={page}
-          totalPage={originalData.totalPage}
+          totalPage={originalData.totalPage > 0 ? originalData.totalPage : 1}
           onPageChange={handlePageChange}
         />
       </div>
