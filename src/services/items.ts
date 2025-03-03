@@ -11,7 +11,11 @@ export const getItems = async (searchQuery?: string, page?: number) => {
 };
 
 export const addItems = async (data: FormData) => {
-  const response = await PrivateAxiosInstance.post('/admin/items', data);
+  const response = await PrivateAxiosInstance.post('/admin/items', data, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
   return response.data;
 };
 
