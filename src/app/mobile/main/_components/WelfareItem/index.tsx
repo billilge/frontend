@@ -25,18 +25,27 @@ export default function WelfareItem({
           </div>
           <div className="flex gap-[9px] text-caption-1_midi font-medium text-gray-primary">
             <div>현재 수량</div>
-            {count}
+            <p
+              className={
+                count > 0
+                  ? 'text-caption-1_midi font-medium text-gray-primary'
+                  : 'text-caption-1_midi font-medium text-destructive'
+              }
+            >
+              {count}
+            </p>
           </div>
         </div>
       </div>
-
-      <button
-        type="button"
-        onClick={onRentalClick}
-        className="box-border px-1 py-2.5 text-body-2-normal_semi font-semibold text-return-blue"
-      >
-        대여하기
-      </button>
+      {count > 0 && (
+        <button
+          type="button"
+          onClick={onRentalClick}
+          className="box-border px-1 py-2.5 text-body-2-normal_semi font-semibold text-return-blue"
+        >
+          대여하기
+        </button>
+      )}
     </div>
   );
 }
