@@ -70,7 +70,11 @@ export default function MobileMain() {
       <div className="mt-10 flex flex-col gap-[50px] px-4 pt-4">
         <Carousel
           images={imageUrls}
-          onClick={() => window.open('https://cs.kookmin.ac.kr/')}
+          onClick={() =>
+            window.open(
+              'https://humdrum-puppet-86a.notion.site/1ab22817262580d9971cc464dc8e2c57?pvs=4',
+            )
+          }
         />
 
         <section className="flex flex-col gap-4">
