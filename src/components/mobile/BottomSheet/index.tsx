@@ -32,9 +32,12 @@ export default function BottomSheet({
     isOpen: false,
   });
 
+  // 현재 시간 가져오기 (현재 시간 이후로만 입력 가능하도록 하기 위함)
+  const now = new Date();
+  const currentHour = now.getHours();
+  const currentMinute = now.getMinutes();
+
   const maxQuantity = item?.count || 0;
-  const minHour = 10;
-  const maxHour = 17;
 
   // 모달이 열릴 때마다 입력값 초기화
   useEffect(() => {
@@ -81,8 +84,15 @@ export default function BottomSheet({
 
     if (Number.isNaN(numHour)) {
       errorMsg = '올바른 시간을 입력해주세요.';
-    } else if (numHour < minHour || numHour >= maxHour) {
-      errorMsg = `대여 가능 시간은 ${minHour}:00 ~ ${maxHour}:00입니다. 다시 입력해주세요.`;
+    } else if (numHour < 10 || numHour >= 17) {
+      errorMsg = '대여 가능 시간은 10:00 ~ 17:00입니다.'; // 10시 ~ 17시 사이가 아닐 경우
+    } else if (numHour < currentHour) {
+      errorMsg = '대여는 현재 시간 이후로만 가능합니다.'; // 현재 시간보다 이전이면 무조건 오류
+    } else if (
+      numHour === currentHour &&
+      parseInt(minute || '0', 10) <= currentMinute
+    ) {
+      errorMsg = '대여는 현재 시간 이후로만 가능합니다.'; // 현재 시각과 같다면, 분이 현재 분보다 커야 함
     }
 
     setErrors((prevErrors) => ({ ...prevErrors, time: errorMsg }));
@@ -99,8 +109,12 @@ export default function BottomSheet({
 
     if (Number.isNaN(numHour) || Number.isNaN(numMinute)) {
       errorMsg = '올바른 시간을 입력해주세요.';
-    } else if (numHour < minHour || numHour >= maxHour) {
-      errorMsg = `대여 가능 시간은 ${minHour}:00 ~ ${maxHour}:00입니다. 다시 입력해주세요.`;
+    } else if (numHour < 10 || numHour >= 17) {
+      errorMsg = '대여 가능 시간은 10:00 ~ 17:00입니다.';
+    } else if (numHour < currentHour) {
+      errorMsg = '대여는 현재 시간 이후로만 가능합니다.';
+    } else if (numHour === currentHour && numMinute <= currentMinute) {
+      errorMsg = '대여는 현재 시간 이후로만 가능합니다.';
     }
 
     setErrors((prevErrors) => ({ ...prevErrors, time: errorMsg }));
