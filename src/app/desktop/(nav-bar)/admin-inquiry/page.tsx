@@ -66,7 +66,12 @@ export default function AdminInquiryPage() {
     console.log('refetch:', page);
   }, [page]);
 
-  if (isLoading) return <p>데이터를 불러오는 중...</p>;
+  if (isLoading)
+    return (
+      <div className="flex items-center justify-center">
+        데이터를 불러오는 중...
+      </div>
+    );
   if (originalDataError) console.error('기존 데이터 로드 중 오류 발생');
 
   const handleDeleteData = (mode: 'original' | 'added') => {

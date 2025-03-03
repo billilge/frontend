@@ -68,7 +68,11 @@ export default function PayerInquiryPage() {
   }, [page]);
 
   if (isLoading) {
-    return <p>데이터를 불러오는 중...</p>;
+    return (
+      <div className="flex items-center justify-center">
+        데이터를 불러오는 중...
+      </div>
+    );
   }
 
   if (originalDataError) {
