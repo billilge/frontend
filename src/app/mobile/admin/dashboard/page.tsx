@@ -131,7 +131,7 @@ export default function Dashboard() {
           현재 대기 중인 요청이 없습니다.
         </div>
       ) : (
-        dashboardDetail.map((item) => (
+        dashboardDetail?.map((item) => (
           <DashboardItem
             key={item.rentalHistoryId}
             itemName={item.itemName}

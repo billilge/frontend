@@ -1,3 +1,5 @@
+import { PaginationProps } from '@/types/paginationType';
+
 export interface Payer {
   payerId: number;
   name: string;
@@ -5,7 +7,7 @@ export interface Payer {
   registered: boolean;
 }
 
-export interface TableComponentProps {
+export interface TableComponentProps extends PaginationProps {
   payers: Payer[];
   showCheckboxes?: boolean;
   headers?: string[];

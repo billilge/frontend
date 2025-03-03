@@ -1,11 +1,13 @@
 'use client';
 
 import Sidebar from 'src/components/desktop/Sidebar';
-import Search from '@/components/desktop/Search';
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { getItems, addItems, deleteItems } from '@/services/items';
+import { SearchInput } from '@/components/ui/search-input';
+import Image from 'next/image';
+import { PageChangeAction } from '@/types/paginationType';
 import TableComponent from './_components/ItemTable';
 
 export default function ItemListPage() {
@@ -18,8 +20,10 @@ export default function ItemListPage() {
     quantity: '' as number | '',
   });
 
+  const [page, setPage] = useState(1);
   const [isDeleteMode, setIsDeleteMode] = useState(false);
   const [selectedItem, setSelectedItem] = useState<number>(0);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const mutation = useMutation({
     mutationFn: addItems,
@@ -42,9 +46,9 @@ export default function ItemListPage() {
     },
   });
 
-  const { data: originalData = [] } = useQuery({
+  const { data: originalData = [], refetch } = useQuery({
     queryKey: ['items'],
-    queryFn: getItems,
+    queryFn: () => getItems(searchQuery, page - 1),
   });
 
   // 물품 추가 핸들러
@@ -80,6 +84,10 @@ export default function ItemListPage() {
     });
   }, [formData, mutation]);
 
+  useEffect(() => {
+    refetch();
+  }, [page]);
+
   // 이미지 파일 선택 핸들러
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -88,6 +96,13 @@ export default function ItemListPage() {
     }
   };
 
+  const handlePageChange = async (pageChangeAction: PageChangeAction) => {
+    console.log('PageChange:', pageChangeAction);
+    setPage((current) =>
+      pageChangeAction === 'NEXT' ? current + 1 : current - 1,
+    );
+    console.log(`page: ${page}`);
+  };
   // 삭제 모드 토글
   const toggleDeleteMode = () => {
     setIsDeleteMode((prev) => !prev);
@@ -111,7 +126,12 @@ export default function ItemListPage() {
         <p className="text-2xl">새로운 복지 물품 추가하기</p>
       </div>
       <div className="flex flex-wrap justify-center gap-2">
-        <Search />
+        <SearchInput
+          placeholder="물품 이름을 입력해 주세요"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          onSearch={refetch}
+        />
         <Sidebar triggerText="복지 물품 추가하기" title="복지 물품 추가하기">
           <div className="mt-4 flex flex-col gap-2">
             {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
@@ -163,8 +183,10 @@ export default function ItemListPage() {
             <label className="text-sm font-semibold">이미지 업로드</label>
             <input type="file" accept="image/*" onChange={handleImageChange} />
             {formData.selectedImage && (
-              <img
+              <Image
                 src={URL.createObjectURL(formData.selectedImage)}
+                width={24}
+                height={24}
                 alt="미리보기"
                 className="mt-2 h-32 w-32 rounded-md object-cover"
               />
@@ -194,6 +216,9 @@ export default function ItemListPage() {
           showCheckboxes={isDeleteMode}
           selected={selectedItem}
           setSelected={setSelectedItem}
+          currentPage={page}
+          totalPage={originalData?.totalPage}
+          onPageChange={handlePageChange}
         />
         <div className="flex justify-end gap-2">
           <Button

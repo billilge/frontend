@@ -1,4 +1,4 @@
-import axios, { InternalAxiosRequestConfig } from 'axios';
+import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
 
 const getAccessToken = (): string | null => {
   const token = localStorage.getItem('token');
@@ -24,6 +24,12 @@ const PrivateAxiosInstance = axios.create({
 PrivateAxiosInstance.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
     const token = getAccessToken();
+    if (!token) {
+      window.location.replace('/mobile/sign-in');
+
+      return Promise.reject(new AxiosError('No authentication token found'));
+    }
+
     const newConfig = { ...config, withCredentials: false };
     if (token) {
       newConfig.headers.set('Authorization', `Bearer ${token}`);

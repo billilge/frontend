@@ -1,60 +1,70 @@
 'use client';
 
 import Sidebar from 'src/components/desktop/Sidebar';
-import Search from '@/components/desktop/Search';
 import { useState, useEffect } from 'react';
 import AddStudentId from '@/components/desktop/AddStudentId';
 import { Button } from '@/components/ui/button';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { getPayer, addPayer, deletePayer } from '@/services/payers';
 import { Payer } from '@/types/payers';
+import { SearchInput } from '@/components/ui/search-input';
+import { PageChangeAction } from '@/types/paginationType';
 import TableComponent from './_components/TableComponent';
 import AddInput from '../../../components/desktop/AddInput';
 
 export default function PayerInquiryPage() {
+  const [searchQuery, setSearchQuery] = useState('');
   const [addedData, setAddedData] = useState<Payer[]>([]);
   const [isDeleteModeOriginal, setIsDeleteModeOriginal] = useState(false);
   const [isDeleteModeAdded, setIsDeleteModeAdded] = useState(false);
   const [selectedOriginal, setSelectedOriginal] = useState<number[]>([]); // 수정: payerId 배열로
   const [selectedAdded, setSelectedAdded] = useState<number[]>([]); // 수정: payerId 배열로
+  const [page, setPage] = useState(1);
 
   const [newStudentId, setNewStudentId] = useState('');
   const [newStudentName, setNewStudentName] = useState('');
+
+  const {
+    data: originalData = [],
+    isError: originalDataError,
+    isLoading,
+    refetch,
+  } = useQuery({
+    queryKey: ['payers'],
+    queryFn: () => getPayer(searchQuery, page - 1),
+  });
 
   const mutation = useMutation({
     mutationFn: addPayer,
     onSuccess: () => {
       alert('추가된 납부자 정보가 성공적으로 저장되었습니다.');
       setAddedData([]);
+      refetch();
     },
     onError: () => {
       alert('추가된 납부자 정보 저장에 실패했습니다.');
     },
   });
 
-  const deletemutation = useMutation({
+  const deleteMutation = useMutation({
     mutationFn: deletePayer,
     onSuccess: () => {
       alert('선택된 납부자 정보가 성공적으로 삭제되었습니다.');
       setAddedData([]);
+      refetch();
     },
     onError: () => {
       alert('납부자 정보 삭제에 실패했습니다.');
     },
   });
 
-  const {
-    data: originalData = [],
-    isError: originalDataError,
-    isLoading,
-  } = useQuery({
-    queryKey: ['payers'],
-    queryFn: getPayer,
-  });
-
   useEffect(() => {
     console.log('Updated originalData:', originalData);
   }, [originalData]);
+
+  useEffect(() => {
+    refetch();
+  }, [page]);
 
   if (isLoading) {
     return <p>데이터를 불러오는 중...</p>;
@@ -95,7 +105,7 @@ export default function PayerInquiryPage() {
   const handleDeleteData = (mode: 'original' | 'added') => {
     if (mode === 'original') {
       // payerId 배열을 직접 전달
-      deletemutation.mutate(selectedOriginal); // payerId 배열을 전달
+      deleteMutation.mutate(selectedOriginal); // payerId 배열을 전달
       setSelectedOriginal([]);
       setIsDeleteModeOriginal(false);
     } else {
@@ -107,6 +117,14 @@ export default function PayerInquiryPage() {
       setSelectedAdded([]);
       setIsDeleteModeAdded(false);
     }
+  };
+
+  const handlePageChange = async (pageChangeAction: PageChangeAction) => {
+    console.log('PageChange:', pageChangeAction);
+    setPage((current) =>
+      pageChangeAction === 'NEXT' ? current + 1 : current - 1,
+    );
+    console.log(`page: ${page}`);
   };
 
   const toggleDeleteMode = (mode: 'original' | 'added') => {
@@ -131,7 +149,12 @@ export default function PayerInquiryPage() {
         <p className="text-2xl">학생회비 납부자 조회하기</p>
       </div>
       <div className="flex flex-wrap justify-center gap-2">
-        <Search />
+        <SearchInput
+          placeholder="이름을 입력해 주세요"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          onSearch={refetch}
+        />
         <Sidebar
           triggerText="새로운 납부자 추가하기"
           title="학생회비 납부자 추가하기"
@@ -191,6 +214,9 @@ export default function PayerInquiryPage() {
           showCheckboxes={isDeleteModeOriginal}
           selected={selectedOriginal}
           setSelected={setSelectedOriginal}
+          currentPage={page}
+          totalPage={originalData.totalPage}
+          onPageChange={handlePageChange}
         />
         <div className="flex justify-end gap-2">
           <Button

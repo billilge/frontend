@@ -2,7 +2,7 @@
 
 import { useEffect, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { decode } from 'js-base64';
+import { handleLoginSuccess } from '@/utils/loginHandler';
 
 function CallbackContent() {
   const searchParams = useSearchParams();
@@ -27,20 +27,7 @@ function CallbackContent() {
         break;
       case 'SUCCESS':
       default:
-        if (accessToken) {
-          const payload = accessToken.split('.')[1] || '';
-          const decodedPayload = decode(payload);
-          const payloadObject = JSON.parse(decodedPayload);
-
-          const tokenRole = payloadObject.role;
-          const tokenName = payloadObject.name;
-          const tokenId = payloadObject.sub;
-
-          const userInfo = { name: tokenName, id: tokenId, role: tokenRole };
-
-          localStorage.setItem('token', accessToken);
-          localStorage.setItem('user', JSON.stringify(userInfo));
-        }
+        handleLoginSuccess(accessToken);
         router.replace('/mobile/main');
         break;
     }
