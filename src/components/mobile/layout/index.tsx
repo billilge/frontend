@@ -1,5 +1,6 @@
 'use client';
 
+import useAuthRedirect from '@/hooks/useAuthRedirect';
 import React, { useEffect } from 'react';
 
 interface MobileLayoutProps {
@@ -7,6 +8,8 @@ interface MobileLayoutProps {
 }
 
 export default function MobileLayout({ children }: MobileLayoutProps) {
+  useAuthRedirect();
+
   useEffect(() => {
     // 기존 body 배경색 저장
     const originalBgColor = document.body.style.backgroundColor;
