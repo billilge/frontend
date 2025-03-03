@@ -51,7 +51,7 @@ export default function MainHeader() {
           >
             <IconAlarm />
             {notificationCount > 0 && (
-              <div className="absolute -right-0.5 -top-0.5 flex h-[13px] w-[13px] items-center justify-center rounded-full bg-warning text-caption-2_midi text-white-primary">
+              <div className="absolute -top-0.5 left-2.5 flex h-[13px] w-fit min-w-[13px] items-center justify-center rounded-full bg-warning px-0.5 text-caption-2_midi text-white-primary">
                 {notificationCount}
               </div>
             )}
