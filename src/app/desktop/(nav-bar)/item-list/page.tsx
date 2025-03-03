@@ -1,6 +1,6 @@
 'use client';
 
-import Sidebar from 'src/components/desktop/Sidebar';
+import Sidebar from '@/components/desktop/Sidebar';
 import { useState, useCallback, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -8,6 +8,7 @@ import { getItems, addItems, deleteItems } from '@/services/items';
 import { SearchInput } from '@/components/ui/search-input';
 import Image from 'next/image';
 import { PageChangeAction } from '@/types/paginationType';
+import toast from 'react-hot-toast';
 import TableComponent from './_components/ItemTable';
 
 export default function ItemListPage() {
@@ -28,21 +29,21 @@ export default function ItemListPage() {
   const mutation = useMutation({
     mutationFn: addItems,
     onSuccess: () => {
-      alert('물품 등록이 완료되었습니다.');
+      toast.success('물품 등록이 완료되었습니다.');
       queryClient.invalidateQueries({ queryKey: ['items'] });
     },
     onError: () => {
-      alert('물품 등록에 실패했습니다.');
+      toast.error('물품 등록에 실패했습니다.');
     },
   });
 
   const deleteMutation = useMutation({
     mutationFn: deleteItems,
     onSuccess: () => {
-      alert('선택된 물품이 삭제되었습니다.');
+      toast.success('선택된 물품이 삭제되었습니다.');
     },
     onError: () => {
-      alert('물품 삭제에 실패했습니다.');
+      toast.error('물품 삭제에 실패했습니다.');
     },
   });
 
@@ -56,7 +57,7 @@ export default function ItemListPage() {
     const { itemName, quantity, selectedImage, isConsumable } = formData;
 
     if (!itemName || quantity === '' || quantity <= 0) {
-      alert('모든 정보를 입력하세요.');
+      toast.error('모든 정보를 입력하세요.');
       return;
     }
 
@@ -97,11 +98,9 @@ export default function ItemListPage() {
   };
 
   const handlePageChange = async (pageChangeAction: PageChangeAction) => {
-    console.log('PageChange:', pageChangeAction);
     setPage((current) =>
       pageChangeAction === 'NEXT' ? current + 1 : current - 1,
     );
-    console.log(`page: ${page}`);
   };
   // 삭제 모드 토글
   const toggleDeleteMode = () => {
@@ -112,7 +111,7 @@ export default function ItemListPage() {
   // 물품 삭제 핸들러
   const handleDeleteItem = () => {
     if (selectedItem === null) {
-      alert('삭제할 물품을 선택해 주세요.');
+      toast.error('삭제할 물품을 선택해 주세요.');
       return;
     }
 

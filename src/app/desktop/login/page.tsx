@@ -6,6 +6,7 @@ import axios from 'axios';
 import { postAdminLogin } from '@/services/admins';
 import { handleLoginSuccess } from '@/utils/loginHandler';
 import { useRouter } from 'next/navigation';
+import toast from 'react-hot-toast';
 
 export default function Login() {
   const router = useRouter();
@@ -14,50 +15,76 @@ export default function Login() {
 
   const validateLoginForm = (studentId: string, password: string) => {
     if (!studentId) {
-      alert('학번을 입력해 주세요!');
+      toast.error('학번을 입력해 주세요!');
       return false;
     }
 
     if (!password) {
-      alert('비밀번호를 입력해 주세요!');
+      toast.error('비밀번호를 입력해 주세요!');
       return false;
     }
 
     const idRegex = /^\d{8}$/;
     if (!idRegex.test(studentId)) {
-      alert('학번은 숫자 8자리여야 합니다.');
+      toast.error('학번은 숫자 8자리여야 합니다.');
       return false;
     }
 
     return true;
   };
 
-  const handleAdminLogin = async () => {
+  const handleAdminLogin = async (
+    event: React.MouseEvent<HTMLElement, MouseEvent>,
+  ) => {
+    event.preventDefault();
+
     const studentId = studentIdRef?.current?.value || '';
     const password = passwordRef?.current?.value || '';
 
     if (!validateLoginForm(studentId, password)) return;
 
-    try {
-      const data = await postAdminLogin({
-        studentId,
-        password,
-      });
+    await toast.promise(
+      postAdminLogin({ studentId, password }).then((data) => {
+        handleLoginSuccess(data.accessToken);
+        router.push('/desktop/rental-history');
+      }),
+      {
+        loading: '로그인 중...',
+        success: '로그인에 성공했습니다!',
+        error: (error) => {
+          if (axios.isAxiosError(error)) {
+            const errorResponse = error.response?.data;
 
-      handleLoginSuccess(data.accessToken);
-      router.push('/desktop/rental-history');
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        const errorResponse = error.response?.data;
+            if (errorResponse) {
+              return errorResponse.message;
+            }
+          }
 
-        if (!errorResponse) {
-          alert('관리자 로그인 중 오류가 발생했습니다!');
-          return;
-        }
+          return '관리자 로그인 중 오류가 발생했습니다!';
+        },
+      },
+    );
 
-        alert(errorResponse.message);
-      }
-    }
+    // try {
+    //   const data = await postAdminLogin({
+    //     studentId,
+    //     password,
+    //   });
+    //
+    //   handleLoginSuccess(data.accessToken);
+    //   router.push('/desktop/rental-history');
+    // } catch (error) {
+    //   if (axios.isAxiosError(error)) {
+    //     const errorResponse = error.response?.data;
+    //
+    //     if (!errorResponse) {
+    //       toast.error('관리자 로그인 중 오류가 발생했습니다!');
+    //       return;
+    //     }
+    //
+    //     toast.error(errorResponse.message);
+    //   }
+    // }
   };
 
   return (

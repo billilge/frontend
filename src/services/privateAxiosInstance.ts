@@ -25,7 +25,16 @@ PrivateAxiosInstance.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
     const token = getAccessToken();
     if (!token) {
-      window.location.replace('/mobile/sign-in');
+      const redirectPages = ['/desktop/login', '/mobile/sign-in'];
+      const { pathname } = window.location;
+
+      if (!redirectPages.includes(pathname)) {
+        window.location.replace(
+          pathname.startsWith('/desktop')
+            ? '/desktop/login'
+            : '/mobile/sign-in',
+        );
+      }
 
       return Promise.reject(new AxiosError('No authentication token found'));
     }
