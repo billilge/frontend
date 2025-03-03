@@ -128,18 +128,19 @@ export default function BottomSheet({
     }
   };
 
-  if (!isOpen || !item) return null;
+  if (!item) return null;
 
   return (
-    // eslint-disable-next-line jsx-a11y/click-events-have-key-events
-    <div
-      onClick={handleOverlayClick}
-      className={`fixed inset-0 z-50 flex items-end justify-center bg-black-primary bg-opacity-50 ${
-        isOpen ? 'visible opacity-100' : 'invisible opacity-0'
-      }`}
-    >
+    <>
+      {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events */}
       <div
-        className={`flex w-full max-w-md transform flex-col items-center gap-5 rounded-t-[20px] bg-white px-[30px] pb-[30px] pt-[10px] transition-transform ${
+        onClick={handleOverlayClick}
+        className={`fixed inset-0 z-40 flex items-end justify-center bg-black-primary bg-opacity-50 transition-opacity ${
+          isOpen ? 'visible opacity-100' : 'invisible opacity-0'
+        }`}
+      />
+      <div
+        className={`fixed bottom-0 z-50 flex w-full max-w-md transform flex-col items-center gap-5 rounded-t-[20px] bg-white px-[30px] pb-[30px] pt-[10px] transition-transform ${
           isOpen ? 'translate-y-0' : 'translate-y-full'
         }`}
       >
@@ -259,6 +260,6 @@ export default function BottomSheet({
           </button>
         </div>
       </div>
-    </div>
+    </>
   );
 }
