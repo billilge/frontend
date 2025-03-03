@@ -6,6 +6,8 @@ import IconHomeIndicator from 'public/assets/icons/bottom-sheet/icon-home-indica
 import Image from 'next/image';
 import { Item } from '@/types/welfareItemType';
 import { requestItems } from '@/apis/rental';
+import Alert from '@/components/mobile/Alert';
+import { AxiosError } from 'axios';
 
 interface BottomSheetProps {
   isOpen: boolean;
@@ -24,6 +26,11 @@ export default function BottomSheet({
   const [errors, setErrors] = useState<{ quantity?: string; time?: string }>(
     {},
   );
+  const [alertState, setAlertState] = useState<{
+    isOpen: boolean;
+  }>({
+    isOpen: false,
+  });
 
   const maxQuantity = item?.count || 0;
   const minHour = 10;
@@ -36,6 +43,7 @@ export default function BottomSheet({
       setHour('');
       setMinute('');
       setErrors({});
+      setAlertState({ isOpen: false });
     }
   }, [isOpen]);
 
@@ -98,7 +106,7 @@ export default function BottomSheet({
     setErrors((prevErrors) => ({ ...prevErrors, time: errorMsg }));
   };
 
-  const handleRent = async () => {
+  const handleRent = async (ignoreDuplicate = false) => {
     if (!item) return;
     if (
       errors.quantity ||
@@ -118,13 +126,20 @@ export default function BottomSheet({
           hour: parseInt(hour, 10),
           minute: parseInt(minute, 10),
         },
-        ignoreDuplicate: false,
+        ignoreDuplicate,
       });
 
       console.log(`${item.itemName} 대여가 완료되었습니다!`);
       onCloseAction();
     } catch (error) {
-      console.error('대여 신청 실패:', error);
+      console.error('대여 신청 실패(중복대여 시도 시 409 에러 발생):', error);
+
+      if (error instanceof AxiosError && error.response?.status === 409) {
+        onCloseAction(); // BottomSheet를 먼저 닫고
+        setTimeout(() => {
+          setAlertState({ isOpen: true });
+        }, 300); // Alert창 표시
+      }
     }
   };
 
@@ -236,7 +251,7 @@ export default function BottomSheet({
           {/* 대여하기 버튼 */}
           <button
             type="button"
-            onClick={handleRent}
+            onClick={() => handleRent(false)}
             className={`w-full rounded-[10px] p-3 text-body-1-normal_semi font-semibold transition ${
               !errors.quantity &&
               !errors.time &&
@@ -260,6 +275,21 @@ export default function BottomSheet({
           </button>
         </div>
       </div>
+
+      {/* 중복 대여 확인 모달 (BottomSheet 닫힌 후 Alert 표시) */}
+      {alertState.isOpen && (
+        <Alert
+          content={'이 물품은 이미 대여 중이에요.\n 그래도 한 번 더 빌릴까요?'}
+          ctaButtonText="대여할게요"
+          otherButtonText="괜찮아요"
+          isMainColor
+          onClickCta={() => {
+            handleRent(true);
+            setAlertState({ isOpen: false });
+          }}
+          onClickOther={() => setAlertState({ isOpen: false })}
+        />
+      )}
     </>
   );
 }

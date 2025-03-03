@@ -45,7 +45,8 @@ export const requestItems = async (
       },
     });
   } catch (error) {
-    throw new Error(`복지 물품 신청에 실패했습니다: ${error}`);
+    // 중복 대여를 위해 에러를 그냥 throw 함
+    throw error;
   }
 };
 
