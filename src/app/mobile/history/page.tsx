@@ -124,6 +124,8 @@ export default function UserRentalList() {
   const handleAlertConfirm = async () => {
     if (!alertState.item) return;
 
+    handleAlertClose();
+
     try {
       if (alertState.type === 'CANCEL') {
         await cancelRentalItems(alertState.item.rentalHistoryId);
@@ -154,8 +156,6 @@ export default function UserRentalList() {
     } catch (error) {
       console.error('API 요청 중 오류 발생:', error);
     }
-
-    handleAlertClose();
   };
 
   const returnItemsWithKeys = useMemo(
