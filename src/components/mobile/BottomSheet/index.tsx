@@ -139,7 +139,7 @@ export default function BottomSheet({
       }`}
     >
       <div
-        className={`flex w-full transform flex-col items-center gap-5 rounded-t-[20px] bg-white px-[30px] pb-[30px] pt-[10px] transition-transform ${
+        className={`flex w-full max-w-md transform flex-col items-center gap-5 rounded-t-[20px] bg-white px-[30px] pb-[30px] pt-[10px] transition-transform ${
           isOpen ? 'translate-y-0' : 'translate-y-full'
         }`}
       >
