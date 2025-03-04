@@ -4,8 +4,8 @@ export interface Item {
   itemId: number;
   itemName: string;
   itemType: string;
-  count: number;
-  renterCount: number;
+  count?: number;
+  renterCount?: number;
   imageUrl: string;
 }
 
