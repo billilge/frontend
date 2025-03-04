@@ -98,6 +98,7 @@ export default function SignIn() {
   const handleAlertConfirm = async () => {
     handleInAppBrowser();
     copyToClipboard('https://billilge.site/mobile/sign-in');
+    setAlertState(false);
   };
 
   useEffect(() => {
