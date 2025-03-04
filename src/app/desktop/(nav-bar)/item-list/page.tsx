@@ -121,6 +121,12 @@ export default function ItemListPage() {
     setSelectedItem(0);
   };
 
+  const handleSearch = async () => {
+    await refetch().then(() => {
+      setPage(1);
+    });
+  };
+
   return (
     <div className="flex flex-col justify-center gap-8 px-4 md:px-16 lg:px-64">
       <div className="pt-20 text-center">
@@ -131,7 +137,7 @@ export default function ItemListPage() {
           placeholder="물품 이름을 입력해 주세요"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          onSearch={refetch}
+          onSearch={handleSearch}
         />
         <Sidebar triggerText="복지 물품 추가하기" title="복지 물품 추가하기">
           <div className="mt-4 flex flex-col gap-2">
