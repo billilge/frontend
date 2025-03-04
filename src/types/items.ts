@@ -16,6 +16,7 @@ export interface ItemTableProps extends PaginationProps {
   selected: number;
   setSelected: (selectedIds: number) => void;
   handleDelete?: (selectedIds: string) => void;
+  onEdit?: (selectedId: number) => void;
 }
 
 export const ItemTypeText: Record<string, string> = {
