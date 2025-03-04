@@ -59,16 +59,45 @@ export default function SignIn() {
         /inapp|KAKAOTALK|FBAV|Line|Instagram|wadiz|kakaostory|band|twitter|DaumApps|everytimeapp|whatsApp|electron|aliapp|zumapp|iphone.*whale|android.*whale|DaumDevice\/mobile|FB_IAB|FB4A|FBAN|FBIOS|FBSS|trill/i,
       )
     ) {
-      console.log('인앱 브라우저');
       handleAlertOpen();
     } else {
       window.location.href = `${process.env.NEXT_PUBLIC_API_BASE_URI}/oauth2/authorization/google`;
     }
   };
 
-  const handleAlertConfirm = () => {
+  const alertConfirmText =
+    '인앱 브라우저는 구글 로그인을 \n사용할 수 없습니다.';
+
+  const copyToClipboard = async (text: string) => {
+    if (navigator.clipboard && window.isSecureContext) {
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch (e) {
+        alert('복사에 실패했습니다. 다시 시도해주세요.');
+      }
+    } else {
+      // navigator.clipboard가 사용 불가능한 경우
+      const textArea = document.createElement('textarea');
+      textArea.value = text;
+      textArea.style.position = 'fixed';
+      textArea.style.left = '-9999px';
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+
+      try {
+        document.execCommand('copy');
+      } catch (e) {
+        alert('복사에 실패했습니다. 다시 시도해주세요.');
+      } finally {
+        document.body.removeChild(textArea);
+      }
+    }
+  };
+
+  const handleAlertConfirm = async () => {
     handleInAppBrowser();
-    navigator.clipboard.writeText('https://billilge.site/mobile/sign-in');
+    copyToClipboard('https://billilge.site/mobile/sign-in');
   };
 
   useEffect(() => {
@@ -97,8 +126,9 @@ export default function SignIn() {
       </button>
       {alertState && (
         <Alert
-          content="인앱 브라우저는 구글 로그인을 사용할 수 없습니다."
-          ctaButtonText="url 복사하기"
+          content={alertConfirmText}
+          isMainColor
+          ctaButtonText="URL 복사하기"
           otherButtonText="닫기"
           onClickCta={handleAlertConfirm}
           onClickOther={handleAlertClose}
