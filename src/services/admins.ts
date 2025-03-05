@@ -11,8 +11,12 @@ export const getAdmins = async (searchQuery?: string, page?: number) => {
   return response.data;
 };
 
-export const getMembers = async () => {
-  const response = await PrivateAxiosInstance.get('/admin/members');
+export const getMembers = async (page?: number) => {
+  const response = await PrivateAxiosInstance.get('/admin/members', {
+    params: {
+      pageNo: page || 0,
+    },
+  });
   return response.data;
 };
 

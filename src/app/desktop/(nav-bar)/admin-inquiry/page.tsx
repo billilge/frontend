@@ -23,6 +23,7 @@ export default function AdminInquiryPage() {
   const [selectedAdded, setSelectedAdded] = useState<number[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [page, setPage] = useState(1);
+  const [sideBarPage, setSideBarPage] = useState(1);
 
   const {
     data: originalData = [],
@@ -34,9 +35,9 @@ export default function AdminInquiryPage() {
     queryFn: () => getAdmins(searchQuery, page - 1),
   });
 
-  const { data: memberData = [] } = useQuery({
+  const { data: memberData = [], refetch: refetchSideBar } = useQuery({
     queryKey: ['members'],
-    queryFn: getMembers,
+    queryFn: () => getMembers(sideBarPage - 1),
   });
 
   const deleteMutation = useMutation({
@@ -65,6 +66,11 @@ export default function AdminInquiryPage() {
     refetch();
     console.log('refetch:', page);
   }, [page]);
+
+  useEffect(() => {
+    refetchSideBar();
+    console.log('refetchSideBar:', sideBarPage);
+  }, [sideBarPage]);
 
   if (isLoading)
     return (
@@ -95,6 +101,15 @@ export default function AdminInquiryPage() {
       pageChangeAction === 'NEXT' ? current + 1 : current - 1,
     );
     console.log(`page: ${page}`);
+  };
+
+  const handleSideBarPageChange = async (
+    pageChangeAction: PageChangeAction,
+  ) => {
+    setSideBarPage((current) =>
+      pageChangeAction === 'NEXT' ? current + 1 : current - 1,
+    );
+    console.log(`page: ${sideBarPage}`);
   };
 
   const toggleDeleteMode = (mode: 'original' | 'added') => {
@@ -153,6 +168,9 @@ export default function AdminInquiryPage() {
                 showCheckboxes
                 selected={selectedAdded}
                 setSelected={setSelectedAdded}
+                currentPage={sideBarPage}
+                totalPage={memberData.totalPage}
+                onPageChange={handleSideBarPageChange}
               />
             </div>
           </div>
