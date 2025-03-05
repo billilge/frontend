@@ -7,6 +7,7 @@ import IconUserAlarm from 'public/assets/icons/side-menu/user-alarm.svg';
 import IconAdminDashboard from 'public/assets/icons/side-menu/admin-dashboard.svg';
 import IconAdminAlarm from 'public/assets/icons/side-menu/admin-alarm.svg';
 import IconLogout from 'public/assets/icons/side-menu/logout.svg';
+import IconPrivacyPolicy from 'public/assets/icons/side-menu/privacy-policy.svg';
 import { useRouter } from 'next/navigation';
 
 interface SidebarProps {
@@ -115,6 +116,16 @@ export default function Sidebar({
 
           {/* 로그아웃 버튼 */}
           <ul className="text-body-2-normal_semi font-semibold text-black-primary">
+            <li key="privacy-policy">
+              <button
+                type="button"
+                onClick={() => router.push('/mobile/privacy-policy')}
+                className="mt-3 flex w-full items-center gap-3 rounded p-2 hover:bg-gray-100"
+              >
+                <IconPrivacyPolicy />
+                개인정보 이용약관
+              </button>
+            </li>
             <li key="logout">
               <button
                 type="button"
