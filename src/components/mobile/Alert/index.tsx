@@ -1,3 +1,5 @@
+import { handleTouchStart, handleTouchEnd } from '@/utils/handleTouch';
+
 interface AlertProps {
   content: string; // alert창 문구
   ctaButtonText: string; // 오른쪽 버튼에 들어갈 문구
@@ -20,7 +22,7 @@ export default function Alert({
     : 'bg-warning text-white-primary'; // 빨간 버튼 (신청 취소)
 
   const defalutButtonClass =
-    'text-body-1-normal_semi w-[108px] rounded-[10px] py-[9px] font-medium outline-none';
+    'text-body-1-normal_semi w-[108px] rounded-[10px] py-[9px] font-medium outline-none ';
 
   return (
     <div className="fixed inset-0 z-20 flex items-center justify-center">
@@ -42,13 +44,17 @@ export default function Alert({
           <button
             type="button"
             onClick={onClickOther}
-            className={`${defalutButtonClass} bg-gray-tertiary text-gray-secondary`}
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
+            className={`${defalutButtonClass} bg-gray-tertiary text-gray-secondary transition-all`}
           >
             {otherButtonText}
           </button>
           <button
             type="button"
             onClick={onClickCta}
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
             className={` ${defalutButtonClass} ${ctaButtonClass}`}
           >
             {ctaButtonText}
