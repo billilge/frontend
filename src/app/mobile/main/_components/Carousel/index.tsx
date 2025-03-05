@@ -27,9 +27,9 @@ export default function Carousel({ images }: CarouselProps) {
         className="rounded-lg shadow-lg"
       >
         {images.map((item, index) => (
-          // eslint-disable-next-line react/no-array-index-key
-          <SwiperSlide key={index}>
+          <SwiperSlide key={item.imgUrl}>
             {/* 이미지의 크기가 맞지 않을 때 화면을 꽉채우게 할건지, 비율을 유지할 건지 정하기 */}
+            {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-noninteractive-element-interactions */}
             <img
               src={item.imgUrl}
               alt={`Slide ${index + 1}`}
