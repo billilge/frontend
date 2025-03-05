@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import convertTime from '@/utils/convertTime';
+import { handleTouchStart, handleTouchEnd } from '@/utils/handleTouch';
 import { DashboardProps } from '@/types/dashboardType';
 
 export default function DashboardItem({
@@ -69,6 +70,8 @@ export default function DashboardItem({
           <button
             type="button"
             onClick={handleCancelBtn}
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
             className="w-14 text-return-red"
           >
             대여 취소
@@ -79,6 +82,8 @@ export default function DashboardItem({
         <button
           type="button"
           onClick={handleApproveBtn}
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
           className="text-return-blue"
         >
           {RentalApproveBtnText[status]}
