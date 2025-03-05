@@ -53,10 +53,15 @@ export default function MobileMain() {
     setSearchQuery(e.target.value);
   };
 
-  const imageUrls = [
-    '/assets/images/test.png',
-    '/assets/images/test.png',
-    '/assets/images/test.png',
+  const images = [
+    {
+      imgUrl: '/assets/images/carousel/pwa-notion.png',
+      link: 'https://humdrum-puppet-86a.notion.site/1ab22817262580d9971cc464dc8e2c57?pvs=4',
+    },
+    {
+      imgUrl: '/assets/images/carousel/google-form.png',
+      link: 'https://docs.google.com/forms/d/e/1FAIpQLSeEi5wC3K1e-ekgudEu75OFmQEgXk474WenokYGEbJzyan3IA/viewform?usp=dialog',
+    },
   ];
 
   const handleOpenBottomSheet = (item: Item) => {
@@ -68,14 +73,7 @@ export default function MobileMain() {
     <MobileLayout>
       <MainHeader />
       <div className="mt-10 flex flex-col gap-[50px] px-4 pt-4">
-        <Carousel
-          images={imageUrls}
-          onClick={() =>
-            window.open(
-              'https://humdrum-puppet-86a.notion.site/1ab22817262580d9971cc464dc8e2c57?pvs=4',
-            )
-          }
-        />
+        <Carousel images={images} />
 
         <section className="flex flex-col gap-4">
           <div className="flex items-center justify-between">
