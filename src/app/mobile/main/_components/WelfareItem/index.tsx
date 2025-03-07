@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import { handleTouchStart, handleTouchEnd } from '@/utils/handleTouch';
 
 interface WelfareItemProps {
   itemName: string;
@@ -41,6 +42,8 @@ export default function WelfareItem({
         <button
           type="button"
           onClick={onRentalClick}
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
           className="box-border px-1 py-2.5 text-body-2-normal_semi font-semibold text-return-blue"
         >
           대여하기
