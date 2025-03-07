@@ -5,9 +5,15 @@ interface AddInputProps {
   value: string;
   onClick: () => void;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onKeyInput: (event: React.KeyboardEvent<HTMLInputElement>) => void;
 }
 
-export default function AddInput({ onClick, value, onChange }: AddInputProps) {
+export default function AddInput({
+  onClick,
+  value,
+  onChange,
+  onKeyInput,
+}: AddInputProps) {
   return (
     <Input
       Icon={
@@ -18,6 +24,7 @@ export default function AddInput({ onClick, value, onChange }: AddInputProps) {
       }
       value={value}
       onChange={onChange}
+      onKeyDown={onKeyInput}
       placeholder="이름을 입력해주세요."
     />
   );

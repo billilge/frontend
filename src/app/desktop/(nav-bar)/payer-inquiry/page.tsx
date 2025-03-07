@@ -152,6 +152,12 @@ export default function PayerInquiryPage() {
     });
   };
 
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      handleAddStudent();
+    }
+  };
+
   return (
     <div className="flex flex-col justify-center gap-8 px-4 md:px-16 lg:px-64">
       <div className="pt-20 text-center">
@@ -178,6 +184,7 @@ export default function PayerInquiryPage() {
                 value={newStudentName}
                 onChange={handleStudentNameChange}
                 onClick={handleAddStudent}
+                onKeyInput={handleKeyDown}
               />
             </div>
             <div className="flex w-full flex-col">
