@@ -154,7 +154,11 @@ export default function PayerInquiryPage() {
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
-      handleAddStudent();
+      event.preventDefault();
+
+      setTimeout(() => {
+        handleAddStudent();
+      }, 0);
     }
   };
 
