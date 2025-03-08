@@ -8,6 +8,7 @@ import { Item } from '@/types/welfareItemType';
 import { requestItems } from '@/apis/rental';
 import Alert from '@/components/mobile/Alert';
 import { AxiosError } from 'axios';
+import MessageAlert from 'src/components/mobile/MessageAlert';
 
 interface BottomSheetProps {
   isOpen: boolean;
@@ -27,9 +28,16 @@ export default function BottomSheet({
     {},
   );
   const [alertState, setAlertState] = useState<{
-    isOpen: boolean;
+    isAlertOpen: boolean;
   }>({
-    isOpen: false,
+    isAlertOpen: false,
+  });
+  const [messageAlertState, setMessageAlertState] = useState<{
+    isMessageAlertOpen: boolean;
+    alertMessage: string;
+  }>({
+    isMessageAlertOpen: false,
+    alertMessage: '',
   });
 
   // 현재 시간 가져오기 (현재 시간 이후로만 입력 가능하도록 하기 위함)
@@ -46,7 +54,8 @@ export default function BottomSheet({
       setHour('');
       setMinute('');
       setErrors({});
-      setAlertState({ isOpen: false });
+      setAlertState({ isAlertOpen: false });
+      setMessageAlertState({ isMessageAlertOpen: false, alertMessage: '' });
     }
   }, [isOpen]);
 
@@ -144,15 +153,29 @@ export default function BottomSheet({
       });
 
       console.log(`${item.itemName} 대여가 완료되었습니다!`);
-      onCloseAction();
+      onCloseAction(); // BottomSheet를 먼저 닫고
+      setTimeout(() => {
+        setMessageAlertState({
+          isMessageAlertOpen: true,
+          alertMessage: `${item.itemName} 대여가 완료되었습니다!`,
+        });
+      }, 100); // MessageAlert창 표시
     } catch (error) {
       console.error('대여 신청 실패(중복대여 시도 시 409 에러 발생):', error);
 
       if (error instanceof AxiosError && error.response?.status === 409) {
         onCloseAction(); // BottomSheet를 먼저 닫고
         setTimeout(() => {
-          setAlertState({ isOpen: true });
+          setAlertState({ isAlertOpen: true });
         }, 300); // Alert창 표시
+      } else {
+        onCloseAction();
+        setTimeout(() => {
+          setMessageAlertState({
+            isMessageAlertOpen: true,
+            alertMessage: '대여에 실패하였습니다.\n 잠시 후 다시 시도해주세요.',
+          });
+        }, 300);
       }
     }
   };
@@ -291,7 +314,7 @@ export default function BottomSheet({
       </div>
 
       {/* 중복 대여 확인 모달 (BottomSheet 닫힌 후 Alert 표시) */}
-      {alertState.isOpen && (
+      {alertState.isAlertOpen && (
         <Alert
           content={'이 물품은 이미 대여 중이에요.\n 그래도 한 번 더 빌릴까요?'}
           ctaButtonText="대여할게요"
@@ -299,9 +322,21 @@ export default function BottomSheet({
           isMainColor
           onClickCta={() => {
             handleRent(true);
-            setAlertState({ isOpen: false });
+            setAlertState({ isAlertOpen: false });
           }}
-          onClickOther={() => setAlertState({ isOpen: false })}
+          onClickOther={() => setAlertState({ isAlertOpen: false })}
+        />
+      )}
+
+      {messageAlertState.isMessageAlertOpen && (
+        <MessageAlert
+          content={messageAlertState.alertMessage}
+          onClickClose={() =>
+            setMessageAlertState({
+              isMessageAlertOpen: false,
+              alertMessage: '',
+            })
+          }
         />
       )}
     </>
