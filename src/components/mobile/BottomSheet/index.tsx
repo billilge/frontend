@@ -157,7 +157,7 @@ export default function BottomSheet({
       setTimeout(() => {
         setMessageAlertState({
           isMessageAlertOpen: true,
-          alertMessage: `${item.itemName} 대여가 완료되었습니다!`,
+          alertMessage: `${item.itemName} 대여 신청이 완료되었습니다!`,
         });
       }, 100); // MessageAlert창 표시
     } catch (error) {
@@ -173,7 +173,8 @@ export default function BottomSheet({
         setTimeout(() => {
           setMessageAlertState({
             isMessageAlertOpen: true,
-            alertMessage: '대여에 실패하였습니다.\n 잠시 후 다시 시도해주세요.',
+            alertMessage:
+              '대여 신청에 실패하였습니다.\n 잠시 후 다시 시도해주세요.',
           });
         }, 300);
       }
