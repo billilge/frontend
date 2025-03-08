@@ -1,11 +1,14 @@
 import { handleTouchStart, handleTouchEnd } from '@/utils/handleTouch';
 
-interface AlertProps {
+interface MessageAlertProps {
   content: string; // alert창 문구
   onClickClose?: () => void; // 오른쪽 버튼을 눌렀을 때 실행될 함수
 }
 
-export default function Alert({ content, onClickClose }: AlertProps) {
+export default function MessageAlert({
+  content,
+  onClickClose,
+}: MessageAlertProps) {
   return (
     <div className="fixed inset-0 z-20 flex items-center justify-center">
       {/* 반투명한 검정 배경 */}
