@@ -140,6 +140,7 @@ export default function Dashboard() {
             studentId={item.studentId}
             status={item.status}
             applicatedAt={item.applicatedAt}
+            rentedCount={item.rentedCount}
             handleApproveBtnClick={() => {
               if (item.rentalHistoryId !== undefined) {
                 handleApproveBtnClick({

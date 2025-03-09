@@ -143,7 +143,6 @@ export default function BottomSheet({
         ignoreDuplicate,
       });
 
-      console.log(`${item.itemName} 대여가 완료되었습니다!`);
       onCloseAction();
     } catch (error) {
       console.error('대여 신청 실패(중복대여 시도 시 409 에러 발생):', error);
