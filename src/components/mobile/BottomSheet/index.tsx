@@ -27,7 +27,7 @@ export default function BottomSheet({
   const [errors, setErrors] = useState<{ quantity?: string; time?: string }>(
     {},
   );
-  const [alertState, setAlertState] = useState<{
+  const [actionAlertState, setActionAlertState] = useState<{
     isAlertOpen: boolean;
   }>({
     isAlertOpen: false,
@@ -54,7 +54,7 @@ export default function BottomSheet({
       setHour('');
       setMinute('');
       setErrors({});
-      setAlertState({ isAlertOpen: false });
+      setActionAlertState({ isAlertOpen: false });
       setMessageAlertState({ isMessageAlertOpen: false, alertMessage: '' });
     }
   }, [isOpen]);
@@ -166,7 +166,7 @@ export default function BottomSheet({
       if (error instanceof AxiosError && error.response?.status === 409) {
         onCloseAction(); // BottomSheet를 먼저 닫고
         setTimeout(() => {
-          setAlertState({ isAlertOpen: true });
+          setActionAlertState({ isAlertOpen: true });
         }, 300); // Alert창 표시
       } else if (error instanceof AxiosError) {
         onCloseAction();
@@ -314,7 +314,7 @@ export default function BottomSheet({
       </div>
 
       {/* 중복 대여 확인 모달 (BottomSheet 닫힌 후 Alert 표시) */}
-      {alertState.isAlertOpen && (
+      {actionAlertState.isAlertOpen && (
         <Alert
           content={'이 물품은 이미 대여 중이에요.\n 그래도 한 번 더 빌릴까요?'}
           ctaButtonText="대여할게요"
@@ -322,9 +322,9 @@ export default function BottomSheet({
           isMainColor
           onClickCta={() => {
             handleRent(true);
-            setAlertState({ isAlertOpen: false });
+            setActionAlertState({ isAlertOpen: false });
           }}
-          onClickOther={() => setAlertState({ isAlertOpen: false })}
+          onClickOther={() => setActionAlertState({ isAlertOpen: false })}
         />
       )}
 
