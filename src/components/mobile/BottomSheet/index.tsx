@@ -160,17 +160,39 @@ export default function BottomSheet({
         });
       }, 100); // MessageAlert창 표시
     } catch (error) {
-      if (error instanceof AxiosError && error.response?.status === 409) {
+      if (error instanceof AxiosError) {
         onCloseAction(); // BottomSheet를 먼저 닫고
-        setTimeout(() => {
-          setActionAlertState({ isAlertOpen: true });
-        }, 300); // Alert창 표시
-      } else if (error instanceof AxiosError) {
+
+        if (error.response?.status === 409) {
+          // 중복대여시 에러
+          setTimeout(() => {
+            setActionAlertState({ isAlertOpen: true });
+          }, 300);
+        } else if (error.response?.status === 500) {
+          // 500 에러 발생시
+          setTimeout(() => {
+            setMessageAlertState({
+              isMessageAlertOpen: true,
+              alertMessage:
+                '일시적인 서버 문제로 오류가 발생했습니다.\n 다시 시도해 주세요.',
+            });
+          }, 300);
+        } else {
+          // 이외의 서버에서 보내주는 에러 메시지 띄우기
+          setTimeout(() => {
+            setMessageAlertState({
+              isMessageAlertOpen: true,
+              alertMessage: error.response?.data.message,
+            });
+          }, 300);
+        }
+      } else {
+        // Axios 에러가 아닌 경우
         onCloseAction();
         setTimeout(() => {
           setMessageAlertState({
             isMessageAlertOpen: true,
-            alertMessage: error.response?.data.message,
+            alertMessage: '알 수 없는 오류가 발생했습니다.',
           });
         }, 300);
       }
