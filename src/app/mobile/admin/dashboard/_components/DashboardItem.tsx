@@ -10,6 +10,7 @@ export default function DashboardItem({
   studentId,
   status,
   applicatedAt,
+  rentedCount,
   handleApproveBtnClick,
   handleCancelBtnClick,
 }: DashboardProps) {
@@ -45,7 +46,9 @@ export default function DashboardItem({
         </section>
 
         <section className="flex flex-col gap-2">
-          <div className="text-sm font-semibold">{itemName}</div>
+          <div className="text-sm font-semibold">
+            `{itemName} ({rentedCount}개)`
+          </div>
 
           <section className="flex flex-col text-[10px] font-normal">
             <section className="flex gap-1">
