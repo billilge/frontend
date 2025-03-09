@@ -168,13 +168,12 @@ export default function BottomSheet({
         setTimeout(() => {
           setAlertState({ isAlertOpen: true });
         }, 300); // Alert창 표시
-      } else {
+      } else if (error instanceof AxiosError) {
         onCloseAction();
         setTimeout(() => {
           setMessageAlertState({
             isMessageAlertOpen: true,
-            alertMessage:
-              '대여 신청에 실패하였습니다.\n 잠시 후 다시 시도해주세요.',
+            alertMessage: error.response?.data.message,
           });
         }, 300);
       }
