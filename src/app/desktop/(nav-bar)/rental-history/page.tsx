@@ -20,11 +20,9 @@ export default function RentalHistoryPage() {
   }, [page]);
 
   const handlePageChange = async (pageChangeAction: PageChangeAction) => {
-    console.log('PageChange:', pageChangeAction);
     setPage((current) =>
       pageChangeAction === 'NEXT' ? current + 1 : current - 1,
     );
-    console.log(`page: ${page}`);
   };
 
   return (

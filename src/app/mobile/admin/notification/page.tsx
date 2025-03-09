@@ -39,7 +39,7 @@ export default function Notification() {
           현재 알림이 없습니다.
         </div>
       ) : (
-        notificationDetail.map((item) => (
+        notificationDetail?.map((item) => (
           <NotificationItem
             key={item.notificationId}
             message={item.message}

@@ -35,7 +35,6 @@ export const handleFCMToken = async () => {
       if (!currentToken) {
         alert('알림을 허용해 주세요.');
       } else {
-        console.log('currentToken', currentToken);
         localStorage.setItem('fcmToken', currentToken);
         await postFCMToken(currentToken);
       }
