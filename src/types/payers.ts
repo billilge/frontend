@@ -7,7 +7,7 @@ export interface Payer {
   registered: boolean;
 }
 
-export interface TableComponentProps extends PaginationProps {
+export interface PayerTableProps extends PaginationProps {
   payers: Payer[];
   showCheckboxes?: boolean;
   headers?: string[];

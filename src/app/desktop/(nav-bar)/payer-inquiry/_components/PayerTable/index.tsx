@@ -9,10 +9,10 @@ import {
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
-import { Payer, TableComponentProps } from '@/types/payers';
+import { Payer, PayerTableProps } from '@/types/payers';
 import { PageChangeAction } from '@/types/paginationType';
 
-export default function TableComponent({
+export default function PayerTable({
   payers,
   showCheckboxes = true,
   headers = ['이름', '학번', '회원 여부'], // 기본값을 설정
@@ -23,7 +23,7 @@ export default function TableComponent({
   onPageChange = (pageChangeAction: PageChangeAction) => {
     console.log(pageChangeAction);
   },
-}: TableComponentProps) {
+}: PayerTableProps) {
   const handleSelect = (payerId: number) => {
     setSelected((prev: number[]) =>
       prev.includes(payerId)

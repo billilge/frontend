@@ -10,7 +10,7 @@ import { Payer } from '@/types/payers';
 import { SearchInput } from '@/components/ui/search-input';
 import { PageChangeAction } from '@/types/paginationType';
 import toast from 'react-hot-toast';
-import TableComponent from './_components/TableComponent';
+import TableComponent from './_components/PayerTable';
 import AddInput from '../../../../components/desktop/AddInput';
 
 export default function PayerInquiryPage() {

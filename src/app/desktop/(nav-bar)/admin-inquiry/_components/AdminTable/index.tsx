@@ -39,10 +39,6 @@ export default function AdminTable({
     event.preventDefault();
     onPageChange(pageChangeAction);
   };
-  // payers가 배열이 아닐 경우 기본 빈 배열로 대체
-  // const  = Array.isArray(admins)
-  //   ? admins.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage)
-  //   : [];
 
   const handleSelectAll = () => {
     const visibleIds = admins.map(
