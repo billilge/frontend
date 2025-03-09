@@ -152,7 +152,6 @@ export default function BottomSheet({
         ignoreDuplicate,
       });
 
-      console.log(`${item.itemName} 대여가 완료되었습니다!`);
       onCloseAction(); // BottomSheet를 먼저 닫고
       setTimeout(() => {
         setMessageAlertState({
@@ -161,8 +160,6 @@ export default function BottomSheet({
         });
       }, 100); // MessageAlert창 표시
     } catch (error) {
-      console.error('대여 신청 실패(중복대여 시도 시 409 에러 발생):', error);
-
       if (error instanceof AxiosError && error.response?.status === 409) {
         onCloseAction(); // BottomSheet를 먼저 닫고
         setTimeout(() => {
