@@ -44,7 +44,6 @@ export default function NavBar() {
       toast.success('로그아웃에 성공했습니다!');
     }
 
-    console.log('index:', index);
     setCurrentIndex(index);
   };
 
