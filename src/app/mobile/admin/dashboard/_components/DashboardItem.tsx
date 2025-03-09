@@ -47,7 +47,7 @@ export default function DashboardItem({
 
         <section className="flex flex-col gap-2">
           <div className="text-sm font-semibold">
-            `{itemName} ({rentedCount}개)`
+            {itemName} ({rentedCount}개)
           </div>
 
           <section className="flex flex-col text-[10px] font-normal">
