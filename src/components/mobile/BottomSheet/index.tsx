@@ -8,6 +8,7 @@ import { Item } from '@/types/welfareItemType';
 import { requestItems } from '@/apis/rental';
 import Alert from '@/components/mobile/Alert';
 import { AxiosError } from 'axios';
+import MessageAlert from 'src/components/mobile/MessageAlert';
 
 interface BottomSheetProps {
   isOpen: boolean;
@@ -26,10 +27,17 @@ export default function BottomSheet({
   const [errors, setErrors] = useState<{ quantity?: string; time?: string }>(
     {},
   );
-  const [alertState, setAlertState] = useState<{
-    isOpen: boolean;
+  const [actionAlertState, setActionAlertState] = useState<{
+    isAlertOpen: boolean;
   }>({
-    isOpen: false,
+    isAlertOpen: false,
+  });
+  const [messageAlertState, setMessageAlertState] = useState<{
+    isMessageAlertOpen: boolean;
+    alertMessage: string;
+  }>({
+    isMessageAlertOpen: false,
+    alertMessage: '',
   });
 
   // 현재 시간 가져오기 (현재 시간 이후로만 입력 가능하도록 하기 위함)
@@ -46,7 +54,8 @@ export default function BottomSheet({
       setHour('');
       setMinute('');
       setErrors({});
-      setAlertState({ isOpen: false });
+      setActionAlertState({ isAlertOpen: false });
+      setMessageAlertState({ isMessageAlertOpen: false, alertMessage: '' });
     }
   }, [isOpen]);
 
@@ -143,15 +152,49 @@ export default function BottomSheet({
         ignoreDuplicate,
       });
 
-      onCloseAction();
+      onCloseAction(); // BottomSheet를 먼저 닫고
+      setTimeout(() => {
+        setMessageAlertState({
+          isMessageAlertOpen: true,
+          alertMessage: `${item.itemName} 대여 신청이 완료되었습니다!`,
+        });
+      }, 100); // MessageAlert창 표시
     } catch (error) {
-      console.error('대여 신청 실패(중복대여 시도 시 409 에러 발생):', error);
-
-      if (error instanceof AxiosError && error.response?.status === 409) {
+      if (error instanceof AxiosError) {
         onCloseAction(); // BottomSheet를 먼저 닫고
+
+        if (error.response?.status === 409) {
+          // 중복대여시 에러
+          setTimeout(() => {
+            setActionAlertState({ isAlertOpen: true });
+          }, 300);
+        } else if (error.response?.status === 500) {
+          // 500 에러 발생시
+          setTimeout(() => {
+            setMessageAlertState({
+              isMessageAlertOpen: true,
+              alertMessage:
+                '일시적인 서버 문제로 오류가 발생했습니다.\n 다시 시도해 주세요.',
+            });
+          }, 300);
+        } else {
+          // 이외의 서버에서 보내주는 에러 메시지 띄우기
+          setTimeout(() => {
+            setMessageAlertState({
+              isMessageAlertOpen: true,
+              alertMessage: error.response?.data.message,
+            });
+          }, 300);
+        }
+      } else {
+        // Axios 에러가 아닌 경우
+        onCloseAction();
         setTimeout(() => {
-          setAlertState({ isOpen: true });
-        }, 300); // Alert창 표시
+          setMessageAlertState({
+            isMessageAlertOpen: true,
+            alertMessage: '알 수 없는 오류가 발생했습니다.',
+          });
+        }, 300);
       }
     }
   };
@@ -290,7 +333,7 @@ export default function BottomSheet({
       </div>
 
       {/* 중복 대여 확인 모달 (BottomSheet 닫힌 후 Alert 표시) */}
-      {alertState.isOpen && (
+      {actionAlertState.isAlertOpen && (
         <Alert
           content={'이 물품은 이미 대여 중이에요.\n 그래도 한 번 더 빌릴까요?'}
           ctaButtonText="대여할게요"
@@ -298,9 +341,21 @@ export default function BottomSheet({
           isMainColor
           onClickCta={() => {
             handleRent(true);
-            setAlertState({ isOpen: false });
+            setActionAlertState({ isAlertOpen: false });
           }}
-          onClickOther={() => setAlertState({ isOpen: false })}
+          onClickOther={() => setActionAlertState({ isAlertOpen: false })}
+        />
+      )}
+
+      {messageAlertState.isMessageAlertOpen && (
+        <MessageAlert
+          content={messageAlertState.alertMessage}
+          onClickClose={() =>
+            setMessageAlertState({
+              isMessageAlertOpen: false,
+              alertMessage: '',
+            })
+          }
         />
       )}
     </>
