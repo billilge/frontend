@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import IconClose from 'public/assets/icons/bottom-sheet/icon-close.svg';
 import IconHomeIndicator from 'public/assets/icons/bottom-sheet/icon-home-indicator.svg';
 import Image from 'next/image';
@@ -14,6 +14,11 @@ interface BottomSheetProps {
   isOpen: boolean;
   onCloseAction: () => void;
   item: Item | null;
+}
+
+function useReRenderer() {
+  const [, setState] = useState({});
+  return useCallback(() => setState({}), []);
 }
 
 export default function BottomSheet({
@@ -39,6 +44,10 @@ export default function BottomSheet({
     isMessageAlertOpen: false,
     alertMessage: '',
   });
+
+  // 버튼 중복 클릭 방지
+  const isLoadingRef = useRef(false);
+  const reRender = useReRenderer();
 
   // 현재 시간 가져오기 (현재 시간 이후로만 입력 가능하도록 하기 위함)
   const now = new Date();
@@ -141,6 +150,13 @@ export default function BottomSheet({
       return;
     }
 
+    if (isLoadingRef.current) {
+      return; // 이미 로딩 중이면 무시
+    }
+
+    isLoadingRef.current = true;
+    reRender(); // 렌더링을 강제로 트리거
+
     try {
       await requestItems({
         itemId: item.itemId,
@@ -196,6 +212,9 @@ export default function BottomSheet({
           });
         }, 300);
       }
+    } finally {
+      isLoadingRef.current = false;
+      reRender(); // 렌더링을 다시 트리거
     }
   };
 
@@ -324,7 +343,7 @@ export default function BottomSheet({
                 quantity === '' ||
                 hour === '' ||
                 minute === ''
-              )
+              ) || isLoadingRef.current // 로딩 중일 때도 비활성화
             }
           >
             대여하기
