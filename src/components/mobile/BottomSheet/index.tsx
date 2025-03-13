@@ -275,7 +275,7 @@ export default function BottomSheet({
               </div>
               <input
                 type="number"
-                className={`rounded-[10px] border px-3.5 py-2.5 text-caption-1_midi font-medium ${
+                className={`rounded-[10px] border px-3.5 py-2.5 text-base font-medium ${
                   errors.quantity ? 'border-warning' : 'border-gray-border'
                 }`}
                 placeholder="0"
@@ -294,7 +294,7 @@ export default function BottomSheet({
               <div className="text-body-2-normal_semi font-semibold text-black-primary">
                 시간
               </div>
-              <div className="flex items-center gap-2 text-caption-1_midi font-medium">
+              <div className="flex items-center gap-2 text-base font-medium">
                 <input
                   type="number"
                   className={`w-1/2 rounded-[10px] border px-3.5 py-2.5 ${
