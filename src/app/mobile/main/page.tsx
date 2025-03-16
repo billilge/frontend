@@ -11,6 +11,7 @@ import { WelfareItemData, Item } from '@/types/welfareItemType';
 import IconSearch from 'public/assets/icons/icon-search.svg';
 import { useRouter } from 'next/navigation';
 import { requestNotificationPermission } from '@/utils/pushNotification';
+import PopUp from '@/components/mobile/PopUp';
 
 export default function MobileMain() {
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
@@ -19,6 +20,7 @@ export default function MobileMain() {
     items: [],
   });
   const [searchQuery, setSearchQuery] = useState('');
+  const [showPopUp, setShowPopUp] = useState<boolean>(false);
   const router = useRouter();
 
   const fetchWelfareItems = async () => {
@@ -47,6 +49,11 @@ export default function MobileMain() {
     fetchWelfareItems();
 
     requestNotificationPermission();
+
+    // "다시 보지 않기" 플래그가 없으면 팝업 표시
+    if (!localStorage.getItem('popUpDismissed')) {
+      setShowPopUp(true);
+    }
   }, []);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -102,6 +109,19 @@ export default function MobileMain() {
           </div>
         </section>
       </div>
+
+      {showPopUp && (
+        <PopUp
+          title="🚨 변경사항 안내 🚨"
+          content={`물품 대여 신청은 현재 시간으로부터
+        5분 후에 가능합니다.\n(16시 55분부터는 즉시 신청이 가능합니다.)`}
+          onClickCta={() => setShowPopUp(false)}
+          onClickOther={() => {
+            localStorage.setItem('popUpDismissed', 'true');
+            setShowPopUp(false);
+          }}
+        />
+      )}
 
       {/* Bottom Sheet */}
       <BottomSheet
