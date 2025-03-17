@@ -119,9 +119,30 @@ export default function BottomSheet({
       0,
     );
 
+    // 점심 시간
+    const lunchOpenTime = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate(),
+      12,
+      0,
+    );
+    const lunchCloseTime = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate(),
+      12,
+      59,
+    );
+
     // 운영시간: 10:00 ~ 17:00
     if (inputTime < openTime || inputTime > closeTime) {
       return '대여 가능한 시간은 10:00 ~ 17:00입니다.';
+    }
+
+    // 점심시간: 12:00 ~ 12:59
+    if (inputTime >= lunchOpenTime && inputTime < lunchCloseTime) {
+      return '12:00 ~ 12:59은 점심시간입니다.';
     }
 
     // 입력 시간이 현재 시간보다 이후인지 체크
