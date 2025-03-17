@@ -49,11 +49,6 @@ export default function BottomSheet({
   const isLoadingRef = useRef(false);
   const reRender = useReRenderer();
 
-  // 현재 시간 가져오기 (현재 시간 이후로만 입력 가능하도록 하기 위함)
-  const now = new Date();
-  const currentHour = now.getHours();
-  const currentMinute = now.getMinutes();
-
   const maxQuantity = item?.count || 0;
 
   // 모달이 열릴 때마다 입력값 초기화
@@ -92,49 +87,81 @@ export default function BottomSheet({
     setErrors((prevErrors) => ({ ...prevErrors, quantity: errorMsg }));
   };
 
-  // 시간 입력 시 검증
+  // 통합 시간 검증 함수
+  const validateTime = (hourStr: string, minuteStr: string): string => {
+    const numHour = parseInt(hourStr, 10);
+    const numMinute = parseInt(minuteStr, 10);
+
+    if (Number.isNaN(numHour) || Number.isNaN(numMinute)) {
+      return '올바른 시간을 입력해주세요.';
+    }
+
+    const now = new Date();
+    const inputTime = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate(),
+      numHour,
+      numMinute,
+    );
+    const openTime = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate(),
+      10,
+      0,
+    );
+    const closeTime = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate(),
+      17,
+      0,
+    );
+
+    // 운영시간: 10:00 ~ 17:00
+    if (inputTime < openTime || inputTime > closeTime) {
+      return '대여 가능한 시간은 10:00 ~ 17:00입니다.';
+    }
+
+    // 입력 시간이 현재 시간보다 이후인지 체크
+    if (inputTime <= now) {
+      return '대여는 현재 시간 이후로만 가능합니다.';
+    }
+
+    // 현재 시각을 기준으로 5분 후 체크 (현재 시간이 16:55 이전일 때만 적용)
+    const threshold = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate(),
+      16,
+      55,
+    );
+    if (now < threshold) {
+      const fiveMinutesLater = new Date(now.getTime() + 5 * 60 * 1000);
+      if (inputTime < fiveMinutesLater) {
+        return '대여는 현재 시간으로부터 5분 후에 가능합니다.';
+      }
+    }
+
+    return '';
+  };
+
+  // 시간 입력 시 검증 (시)
   const handleHourChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     setHour(value);
 
-    const numHour = parseInt(value, 10);
-    let errorMsg = '';
-
-    if (Number.isNaN(numHour)) {
-      errorMsg = '올바른 시간을 입력해주세요.';
-    } else if (numHour < 10 || numHour >= 17) {
-      errorMsg = '대여 가능 시간은 10:00 ~ 17:00입니다.'; // 10시 ~ 17시 사이가 아닐 경우
-    } else if (numHour < currentHour) {
-      errorMsg = '대여는 현재 시간 이후로만 가능합니다.'; // 현재 시간보다 이전이면 무조건 오류
-    } else if (
-      numHour === currentHour &&
-      parseInt(minute || '0', 10) <= currentMinute
-    ) {
-      errorMsg = '대여는 현재 시간 이후로만 가능합니다.'; // 현재 시각과 같다면, 분이 현재 분보다 커야 함
-    }
-
+    const errorMsg = validateTime(value, minute);
     setErrors((prevErrors) => ({ ...prevErrors, time: errorMsg }));
   };
 
-  // 분 입력 시 검증
+  // 시간 입력 시 검증 (분)
   const handleMinuteChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     setMinute(value);
 
-    const numHour = parseInt(hour, 10);
-    const numMinute = parseInt(value, 10);
-    let errorMsg = '';
-
-    if (Number.isNaN(numHour) || Number.isNaN(numMinute)) {
-      errorMsg = '올바른 시간을 입력해주세요.';
-    } else if (numHour < 10 || numHour >= 17) {
-      errorMsg = '대여 가능 시간은 10:00 ~ 17:00입니다.';
-    } else if (numHour < currentHour) {
-      errorMsg = '대여는 현재 시간 이후로만 가능합니다.';
-    } else if (numHour === currentHour && numMinute <= currentMinute) {
-      errorMsg = '대여는 현재 시간 이후로만 가능합니다.';
-    }
-
+    const errorMsg = validateTime(hour, value);
     setErrors((prevErrors) => ({ ...prevErrors, time: errorMsg }));
   };
 
