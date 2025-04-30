@@ -14,6 +14,17 @@ const getAccessToken = (): string | null => {
   return '';
 };
 
+const redirectToLogin = () => {
+  const { pathname } = window.location;
+  const redirectPages = ['/desktop/login', '/mobile/sign-in'];
+
+  if (!redirectPages.includes(pathname)) {
+    window.location.replace(
+      pathname.startsWith('/desktop') ? '/desktop/login' : '/mobile/sign-in',
+    );
+  }
+};
+
 const PrivateAxiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_BASE_URI,
   headers: {
@@ -21,6 +32,7 @@ const PrivateAxiosInstance = axios.create({
   },
 });
 
+// 요청 인터셉터
 PrivateAxiosInstance.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
     const token = getAccessToken();
