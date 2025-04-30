@@ -53,6 +53,7 @@ PrivateAxiosInstance.interceptors.response.use(
   (response) => response,
   (error: AxiosError) => {
     if (error.response?.status === 401) {
+      localStorage.clear();
       redirectToLogin();
     }
     return Promise.reject(error);
