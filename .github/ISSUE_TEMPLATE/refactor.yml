@@ -1,6 +1,6 @@
-name: "리팩토링"
+name: '리팩토링'
 description: 리팩토링 작업 사항을 작성해주세요.
-title: "[ Refactor ] "
+title: '[ Refactor ] '
 body:
   - type: markdown
     attributes:
@@ -19,7 +19,7 @@ body:
     attributes:
       label: 🔢 리팩토링하는 이슈를 기입해주세요.
       description: 리팩토링을 진행하는 이전 이슈를 작성해주세요.
-      placeholder: "#이슈번호"
+      placeholder: '#이슈번호'
     validations:
       required: true
   - type: textarea
@@ -30,7 +30,7 @@ body:
       placeholder: |
         1. 이유
         2. 이유
-      render: ""
+      render: ''
     validations:
       required: false
   - type: textarea

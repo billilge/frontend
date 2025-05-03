@@ -1,5 +1,5 @@
 name: Auto Labeler
-on: 
+on:
   issues:
     types: [opened]
   pull_request_target:
@@ -13,8 +13,8 @@ jobs:
       issues: write
       pull-requests: write
     steps:
-    - name: Check Labels
-      id: labeler
-      uses: jimschubert/labeler-action@v2
-      with:
-        GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+      - name: Check Labels
+        id: labeler
+        uses: jimschubert/labeler-action@v2
+        with:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}

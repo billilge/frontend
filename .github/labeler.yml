@@ -13,25 +13,25 @@ enable:
 #    - 'include' patterns will associate a label if any of these patterns match
 #    - 'exclude' patterns will ignore this label if any of these patterns match
 labels:
-  ":bug: BUG":
+  ':bug: BUG':
     include: ['\bBug\b', '\bbug\b', '\bFix\b', '\bfix\b']
-  ":sparkles: FEAT":
+  ':sparkles: FEAT':
     include: ['\bFeat\b', '\bfeat\b', '\bFeature\b', '\bfeature\b']
-  ":memo: DOCS":
+  ':memo: DOCS':
     include: ['\bDocs\b', '\bdocs\b', '\bREADME\b']
-  ":package: CHORE":
+  ':package: CHORE':
     include: ['\bChore\b', '\bchore\b']
-  ":lipstick: DESIGN":
+  ':lipstick: DESIGN':
     include: ['\bDesign\b', '\bdesign\b']
-  ":rocket: API":
+  ':rocket: API':
     include: ['\bAPI\b', '\bapi\b']
-  ":recycle: REFACTOR":
+  ':recycle: REFACTOR':
     include: ['\bRefactor\b', '\brefactor\b']
-  ":wrench: INIT":
+  ':wrench: INIT':
     include: ['\bINIT\b', '\bInit\b', '\binit\b']
-  ":twisted_rightwards_arrows: MERGE":
+  ':twisted_rightwards_arrows: MERGE':
     include: ['\bMERGE\b', '\bMerge\b', '\bmerge\b']
-  ":ambulance: !HOTFIX":
+  ':ambulance: !HOTFIX':
     include: ['\bHOTFIX\b', '\bhotfix\b']
-  ":bookmark: RELEASE":
+  ':bookmark: RELEASE':
     include: ['\bRelease\b', '\brelease\b']
