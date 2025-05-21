@@ -9,7 +9,7 @@ export default function DashboardItem({
   renterName,
   studentId,
   status,
-  applicatedAt,
+  rentAt,
   rentedCount,
   handleApproveBtnClick,
   handleCancelBtnClick,
@@ -29,7 +29,7 @@ export default function DashboardItem({
     handleCancelBtnClick();
   };
 
-  const applicatedTime = convertTime(applicatedAt);
+  const applicatedTime = convertTime(rentAt);
 
   return (
     <section className="flex w-full items-center justify-between px-5 py-4">
@@ -59,7 +59,7 @@ export default function DashboardItem({
             </section>
 
             <section className="flex gap-1">
-              <div className="flex w-10">신청 시간</div>
+              <div className="flex w-10">대여 시간</div>
               <div className="">
                 {applicatedTime.formattedDate} {applicatedTime.formattedTime}
               </div>
