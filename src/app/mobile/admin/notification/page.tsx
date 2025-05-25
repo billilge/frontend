@@ -8,7 +8,7 @@ import { elapsedTime } from '@/utils/elapsedTime';
 import { NotificationProps } from '@/types/notificationType';
 import {
   adminNotificationGet,
-  readNotificationPost,
+  readNotificationPatch,
 } from '@/services/notification';
 
 type AdminNotificationType = NotificationProps;
@@ -28,7 +28,7 @@ export default function Notification() {
   }, []);
 
   const handleReadNotification = async (notificationId: number) => {
-    await readNotificationPost(notificationId);
+    await readNotificationPatch(notificationId);
   };
 
   return (
