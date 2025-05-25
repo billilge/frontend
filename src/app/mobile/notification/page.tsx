@@ -5,7 +5,8 @@ import { useRouter } from 'next/navigation';
 import MobileLayout from '@/components/mobile/layout';
 import {
   userNotificationGet,
-  readNotificationPost,
+  readNotificationPatch,
+  readNotificationAllPatch,
 } from '@/services/notification';
 import NotificationItem from '@/components/mobile/NotificationItem';
 import Header from '@/components/mobile/Header';
@@ -39,10 +40,13 @@ export default function Notification() {
     fetchNotifications();
   }, []);
 
-  // TODO : 로그인 여부 확인 후 로그인 안 했으면 로그인 화면으로 보내기
-
   const handleReadNotification = async (notificationId: number) => {
-    await readNotificationPost(notificationId);
+    await readNotificationPatch(notificationId);
+  };
+
+  const handleClickAllNotification = async () => {
+    await readNotificationAllPatch();
+    window.location.reload();
   };
 
   return (
@@ -53,19 +57,32 @@ export default function Notification() {
           현재 알림이 없습니다.
         </div>
       ) : (
-        notificationDetail.map((item) => (
-          <NotificationItem
-            key={item.notificationId}
-            message={item.message}
-            link={item.link}
-            isRead={item.isRead}
-            status={item.status}
-            createdAt={elapsedTime(item.createdAt)}
-            handleNotification={() =>
-              item.notificationId && handleReadNotification(item.notificationId)
-            }
-          />
-        ))
+        <div className="flex flex-col">
+          <div className="flex justify-end px-4 py-1">
+            <button
+              type="button"
+              onClick={handleClickAllNotification}
+              className="text-xs font-medium text-gray-secondary"
+            >
+              모두 읽음으로 표시
+            </button>
+          </div>
+
+          {notificationDetail.map((item) => (
+            <NotificationItem
+              key={item.notificationId}
+              message={item.message}
+              link={item.link}
+              isRead={item.isRead}
+              status={item.status}
+              createdAt={elapsedTime(item.createdAt)}
+              handleNotification={() =>
+                item.notificationId &&
+                handleReadNotification(item.notificationId)
+              }
+            />
+          ))}
+        </div>
       )}
     </MobileLayout>
   );
