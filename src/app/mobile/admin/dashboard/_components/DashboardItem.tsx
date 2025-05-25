@@ -61,7 +61,8 @@ export default function DashboardItem({
             <section className="flex gap-1">
               <div className="flex w-10">대여 시간</div>
               <div className="">
-                {applicatedTime.formattedDate} {applicatedTime.formattedTime}
+                {applicatedTime.formattedDate}{' '}
+                {applicatedTime.formattedTime.split(':').slice(0, 2).join(':')}
               </div>
             </section>
           </section>
