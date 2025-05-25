@@ -139,7 +139,7 @@ export default function Dashboard() {
             renterName={item.renterName}
             studentId={item.studentId}
             status={item.status}
-            applicatedAt={item.applicatedAt}
+            rentAt={item.rentAt}
             rentedCount={item.rentedCount}
             handleApproveBtnClick={() => {
               if (item.rentalHistoryId !== undefined) {

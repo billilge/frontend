@@ -5,7 +5,7 @@ export interface DashboardProps {
   renterName: string;
   studentId: string;
   status: string;
-  applicatedAt: string;
+  rentAt: string;
   rentedCount: number;
   handleApproveBtnClick: () => void;
   handleCancelBtnClick: () => void;
