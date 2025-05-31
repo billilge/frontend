@@ -38,7 +38,7 @@ const adminItems = [
   {
     icon: IconAdminHomepage,
     label: '관리자 홈페이지',
-    href: '/mobile/admin/notification',
+    href: 'https://www.billilge.site/desktop/login',
   },
 ];
 
@@ -103,17 +103,23 @@ export default function Sidebar({
           {role === 'ADMIN' && (
             <>
               <ul className="text-body-2-normal_semi font-semibold text-black-primary">
-                {adminItems.map(({ icon: Icon, label, href }) => (
-                  <li key={label}>
-                    <a
-                      href={href}
-                      className="mt-3 flex items-center gap-3 rounded p-2 hover:bg-gray-100"
-                    >
-                      <Icon />
-                      {label}
-                    </a>
-                  </li>
-                ))}
+                {adminItems.map(({ icon: Icon, label, href }) => {
+                  const isExternal = label === '관리자 홈페이지';
+
+                  return (
+                    <li key={label}>
+                      <a
+                        href={isExternal ? href : href}
+                        target={isExternal ? '_blank' : undefined}
+                        rel={isExternal ? 'noopener noreferrer' : undefined}
+                        className="mt-3 flex items-center gap-3 rounded p-2 hover:bg-gray-100"
+                      >
+                        <Icon />
+                        {label}
+                      </a>
+                    </li>
+                  );
+                })}
               </ul>
 
               {/* 두 번째 구분선 */}
