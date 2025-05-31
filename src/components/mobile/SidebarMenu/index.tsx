@@ -8,6 +8,7 @@ import IconAdminDashboard from 'public/assets/icons/side-menu/admin-dashboard.sv
 import IconAdminAlarm from 'public/assets/icons/side-menu/admin-alarm.svg';
 import IconLogout from 'public/assets/icons/side-menu/logout.svg';
 import IconPrivacyPolicy from 'public/assets/icons/side-menu/privacy-policy.svg';
+import IconAdminHomepage from 'public/assets/icons/side-menu/admin-homepage.svg';
 import { useRouter } from 'next/navigation';
 
 interface SidebarProps {
@@ -22,6 +23,7 @@ const menuItems = [
   { icon: IconUserAlarm, label: '알림', href: '/mobile/notification' },
 ];
 
+// TODO: 관리자 홈페이지 링크 변경
 const adminItems = [
   {
     icon: IconAdminDashboard,
@@ -31,6 +33,11 @@ const adminItems = [
   {
     icon: IconAdminAlarm,
     label: '관리자 알림',
+    href: '/mobile/admin/notification',
+  },
+  {
+    icon: IconAdminHomepage,
+    label: '관리자 홈페이지',
     href: '/mobile/admin/notification',
   },
 ];
