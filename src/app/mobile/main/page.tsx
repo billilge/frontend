@@ -50,7 +50,7 @@ export default function MobileMain() {
     requestNotificationPermission();
 
     // "다시 보지 않기" 플래그가 없으면 팝업 표시
-    if (!localStorage.getItem('popUpDismissed2')) {
+    if (!localStorage.getItem('popUpDismissed3')) {
       setShowPopUp(true);
     }
   }, []);
@@ -112,11 +112,11 @@ export default function MobileMain() {
       {showPopUp && (
         <PopUp
           title="🚨 공지사항 안내 🚨"
-          content={`시험기간(04.14.~04.28.) 동안\n복지물품 대여가 일시 중단됩니다.\n
+          content={`2025년 1학기 복지물품 대여는\n6월 1일(월)부로 종료됩니다.\n
 이용에 참고 부탁드립니다!`}
           onClickCta={() => setShowPopUp(false)}
           onClickOther={() => {
-            localStorage.setItem('popUpDismissed2', 'true');
+            localStorage.setItem('popUpDismissed3', 'true');
             setShowPopUp(false);
           }}
         />
