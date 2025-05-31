@@ -78,7 +78,7 @@ export default function MobileMain() {
   return (
     <div>
       <MainHeader />
-      <div className="mt-10 flex flex-col gap-[50px] px-4 pt-4">
+      <div className="mt-10 flex flex-col gap-[50px] px-4 py-4">
         <Carousel images={images} />
 
         <section className="flex flex-col gap-4">
