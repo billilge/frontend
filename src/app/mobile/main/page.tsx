@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import MobileLayout from '@/components/mobile/layout';
 import MainHeader from '@/app/mobile/main/_components/MainHeader';
 import Carousel from '@/app/mobile/main/_components/Carousel';
 import WelfareItem from '@/app/mobile/main/_components/WelfareItem';
@@ -77,7 +76,7 @@ export default function MobileMain() {
   };
 
   return (
-    <MobileLayout>
+    <div>
       <MainHeader />
       <div className="mt-10 flex flex-col gap-[50px] px-4 pt-4">
         <Carousel images={images} />
@@ -129,6 +128,6 @@ export default function MobileMain() {
         onCloseAction={() => setIsBottomSheetOpen(false)}
         item={selectedItem}
       />
-    </MobileLayout>
+    </div>
   );
 }

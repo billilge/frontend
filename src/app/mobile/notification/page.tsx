@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import MobileLayout from '@/components/mobile/layout';
 import {
   userNotificationGet,
   readNotificationPatch,
@@ -50,7 +49,7 @@ export default function Notification() {
   };
 
   return (
-    <MobileLayout>
+    <div>
       <Header title="알림" />
       {notificationDetail?.length === 0 ? (
         <div className="flex h-dvh items-center justify-center text-gray-secondary">
@@ -84,6 +83,6 @@ export default function Notification() {
           ))}
         </div>
       )}
-    </MobileLayout>
+    </div>
   );
 }

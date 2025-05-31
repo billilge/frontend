@@ -1,12 +1,11 @@
 'use client';
 
-import MobileLayout from '@/components/mobile/layout';
 import Header from '@/components/mobile/Header';
 import privacyPolicy from './privacyPolicyData';
 
 export default function UserRentalList() {
   return (
-    <MobileLayout>
+    <div>
       <Header title="개인정보 이용약관" menu={false} />
 
       {/* 반납이 필요한 물품 */}
@@ -42,6 +41,6 @@ export default function UserRentalList() {
       <div className="fixed bottom-0 left-0 right-0 flex h-12 items-center justify-center bg-[#F3F4F6]">
         <div className="text-body-2-normal_medi">© wink</div>
       </div>
-    </MobileLayout>
+    </div>
   );
 }
