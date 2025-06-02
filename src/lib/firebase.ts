@@ -3,6 +3,7 @@ import { initializeApp } from 'firebase/app';
 import { getMessaging, getToken } from '@firebase/messaging';
 import postFCMToken from '@/services/fcm';
 import { isSupported } from 'firebase/messaging';
+import Cookies from 'js-cookie';
 
 const firebaseConfig = {
   apiKey: `${process.env.NEXT_PUBLIC_FIREBASE_API_KEY}`,
@@ -35,7 +36,7 @@ export const handleFCMToken = async () => {
       if (!currentToken) {
         alert('알림을 허용해 주세요.');
       } else {
-        localStorage.setItem('fcmToken', currentToken);
+        Cookies.set('fcmToken', currentToken);
         await postFCMToken(currentToken);
       }
     })

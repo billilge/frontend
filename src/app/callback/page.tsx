@@ -3,6 +3,7 @@
 import { useEffect, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { handleLoginSuccess } from '@/utils/loginHandler';
+import Cookies from 'js-cookie';
 
 function CallbackContent() {
   const searchParams = useSearchParams();
@@ -13,7 +14,7 @@ function CallbackContent() {
     const email = searchParams.get('email');
     const accessToken = searchParams.get('accessToken');
 
-    localStorage.setItem('email', email || '');
+    Cookies.set('email', email || '');
 
     if (!status) return;
 

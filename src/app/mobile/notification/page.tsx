@@ -11,6 +11,7 @@ import NotificationItem from '@/components/mobile/NotificationItem';
 import Header from '@/components/mobile/Header';
 import { elapsedTime } from '@/utils/elapsedTime';
 import { NotificationProps } from '@/types/notificationType';
+import Cookies from 'js-cookie';
 
 type UserNotificationType = NotificationProps;
 
@@ -22,7 +23,7 @@ export default function Notification() {
   >([]);
 
   useEffect(() => {
-    const user = localStorage.getItem('user');
+    const user = Cookies.get('user');
 
     if (!user) {
       alert('로그인 후 사용 가능합니다.');

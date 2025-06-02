@@ -11,6 +11,7 @@ import IconSearch from 'public/assets/icons/icon-search.svg';
 import { useRouter } from 'next/navigation';
 import { requestNotificationPermission } from '@/utils/pushNotification';
 import PopUp from '@/components/mobile/PopUp';
+import Cookies from 'js-cookie';
 
 export default function MobileMain() {
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
@@ -41,7 +42,7 @@ export default function MobileMain() {
   }, [searchQuery]);
 
   useEffect(() => {
-    if (!localStorage.getItem('token')) {
+    if (!Cookies.get('token')) {
       router.replace('/mobile/sign-in');
       return;
     }
@@ -50,7 +51,7 @@ export default function MobileMain() {
     requestNotificationPermission();
 
     // "다시 보지 않기" 플래그가 없으면 팝업 표시
-    if (!localStorage.getItem('popUpDismissed3')) {
+    if (!Cookies.get('popUpDismissed3')) {
       setShowPopUp(true);
     }
   }, []);
@@ -112,11 +113,11 @@ export default function MobileMain() {
       {showPopUp && (
         <PopUp
           title="🚨 공지사항 안내 🚨"
-          content={`2025년 1학기 복지물품 대여는\n6월 1일(월)부로 종료됩니다.\n
+          content={`2025년 1학기 복지물품 대여는\n6월 2일(월)부로 종료됩니다.\n
 이용에 참고 부탁드립니다!`}
           onClickCta={() => setShowPopUp(false)}
           onClickOther={() => {
-            localStorage.setItem('popUpDismissed3', 'true');
+            Cookies.set('popUpDismissed3', 'true');
             setShowPopUp(false);
           }}
         />

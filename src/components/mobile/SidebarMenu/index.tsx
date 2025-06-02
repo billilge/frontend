@@ -10,6 +10,7 @@ import IconLogout from 'public/assets/icons/side-menu/logout.svg';
 import IconPrivacyPolicy from 'public/assets/icons/side-menu/privacy-policy.svg';
 import IconAdminHomepage from 'public/assets/icons/side-menu/admin-homepage.svg';
 import { useRouter } from 'next/navigation';
+import { clearAllCookies } from '@/utils/clearAllCookies';
 
 interface SidebarProps {
   isOpen: boolean;
@@ -23,7 +24,6 @@ const menuItems = [
   { icon: IconUserAlarm, label: '알림', href: '/mobile/notification' },
 ];
 
-// TODO: 관리자 홈페이지 링크 변경
 const adminItems = [
   {
     icon: IconAdminDashboard,
@@ -50,7 +50,7 @@ export default function Sidebar({
   const router = useRouter();
 
   const handleLogout = () => {
-    localStorage.clear(); // 로컬 스토리지 전체 삭제
+    clearAllCookies();
     router.replace('/mobile/sign-in'); // 로그인 페이지로 이동
   };
 

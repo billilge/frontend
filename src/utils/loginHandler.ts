@@ -1,4 +1,5 @@
 import { decode } from 'js-base64';
+import Cookies from 'js-cookie';
 
 export const handleLoginSuccess = (accessToken: string | null) => {
   if (accessToken) {
@@ -19,7 +20,7 @@ export const handleLoginSuccess = (accessToken: string | null) => {
       isFeePaid: tokenFeePaid,
     };
 
-    localStorage.setItem('token', accessToken);
-    localStorage.setItem('user', JSON.stringify(userInfo));
+    Cookies.set('token', accessToken);
+    Cookies.set('user', JSON.stringify(userInfo));
   }
 };
