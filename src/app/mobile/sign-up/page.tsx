@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import postSignUp from '@/services/sign-up';
+import Cookies from 'js-cookie';
 
 export default function SignUp() {
   const router = useRouter();
@@ -38,7 +39,7 @@ export default function SignUp() {
   const handleSignUp = async () => {
     if (!validateForm()) return;
 
-    const email = localStorage.getItem('email');
+    const email = Cookies.get('email');
     if (!email) {
       alert('이메일 정보가 없습니다. 다시 로그인해 주세요.');
       return;
@@ -53,8 +54,8 @@ export default function SignUp() {
 
       const userInfo = { name: studentName, id: studentId, role: 'USER' };
 
-      localStorage.setItem('token', data.accessToken);
-      localStorage.setItem('user', JSON.stringify(userInfo));
+      Cookies.set('token', data.accessToken);
+      Cookies.set('user', JSON.stringify(userInfo));
 
       router.push('/mobile/main');
     } catch (e) {

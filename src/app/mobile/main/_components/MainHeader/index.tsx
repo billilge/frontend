@@ -5,7 +5,9 @@ import Sidebar from '@/components/mobile/SidebarMenu/index';
 import { useEffect, useState } from 'react';
 import IconAlarm from 'public/assets/icons/icon-alarm.svg';
 import IconHamburger from 'public/assets/icons/icon-hamburger.svg';
+import IconFeeCheck from 'public/assets/icons/icon-fee-check.svg';
 import { getNotificationCount } from '@/apis/notification';
+import Cookies from 'js-cookie';
 
 export default function MainHeader() {
   const router = useRouter();
@@ -15,6 +17,7 @@ export default function MainHeader() {
     name: string;
     id: string;
     role: string;
+    isFeePaid: boolean;
   } | null>(null);
 
   useEffect(() => {
@@ -31,7 +34,7 @@ export default function MainHeader() {
   }, []);
 
   useEffect(() => {
-    const storedUser = localStorage.getItem('user');
+    const storedUser = Cookies.get('user');
     if (storedUser) {
       setUser(JSON.parse(storedUser));
     }
@@ -40,8 +43,8 @@ export default function MainHeader() {
   return (
     <>
       <section className="fixed top-0 z-10 flex h-10 w-full max-w-md items-center justify-between bg-[#F3F4F6] px-4 py-1.5">
-        <div className="text-heading-3_D font-semibold text-black-primary">
-          {user?.name}님
+        <div className="flex items-center gap-2 text-heading-3_D font-semibold text-black-primary">
+          {user?.name}님{user?.isFeePaid ? <IconFeeCheck /> : null}
         </div>
         <div className="flex gap-[7px]">
           <button

@@ -18,7 +18,7 @@ const adminNotificationGet = async () => {
   }
 };
 
-const readNotificationPost = async (notificationId: number) => {
+const readNotificationPatch = async (notificationId: number) => {
   try {
     const response = await PrivateAxiosInstance.patch(
       `notifications/${notificationId}`,
@@ -29,4 +29,18 @@ const readNotificationPost = async (notificationId: number) => {
   }
 };
 
-export { adminNotificationGet, userNotificationGet, readNotificationPost };
+const readNotificationAllPatch = async () => {
+  try {
+    const response = await PrivateAxiosInstance.patch('notifications/all');
+    return response.data;
+  } catch (error) {
+    return [];
+  }
+};
+
+export {
+  adminNotificationGet,
+  readNotificationAllPatch,
+  readNotificationPatch,
+  userNotificationGet,
+};

@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState, useMemo } from 'react';
-import MobileLayout from '@/components/mobile/layout';
 import Header from '@/components/mobile/Header';
 import ReturnItem from '@/app/mobile/history/_components/ReturnItem';
 import RentalItem from '@/app/mobile/history/_components/RentalItem';
@@ -194,7 +193,7 @@ export default function UserRentalList() {
   );
 
   return (
-    <MobileLayout>
+    <div>
       <Header title="대여 기록" menu />
 
       {/* 반납이 필요한 물품 */}
@@ -287,6 +286,6 @@ export default function UserRentalList() {
           <div className="text-body-2-normal_medi">© wink</div>
         </div>
       </div>
-    </MobileLayout>
+    </div>
   );
 }

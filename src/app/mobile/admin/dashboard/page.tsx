@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import MobileLayout from '@/components/mobile/layout';
 import Header from '@/components/mobile/Header';
 import Dropdown from '@/components/mobile/Dropdown';
 import useDropdown from '@/hooks/useDropdown';
@@ -104,7 +103,7 @@ export default function Dashboard() {
   };
 
   return (
-    <MobileLayout>
+    <div>
       <Header title="관리자 대시보드" />
 
       <section className="itmes-center mt-2.5 flex w-full justify-between px-5">
@@ -139,7 +138,7 @@ export default function Dashboard() {
             renterName={item.renterName}
             studentId={item.studentId}
             status={item.status}
-            applicatedAt={item.applicatedAt}
+            rentAt={item.rentAt}
             rentedCount={item.rentedCount}
             handleApproveBtnClick={() => {
               if (item.rentalHistoryId !== undefined) {
@@ -171,6 +170,6 @@ export default function Dashboard() {
         hideDropdown={hideDropdown}
         positionClasses="top-[80px] right-5"
       />
-    </MobileLayout>
+    </div>
   );
 }
