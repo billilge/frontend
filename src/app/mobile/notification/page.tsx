@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import MobileLayout from '@/components/mobile/layout';
 import {
   userNotificationGet,
   readNotificationPatch,
@@ -12,6 +11,7 @@ import NotificationItem from '@/components/mobile/NotificationItem';
 import Header from '@/components/mobile/Header';
 import { elapsedTime } from '@/utils/elapsedTime';
 import { NotificationProps } from '@/types/notificationType';
+import Cookies from 'js-cookie';
 
 type UserNotificationType = NotificationProps;
 
@@ -23,7 +23,7 @@ export default function Notification() {
   >([]);
 
   useEffect(() => {
-    const user = localStorage.getItem('user');
+    const user = Cookies.get('user');
 
     if (!user) {
       alert('로그인 후 사용 가능합니다.');
@@ -50,7 +50,7 @@ export default function Notification() {
   };
 
   return (
-    <MobileLayout>
+    <div>
       <Header title="알림" />
       {notificationDetail?.length === 0 ? (
         <div className="flex h-dvh items-center justify-center text-gray-secondary">
@@ -84,6 +84,6 @@ export default function Notification() {
           ))}
         </div>
       )}
-    </MobileLayout>
+    </div>
   );
 }

@@ -8,7 +8,9 @@ import IconAdminDashboard from 'public/assets/icons/side-menu/admin-dashboard.sv
 import IconAdminAlarm from 'public/assets/icons/side-menu/admin-alarm.svg';
 import IconLogout from 'public/assets/icons/side-menu/logout.svg';
 import IconPrivacyPolicy from 'public/assets/icons/side-menu/privacy-policy.svg';
+import IconAdminHomepage from 'public/assets/icons/side-menu/admin-homepage.svg';
 import { useRouter } from 'next/navigation';
+import { clearAllCookies } from '@/utils/clearAllCookies';
 
 interface SidebarProps {
   isOpen: boolean;
@@ -33,6 +35,11 @@ const adminItems = [
     label: '관리자 알림',
     href: '/mobile/admin/notification',
   },
+  {
+    icon: IconAdminHomepage,
+    label: '관리자 홈페이지',
+    href: 'https://www.billilge.site/desktop/login',
+  },
 ];
 
 export default function Sidebar({
@@ -43,7 +50,7 @@ export default function Sidebar({
   const router = useRouter();
 
   const handleLogout = () => {
-    localStorage.clear(); // 로컬 스토리지 전체 삭제
+    clearAllCookies();
     router.replace('/mobile/sign-in'); // 로그인 페이지로 이동
   };
 
@@ -96,17 +103,23 @@ export default function Sidebar({
           {role === 'ADMIN' && (
             <>
               <ul className="text-body-2-normal_semi font-semibold text-black-primary">
-                {adminItems.map(({ icon: Icon, label, href }) => (
-                  <li key={label}>
-                    <a
-                      href={href}
-                      className="mt-3 flex items-center gap-3 rounded p-2 hover:bg-gray-100"
-                    >
-                      <Icon />
-                      {label}
-                    </a>
-                  </li>
-                ))}
+                {adminItems.map(({ icon: Icon, label, href }) => {
+                  const isExternal = label === '관리자 홈페이지';
+
+                  return (
+                    <li key={label}>
+                      <a
+                        href={isExternal ? href : href}
+                        target={isExternal ? '_blank' : undefined}
+                        rel={isExternal ? 'noopener noreferrer' : undefined}
+                        className="mt-3 flex items-center gap-3 rounded p-2 hover:bg-gray-100"
+                      >
+                        <Icon />
+                        {label}
+                      </a>
+                    </li>
+                  );
+                })}
               </ul>
 
               {/* 두 번째 구분선 */}
