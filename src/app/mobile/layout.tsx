@@ -27,6 +27,8 @@ export default function MobileLayout({
         document.body.style.backgroundColor = originalBgColor;
       };
     }
+
+    return undefined;
   }, [isExcluded]);
 
   if (isExcluded) {
