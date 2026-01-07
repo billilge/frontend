@@ -12,6 +12,7 @@ const nextConfig = withPWA({
     DB_NAME: process.env.DB_NAME,
   },
   reactStrictMode: true,
+  output: 'standalone',
   swcMinify: true,
   async redirects() {
     return [
