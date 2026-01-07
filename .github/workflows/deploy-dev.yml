@@ -3,7 +3,7 @@ name: Deploy to Development
 on:
   push:
     branches:
-      - chore/#142-cicd-migration
+      - develop
 
 env:
   DOCKER_IMAGE: ${{ secrets.DOCKER_USERNAME }}/billilge-client
