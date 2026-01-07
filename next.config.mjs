@@ -35,7 +35,7 @@ const nextConfig = withPWA({
   images: {
     domains: [
       'github.com',
-      'billilge-resources.s3.us-west-2.amazonaws.com', // S3 이미지 도메인 추가
+      'minio-api.billilge.site', // 파일서버 이미지 도메인 추가
     ],
     dangerouslyAllowSVG: true,
     contentSecurityPolicy: "default-src 'self'; img-src 'self' data: https:;",
