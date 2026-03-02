@@ -40,7 +40,7 @@ const adminItems = [
   {
     icon: IconAdminHomepage,
     label: '관리자 홈페이지',
-    href: 'https://www.billilge.site/desktop/login',
+    href: 'https://admin.billilge.site/login',
   },
 ];
 
