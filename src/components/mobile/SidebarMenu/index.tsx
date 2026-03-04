@@ -18,6 +18,8 @@ interface SidebarProps {
   role?: string;
 }
 
+const adminRole = ['GA', 'WORKER', 'ADMIN'];
+
 const menuItems = [
   { icon: IconRentalList, label: '복지 물품 목록', href: '/mobile/main' },
   { icon: IconRentalHistory, label: '대여기록', href: '/mobile/history' },
@@ -38,7 +40,7 @@ const adminItems = [
   {
     icon: IconAdminHomepage,
     label: '관리자 홈페이지',
-    href: 'https://www.billilge.site/desktop/login',
+    href: 'https://admin.billilge.site/login',
   },
 ];
 
@@ -100,7 +102,7 @@ export default function Sidebar({
           <div className="my-5 border-t border-gray-border" />
 
           {/* 관리자 메뉴 */}
-          {role === 'ADMIN' && (
+          {adminRole.includes(role) && (
             <>
               <ul className="text-body-2-normal_semi font-semibold text-black-primary">
                 {adminItems.map(({ icon: Icon, label, href }) => {

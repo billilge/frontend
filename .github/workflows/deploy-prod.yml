@@ -7,7 +7,7 @@ on:
 
 env:
   DOCKER_IMAGE: ${{ secrets.DOCKER_USERNAME }}/billilge-client
-  CAPROVER_APP: app
+  CAPROVER_APP: www
 
 jobs:
   build-and-deploy:
