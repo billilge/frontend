@@ -113,7 +113,7 @@ export default function MobileMain() {
       {showPopUp && (
         <PopUp
           title="🚨 공지사항 안내 🚨"
-          content={`2025년 1학기 복지물품 대여는\n6월 2일(월)부로 종료됩니다.\n
+          content={`2026년 1학기 복지물품 대여는\n3월 9일(월)부터 가능합니다.\n
 이용에 참고 부탁드립니다!`}
           onClickCta={() => setShowPopUp(false)}
           onClickOther={() => {

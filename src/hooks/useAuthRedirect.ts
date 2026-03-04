@@ -4,6 +4,8 @@ import { useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import Cookies from 'js-cookie';
 
+const adminRole = ['ADMIN', 'GA', 'WORKER'];
+
 const useAuthRedirect = () => {
   const router = useRouter();
   const pathname = usePathname();
@@ -39,7 +41,10 @@ const useAuthRedirect = () => {
       return;
     }
 
-    if (currentPage.startsWith('/mobile/admin') && user.role !== 'ADMIN') {
+    if (
+      currentPage.startsWith('/mobile/admin') &&
+      adminRole.includes(user.role)
+    ) {
       alert('관리자만 이용 가능한 페이지입니다.');
       router.replace('/mobile/main');
     }
