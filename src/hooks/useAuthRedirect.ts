@@ -43,7 +43,7 @@ const useAuthRedirect = () => {
 
     if (
       currentPage.startsWith('/mobile/admin') &&
-      adminRole.includes(user.role)
+      !adminRole.includes(user.role)
     ) {
       alert('관리자만 이용 가능한 페이지입니다.');
       router.replace('/mobile/main');
