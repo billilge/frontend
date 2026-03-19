@@ -4,6 +4,8 @@ import { useEffect, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { handleLoginSuccess } from '@/utils/loginHandler';
 import Cookies from 'js-cookie';
+import Lottie from 'lottie-react';
+import loadingDotsBlue from 'public/assets/lottie/loading-dots-blue.json';
 
 function CallbackContent() {
   const searchParams = useSearchParams();
@@ -34,12 +36,47 @@ function CallbackContent() {
     }
   }, [searchParams, router]);
 
-  return <p>Redirecting...</p>;
+  return (
+    <div className="flex h-dvh flex-col bg-white">
+      {/* 상단 텍스트 */}
+      <div className="px-6 pt-20">
+        <h1 className="text-[24px] font-bold leading-[34px] text-black-primary">
+          로그인 중이에요
+        </h1>
+        <p className="mt-2 text-[15px] leading-[22px] text-gray-secondary">
+          잠시만 기다려주세요.
+        </p>
+      </div>
+
+      {/* 로딩 애니메이션 */}
+      <div className="flex flex-1 items-center justify-center">
+        <Lottie animationData={loadingDotsBlue} loop className="w-[240px]" />
+      </div>
+    </div>
+  );
+}
+
+function LoadingFallback() {
+  return (
+    <div className="flex h-dvh flex-col bg-white">
+      <div className="px-6 pt-20">
+        <h1 className="text-[24px] font-bold leading-[34px] text-black-primary">
+          로그인 중이에요
+        </h1>
+        <p className="mt-2 text-[15px] leading-[22px] text-gray-secondary">
+          잠시만 기다려주세요.
+        </p>
+      </div>
+      <div className="flex flex-1 items-center justify-center">
+        <Lottie animationData={loadingDotsBlue} loop className="w-[240px]" />
+      </div>
+    </div>
+  );
 }
 
 export default function Callback() {
   return (
-    <Suspense fallback={<p>Loading...</p>}>
+    <Suspense fallback={<LoadingFallback />}>
       <CallbackContent />
     </Suspense>
   );

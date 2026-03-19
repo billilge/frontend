@@ -1,8 +1,6 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import IconClose from 'public/assets/icons/bottom-sheet/icon-close.svg';
-import IconHomeIndicator from 'public/assets/icons/bottom-sheet/icon-home-indicator.svg';
 import Image from 'next/image';
 import { Item } from '@/types/welfareItemType';
 import { requestItems } from '@/apis/rental';
@@ -262,30 +260,30 @@ export default function BottomSheet({
       {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events */}
       <div
         onClick={handleOverlayClick}
-        className={`fixed inset-0 z-40 flex items-end justify-center bg-black-primary bg-opacity-50 transition-opacity ${
+        className={`fixed inset-0 z-40 bg-black/50 transition-opacity duration-300 ${
           isOpen ? 'visible opacity-100' : 'invisible opacity-0'
         }`}
       />
       <div
-        className={`fixed bottom-0 z-50 flex w-full max-w-md transform flex-col items-center gap-5 rounded-t-[20px] bg-white px-[30px] pb-[30px] pt-[10px] transition-transform ${
+        className={`fixed bottom-0 left-0 right-0 z-50 mx-auto max-w-md transform rounded-t-[16px] bg-white transition-transform duration-300 ease-out ${
           isOpen ? 'translate-y-0' : 'translate-y-full'
         }`}
       >
-        <IconHomeIndicator />
+        {/* 핸들바 */}
+        <div className="flex justify-center pb-2 pt-3">
+          <div className="h-[4px] w-[36px] rounded-full bg-gray-border" />
+        </div>
 
-        <div className="flex flex-col gap-[30px]">
-          {/* 닫기 버튼 */}
-          <div className="flex items-center justify-between text-heading-4_M font-semibold text-black-primary">
-            <div className="h-[20px] w-[20px]" />
-            <h2 className="text-lg font-semibold">물품 대여</h2>
-            <button type="button" onClick={onCloseAction}>
-              <IconClose />
-            </button>
-          </div>
+        {/* 컨텐츠 영역 */}
+        <div className="flex flex-col px-6 pb-8">
+          {/* 타이틀 */}
+          <h2 className="pb-5 text-[20px] font-bold leading-[29px] text-black-primary">
+            물품 대여
+          </h2>
 
           {/* 아이템 정보 */}
-          <section className="flex items-center gap-[17px] rounded-[20px] border-[0.5px] border-gray-border p-[15px]">
-            <div className="flex aspect-square h-[40px] w-[40px] items-center justify-center rounded-full bg-gray-tertiary p-1">
+          <section className="mb-5 flex items-center gap-[14px] rounded-[12px] bg-gray-tertiary px-4 py-[14px]">
+            <div className="flex h-[40px] w-[40px] items-center justify-center rounded-full bg-white">
               <Image
                 width={26}
                 height={26}
@@ -293,26 +291,30 @@ export default function BottomSheet({
                 alt={item.itemName}
               />
             </div>
-            <div className="flex flex-col gap-[7px]">
-              <div className="text-body-2-normal_semi font-semibold text-black-primary">
+            <div className="flex flex-col gap-[4px]">
+              <div className="text-[15px] font-semibold leading-[22px] text-black-primary">
                 {item.itemName}
               </div>
-              <div className="flex gap-[9px] text-caption-1_midi font-medium text-gray-primary">
-                <div>현재 수량</div>
-                {item.count}
+              <div className="text-[13px] leading-[19px] text-gray-secondary">
+                현재 수량 {item.count}
               </div>
             </div>
           </section>
 
-          <section className="flex flex-col gap-[15px]">
+          {/* 입력 폼 */}
+          <section className="mb-8 flex flex-col gap-[16px]">
             {/* 수량 입력 */}
-            <div className="flex flex-col gap-[8px]">
-              <div className="text-body-2-normal_semi font-semibold text-black-primary">
+            <div className="flex flex-col gap-[6px]">
+              <label
+                htmlFor="rental-quantity"
+                className="text-[14px] font-semibold leading-[20px] text-black-primary"
+              >
                 수량
-              </div>
+              </label>
               <input
+                id="rental-quantity"
                 type="number"
-                className={`rounded-[10px] border px-3.5 py-2.5 text-base font-medium ${
+                className={`rounded-[12px] border bg-white px-4 py-3 text-[15px] leading-[22px] outline-none transition-colors focus:border-return-blue ${
                   errors.quantity ? 'border-warning' : 'border-gray-border'
                 }`}
                 placeholder="0"
@@ -320,31 +322,32 @@ export default function BottomSheet({
                 onChange={handleQuantityChange}
               />
               {errors.quantity && (
-                <p className="text-caption-2_midi text-warning">
+                <p className="text-[12px] leading-[18px] text-warning">
                   {errors.quantity}
                 </p>
               )}
             </div>
 
             {/* 시간 입력 */}
-            <div className="flex flex-col gap-[8px]">
-              <div className="text-body-2-normal_semi font-semibold text-black-primary">
+            <div className="flex flex-col gap-[6px]">
+              <span className="text-[14px] font-semibold leading-[20px] text-black-primary">
                 시간
-              </div>
-              <div className="flex items-center gap-2 text-base font-medium">
+              </span>
+              <div className="flex items-center gap-2">
                 <input
+                  id="rental-hour"
                   type="number"
-                  className={`w-1/2 rounded-[10px] border px-3.5 py-2.5 ${
+                  className={`w-1/2 rounded-[12px] border bg-white px-4 py-3 text-[15px] leading-[22px] outline-none transition-colors focus:border-return-blue ${
                     errors.time ? 'border-warning' : 'border-gray-border'
                   }`}
                   placeholder="HH"
                   value={hour}
                   onChange={handleHourChange}
                 />
-                <span>:</span>
+                <span className="text-[15px] text-gray-secondary">:</span>
                 <input
                   type="number"
-                  className={`w-1/2 rounded-[10px] border px-3.5 py-2.5 ${
+                  className={`w-1/2 rounded-[12px] border bg-white px-4 py-3 text-[15px] leading-[22px] outline-none transition-colors focus:border-return-blue ${
                     errors.time ? 'border-warning' : 'border-gray-border'
                   }`}
                   placeholder="MM"
@@ -353,7 +356,7 @@ export default function BottomSheet({
                 />
               </div>
               {errors.time && (
-                <p className="text-caption-2_midi text-warning">
+                <p className="text-[12px] leading-[18px] text-warning">
                   {errors.time}
                 </p>
               )}
@@ -364,14 +367,14 @@ export default function BottomSheet({
           <button
             type="button"
             onClick={() => handleRent(false)}
-            className={`w-full rounded-[10px] p-3 text-body-1-normal_semi font-semibold transition ${
+            className={`w-full rounded-[12px] py-[15px] text-[16px] font-semibold transition-colors ${
               !errors.quantity &&
               !errors.time &&
               quantity !== '' &&
               hour !== '' &&
               minute !== '' &&
               !isLoading
-                ? 'bg-return-blue text-white-primary'
+                ? 'bg-return-blue text-white-primary active:bg-blue-600'
                 : 'cursor-not-allowed bg-gray-tertiary text-gray-secondary'
             }`}
             disabled={
