@@ -11,6 +11,7 @@ import IconSearch from 'public/assets/icons/icon-search.svg';
 import { useRouter } from 'next/navigation';
 import { requestNotificationPermission } from '@/utils/pushNotification';
 import PopUp from '@/components/mobile/PopUp';
+import PwaInstallBottomSheet from '@/components/mobile/PwaInstallBottomSheet';
 import Cookies from 'js-cookie';
 
 export default function MobileMain() {
@@ -122,6 +123,9 @@ export default function MobileMain() {
           }}
         />
       )}
+
+      {/* PWA 설치 유도 바텀시트 */}
+      <PwaInstallBottomSheet />
 
       {/* Bottom Sheet */}
       <BottomSheet
