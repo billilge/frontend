@@ -3,7 +3,6 @@
 import { useEffect, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { handleLoginSuccess } from '@/utils/loginHandler';
-import Cookies from 'js-cookie';
 import Lottie from 'lottie-react';
 import loadingDotsBlue from 'public/assets/lottie/loading-dots-blue.json';
 
@@ -16,7 +15,7 @@ function CallbackContent() {
     const email = searchParams.get('email');
     const accessToken = searchParams.get('accessToken');
 
-    Cookies.set('email', email || '');
+    localStorage.setItem('email', email || '');
 
     if (!status) return;
 

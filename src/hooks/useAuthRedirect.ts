@@ -2,7 +2,6 @@
 
 import { useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
-import Cookies from 'js-cookie';
 
 const adminRole = ['ADMIN', 'GA', 'WORKER'];
 
@@ -18,8 +17,8 @@ const useAuthRedirect = () => {
       currentPage === '/mobile/sign-in' ||
       currentPage === '/desktop/login';
 
-    const userString = Cookies.get('user');
-    const isLogin = !!(userString && Cookies.get('token'));
+    const userString = localStorage.getItem('user');
+    const isLogin = !!(userString && localStorage.getItem('token'));
     const user = userString ? JSON.parse(userString) : undefined;
 
     if (!isLogin) {

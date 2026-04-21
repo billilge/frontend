@@ -6,7 +6,6 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { getUA } from 'react-device-detect';
 import Alert from '@/components/mobile/Alert';
-import Cookies from 'js-cookie';
 
 export default function SignIn() {
   const router = useRouter();
@@ -103,7 +102,7 @@ export default function SignIn() {
   };
 
   useEffect(() => {
-    if (Cookies.get('token') && Cookies.get('user')) {
+    if (localStorage.getItem('token') && localStorage.getItem('user')) {
       router.replace('/mobile/main');
     }
   }, []);
