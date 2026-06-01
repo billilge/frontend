@@ -305,6 +305,7 @@ export default function BottomSheet({
           <section className="mb-8 flex flex-col gap-[16px]">
             {/* 수량 입력 */}
             <div className="flex flex-col gap-[6px]">
+              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label
                 htmlFor="rental-quantity"
                 className="text-[14px] font-semibold leading-[20px] text-black-primary"

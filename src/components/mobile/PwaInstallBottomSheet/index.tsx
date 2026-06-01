@@ -18,8 +18,8 @@ export default function PwaInstallBottomSheet() {
       window.matchMedia('(display-mode: standalone)').matches ||
       (navigator as unknown as { standalone?: boolean }).standalone === true;
 
-    if (isStandalone) return;
-    if (localStorage.getItem('pwaInstallDismissed')) return;
+    if (isStandalone) return undefined;
+    if (localStorage.getItem('pwaInstallDismissed')) return undefined;
 
     setShouldRender(true);
 
