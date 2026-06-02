@@ -5,7 +5,6 @@ import Sidebar from '@/components/mobile/SidebarMenu/index';
 import { useEffect, useState } from 'react';
 import IconArrow from 'public/assets/icons/icon-arrow.svg';
 import IconHamburger from 'public/assets/icons/icon-hamburger.svg';
-import Cookies from 'js-cookie';
 
 interface HeaderProps {
   title: string;
@@ -22,7 +21,7 @@ export default function Header({ title, menu = false }: HeaderProps) {
   } | null>(null);
 
   useEffect(() => {
-    const storedUser = Cookies.get('user');
+    const storedUser = localStorage.getItem('user');
     if (storedUser) {
       setUser(JSON.parse(storedUser));
     }

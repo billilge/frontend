@@ -7,7 +7,6 @@ import IconAlarm from 'public/assets/icons/icon-alarm.svg';
 import IconHamburger from 'public/assets/icons/icon-hamburger.svg';
 import IconFeeCheck from 'public/assets/icons/icon-fee-check.svg';
 import { getNotificationCount } from '@/apis/notification';
-import Cookies from 'js-cookie';
 
 export default function MainHeader() {
   const router = useRouter();
@@ -34,7 +33,7 @@ export default function MainHeader() {
   }, []);
 
   useEffect(() => {
-    const storedUser = Cookies.get('user');
+    const storedUser = localStorage.getItem('user');
     if (storedUser) {
       setUser(JSON.parse(storedUser));
     }

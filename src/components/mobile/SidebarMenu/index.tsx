@@ -10,7 +10,7 @@ import IconLogout from 'public/assets/icons/side-menu/logout.svg';
 import IconPrivacyPolicy from 'public/assets/icons/side-menu/privacy-policy.svg';
 import IconAdminHomepage from 'public/assets/icons/side-menu/admin-homepage.svg';
 import { useRouter } from 'next/navigation';
-import { clearAllCookies } from '@/utils/clearAllCookies';
+import { clearAllStorage } from '@/utils/clearAllStorage';
 
 interface SidebarProps {
   isOpen: boolean;
@@ -52,7 +52,7 @@ export default function Sidebar({
   const router = useRouter();
 
   const handleLogout = () => {
-    clearAllCookies();
+    clearAllStorage();
     router.replace('/mobile/sign-in'); // 로그인 페이지로 이동
   };
 

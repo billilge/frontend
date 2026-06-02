@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
-import { clearAllCookies } from '@/utils/clearAllCookies';
+import { clearAllStorage } from '@/utils/clearAllStorage';
 
 interface NavBarItem {
   name: string;
@@ -41,7 +41,7 @@ export default function NavBar() {
     router.push(`${item.link}`);
 
     if (item.name === '로그아웃') {
-      clearAllCookies();
+      clearAllStorage();
       toast.success('로그아웃에 성공했습니다!');
     }
 

@@ -11,7 +11,7 @@ import IconSearch from 'public/assets/icons/icon-search.svg';
 import { useRouter } from 'next/navigation';
 import { requestNotificationPermission } from '@/utils/pushNotification';
 import PopUp from '@/components/mobile/PopUp';
-import Cookies from 'js-cookie';
+import PwaInstallBottomSheet from '@/components/mobile/PwaInstallBottomSheet';
 
 export default function MobileMain() {
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
@@ -42,7 +42,7 @@ export default function MobileMain() {
   }, [searchQuery]);
 
   useEffect(() => {
-    if (!Cookies.get('token')) {
+    if (!localStorage.getItem('token')) {
       router.replace('/mobile/sign-in');
       return;
     }
@@ -51,7 +51,7 @@ export default function MobileMain() {
     requestNotificationPermission();
 
     // "다시 보지 않기" 플래그가 없으면 팝업 표시
-    if (!Cookies.get('popUpDismissed3')) {
+    if (!localStorage.getItem('popUpDismissed3')) {
       setShowPopUp(true);
     }
   }, []);
@@ -117,11 +117,14 @@ export default function MobileMain() {
 이용에 참고 부탁드립니다!`}
           onClickCta={() => setShowPopUp(false)}
           onClickOther={() => {
-            Cookies.set('popUpDismissed3', 'true');
+            localStorage.setItem('popUpDismissed3', 'true');
             setShowPopUp(false);
           }}
         />
       )}
+
+      {/* PWA 설치 유도 바텀시트 */}
+      <PwaInstallBottomSheet />
 
       {/* Bottom Sheet */}
       <BottomSheet

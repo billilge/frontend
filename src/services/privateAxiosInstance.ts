@@ -1,15 +1,14 @@
 import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
-import Cookies from 'js-cookie';
-import { clearAllCookies } from '@/utils/clearAllCookies';
+import { clearAllStorage } from '@/utils/clearAllStorage';
 
 const getAccessToken = (): string | null => {
-  const token = Cookies.get('token');
+  const token = localStorage.getItem('token');
 
   if (token) {
     try {
       return token || '';
     } catch (error) {
-      console.error('Failed to parse user from Cookies', error);
+      console.error('Failed to parse user from localStorage', error);
       return '';
     }
   }
@@ -55,7 +54,7 @@ PrivateAxiosInstance.interceptors.response.use(
   (response) => response,
   (error: AxiosError) => {
     if (error.response?.status === 401) {
-      clearAllCookies();
+      clearAllStorage();
       redirectToLogin();
     }
     return Promise.reject(error);

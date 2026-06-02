@@ -1,5 +1,5 @@
 const handleTouchStart = (e: React.TouchEvent<HTMLButtonElement>) => {
-  e.currentTarget.style.transform = 'scale(0.95)';
+  e.currentTarget.style.transform = 'scale(0.90)';
 };
 
 const handleTouchEnd = (e: React.TouchEvent<HTMLButtonElement>) => {
