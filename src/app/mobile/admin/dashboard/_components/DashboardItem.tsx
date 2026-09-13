@@ -32,7 +32,7 @@ export default function DashboardItem({
   const applicatedTime = convertTime(rentAt);
 
   return (
-    <section className="flex w-full items-center justify-between px-5 py-4">
+    <section className="flex w-full items-center justify-between py-4">
       <section className="flex items-center gap-4">
         <section className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-tertiary p-2.5">
           {itemImageUrl && (

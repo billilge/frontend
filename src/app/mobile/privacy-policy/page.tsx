@@ -9,7 +9,7 @@ export default function UserRentalList() {
       <Header title="개인정보 이용약관" menu={false} />
 
       {/* 반납이 필요한 물품 */}
-      <div className="relative h-full px-[15px] pb-12 pt-[17px]">
+      <div className="relative h-full pb-12 pt-[17px]">
         <div className="pb-[7px] text-caption-2_midi font-medium text-gray-secondary">
           최종 수정일: 2025년 3월 5일
         </div>

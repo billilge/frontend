@@ -198,10 +198,10 @@ export default function UserRentalList() {
 
       {/* 반납이 필요한 물품 */}
       <div className="relative h-full">
-        <div className="pb-1.5 pl-4 pt-[22px] text-heading-4_M font-semibold">
+        <div className="pb-1.5 pt-[22px] text-heading-4_M font-semibold">
           반납이 필요한 물품
         </div>
-        <div className="box-border flex gap-1.5 overflow-auto px-4 py-1">
+        <div className="-mx-5 box-border flex gap-1.5 overflow-auto px-5 py-1">
           {returnItems.items.length > 0 ? (
             returnItemsWithKeys.map((item) => (
               <ReturnItem
@@ -222,7 +222,7 @@ export default function UserRentalList() {
         </div>
 
         {/* 대여 내역 */}
-        <section className="px-4 pb-12 pt-[50px]">
+        <section className="pb-12 pt-[50px]">
           <div className="flex items-center justify-between pb-1.5">
             <div className="text-heading-4_M font-semibold">대여 내역</div>
             <button

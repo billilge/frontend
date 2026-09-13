@@ -57,7 +57,7 @@ export default function Notification() {
         </div>
       ) : (
         <div className="flex flex-col">
-          <div className="flex justify-end px-4 py-1">
+          <div className="flex justify-end py-1">
             <button
               type="button"
               onClick={handleClickAllNotification}

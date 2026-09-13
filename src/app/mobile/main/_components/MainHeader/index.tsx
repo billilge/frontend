@@ -41,7 +41,7 @@ export default function MainHeader() {
 
   return (
     <>
-      <section className="fixed top-0 z-10 flex h-10 w-full max-w-md items-center justify-between bg-[#F3F4F6] px-4 py-1.5">
+      <section className="fixed left-0 right-0 top-0 z-10 mx-auto flex h-10 w-full max-w-md items-center justify-between bg-[#F3F4F6] px-5 py-1.5">
         <div className="flex items-center gap-2 text-heading-3_D font-semibold text-black-primary">
           {user?.name}님{user?.isFeePaid ? <IconFeeCheck /> : null}
         </div>
