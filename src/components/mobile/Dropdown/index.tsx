@@ -1,4 +1,4 @@
-import { RefObject, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
 
 interface DropdownProps {
@@ -6,8 +6,6 @@ interface DropdownProps {
   isVisible: boolean;
   hideDropdown: () => void;
   positionClasses?: string;
-  // 열고 닫는 버튼. 바깥 클릭 감지에서 제외해야 버튼으로 다시 닫을 수 있음
-  triggerRef?: RefObject<HTMLElement>;
 }
 
 export default function Dropdown({
@@ -15,18 +13,14 @@ export default function Dropdown({
   isVisible,
   hideDropdown,
   positionClasses = 'top-0 right-0',
-  triggerRef,
 }: DropdownProps) {
   const dropdownRef = useRef<HTMLUListElement | null>(null);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      const target = event.target as Node;
-
       if (
         dropdownRef.current &&
-        !dropdownRef.current.contains(target) &&
-        !triggerRef?.current?.contains(target)
+        !dropdownRef.current.contains(event.target as Node)
       ) {
         hideDropdown();
       }
@@ -37,7 +31,7 @@ export default function Dropdown({
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [hideDropdown, triggerRef]);
+  }, [hideDropdown]);
 
   return (
     <ul

@@ -106,7 +106,7 @@ export default function Dashboard() {
     <div>
       <Header title="관리자 대시보드" />
 
-      <section className="itmes-center mt-2.5 flex w-full justify-between">
+      <section className="itmes-center mt-2.5 flex w-full justify-between px-5">
         <div className="flex justify-between text-lg font-semibold">
           신청 내역
         </div>

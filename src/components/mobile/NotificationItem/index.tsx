@@ -34,7 +34,7 @@ export default function NotificationItem({
     <button
       type="button"
       className={cn(
-        '-mx-5 flex gap-2.5 px-5 py-5',
+        'flex w-full gap-2.5 p-5',
         isRead ? '' : 'bg-main-tertiary',
       )}
       onClick={handleClick}

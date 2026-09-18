@@ -38,8 +38,7 @@ export default function MobileLayout({
 
   return (
     <div className="flex min-h-screen justify-center">
-      {/* 모바일 페이지 공통 좌우 여백(20px) - 화면 끝까지 채워야 하는 요소는 -mx-5 로 상쇄 */}
-      <div className="flex w-full max-w-md flex-col px-5">{children}</div>
+      <div className="flex w-full max-w-md flex-col">{children}</div>
     </div>
   );
 }
