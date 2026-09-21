@@ -7,7 +7,6 @@ on:
 
 env:
   DOCKER_IMAGE: ${{ secrets.DOCKER_USERNAME }}/billilge-client
-  CAPROVER_APP: www
 
 jobs:
   build-and-deploy:
@@ -42,10 +41,9 @@ jobs:
           cache-from: type=gha,scope=prod
           cache-to: type=gha,mode=max,scope=prod
 
-      - name: Deploy to CapRover
-        uses: caprover/deploy-from-github@v1.1.2
-        with:
-          server: ${{ secrets.CAPROVER_SERVER }}
-          app: ${{ env.CAPROVER_APP }}
-          token: ${{ secrets.CAPROVER_PROD_APP_TOKEN }}
-          image: ${{ env.DOCKER_IMAGE }}:prod
+      - name: Deploy to Coolify
+        run: |
+          curl --fail-with-body --request POST \
+            "${{ secrets.COOLIFY_URL }}/api/v1/deploy?uuid=${{ secrets.COOLIFY_UUID }}&force=true" \
+            --header "Authorization: Bearer ${{ secrets.COOLIFY_TOKEN }}" \
+            --header "Content-Length: 0"
